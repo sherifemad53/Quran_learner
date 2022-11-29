@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
-import 'package:quran_leaner/components/topicmodeling_json.dart';
+import 'api_handling/topicmodeling_json.dart';
 import 'package:http/http.dart' as http;
+import 'package:quran_leaner/constrains.dart';
+
+import 'components/veruscard.dart';
 
 class TopicModelingScreen extends StatefulWidget {
   const TopicModelingScreen({Key? key}) : super(key: key);
@@ -15,8 +16,9 @@ class TopicModelingScreen extends StatefulWidget {
 }
 
 class _TopicModelingScreenState extends State<TopicModelingScreen> {
+  final String _qarunVersehint = 'Enter Verus here';
   String? _qarunVersetext;
-  var _isSearching = false;
+  //var _isSearching = false;
   //bool _isloading = true;
 
   Future<Datum> tpgetData(text) async {
@@ -49,27 +51,35 @@ class _TopicModelingScreenState extends State<TopicModelingScreen> {
     return Datum();
   }
 
+  bool isProbablyArabic(String s) {
+    for (int i = 0; i < s.length;) {
+      int c = s.codeUnitAt(i);
+      if (c >= 0x0600 && c <= 0x06E0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    //debugPrint('Build: Done -----------------------------------------------');
     return Scaffold(
       appBar: AppBar(
         title: Title(
           color: Colors.blue,
           child: const Text(
-            'Topic Modeling',
+            'S E N T E N S E  S I M I L A R I T Y',
             style: TextStyle(fontSize: 20),
           ),
         ),
-        actions: <Widget>[
-          TextButton.icon(
-            label: const Text('s'),
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: (() => setState(() {
-                  _isSearching = true;
-                })),
-          )
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     onPressed: () => setState(() {
+        //       //_isSearching = true;
+        //     }),
+        //     icon: const Icon(Icons.search, color: Colors.white),
+        //   )
+        // ],
       ),
       /*
       todo 1- search bar doesn't load the body each time even on submiting 
@@ -79,98 +89,70 @@ class _TopicModelingScreenState extends State<TopicModelingScreen> {
       todo 5- remember the searched data 
       todo 6- add clear button to search bar
       */
-      body: SingleChildScrollView(
-        //physics: const NeverScrollableScrollPhysics(),
-        child: Column(
-          children: <Widget>[
-            _isSearching
-                ? Container(
-                    padding: const EdgeInsets.all(10),
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter a search term',
+      body: Container(
+        padding: const EdgeInsets.all(10),
+        child: SingleChildScrollView(
+          //physics: const NeverScrollableScrollPhysics(),
+          child: Column(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: kSecendoryColor),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          //border: const OutlineInputBorder(),
+                          disabledBorder: InputBorder.none,
+                          //suffixIcon: const Icon(Icons.search),
+                          hintText: _qarunVersehint,
+                          icon: const Icon(Icons.search),
+                        ),
+                        keyboardType: TextInputType.text,
+                        onSubmitted: (value) {
+                          setState(() {
+                            _qarunVersetext = value;
+                            // _qarunVersehint = value;
+                          });
+                        },
                       ),
-                      onSubmitted: (value) {
-                        setState(() {
-                          _qarunVersetext = value;
-                        });
-                      },
                     ),
-                  )
-                : const SizedBox.shrink(),
-            FutureBuilder(
-                future: tpgetData(_qarunVersetext),
-                builder: (context, snapshot) {
-                  _isSearching = false;
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return const Card(child: Text(''));
-                  } else {
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.confidences!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                title: Row(
-                                  children: [
-                                    const SizedBox(width: 20),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.75,
-                                          child: AutoSizeText(
-                                            '${snapshot.data!.confidences?[index].label}',
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600),
-                                            maxLines: 3,
-                                            softWrap: true,
-                                            overflow: TextOverflow.ellipsis,
-                                            wrapWords: true,
-                                            minFontSize: 18,
-                                            maxFontSize: 30,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 20),
-                                        SizedBox(
-                                          width: 400,
-                                          //color: Colors.red,
-                                          child: FAProgressBar(
-                                            currentValue: snapshot
-                                                    .data!
-                                                    .confidences![index]
-                                                    .confidence! *
-                                                100,
-                                            displayText: '%',
-                                            progressGradient: LinearGradient(
-                                              colors: [
-                                                Colors.blue.withOpacity(0.75),
-                                                Colors.green.withOpacity(0.75),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        });
-                  }
-                }),
-          ],
+                    IconButton(
+                        onPressed: () {
+                          debugPrint("hello");
+                        },
+                        icon: const Icon(Icons.clear))
+                  ],
+                ),
+              ),
+              //const SizedBox.shrink(),
+              FutureBuilder(
+                  future: tpgetData(_qarunVersetext),
+                  builder: (context, snapshot) {
+                    //_isSearching = false;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return const Card(child: Text(''));
+                    } else {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.confidences!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return VerusCard(
+                                label: snapshot.data!.confidences![index].label,
+                                confidance: snapshot
+                                    .data!.confidences![index].confidence!);
+                          });
+                    }
+                  }),
+            ],
+          ),
         ),
       ),
     );

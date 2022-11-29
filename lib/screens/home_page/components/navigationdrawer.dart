@@ -36,10 +36,13 @@ class NavigationDrawer extends StatelessWidget {
                     }));
               },
             ),
-            Divider(height: 1, thickness: 1, color: Colors.blue[200]),
+            Divider(height: 1, thickness: 2, color: ThemeData().primaryColor),
             ListTile(
               leading: const Icon(Icons.search),
-              title: const Text('Topic Modeling'),
+              title: const Text(
+                'S E N T E N S E  S I M I L A R I T Y',
+                style: TextStyle(fontSize: 12),
+              ),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) {
                   return const TopicModelingScreen();
@@ -48,7 +51,10 @@ class NavigationDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.book),
-              title: const Text('Quran'),
+              title: const Text(
+                'Q U R A N',
+                style: TextStyle(fontSize: 12),
+              ),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) {
                   return const QuranReaderScreen();

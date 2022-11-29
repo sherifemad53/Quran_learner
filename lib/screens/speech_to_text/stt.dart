@@ -23,8 +23,8 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   void listen() async {
     if (!isListening) {
       bool? available = await speech!.initialize(
-        onStatus: (val) => print('onStatus: $val'),
-        onError: (val) => print('onError: $val'),
+        onStatus: (val) => debugPrint('onStatus: $val'),
+        onError: (val) => debugPrint('onError: $val'),
       );
       if (available) {
         setState(() => isListening = true);
