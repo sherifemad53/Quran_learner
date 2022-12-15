@@ -32,15 +32,28 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  http: ^0.13.5
-  speech_to_text: ^6.1.0
-  auto_size_text: ^3.0.0
   flutter_animation_progress_bar: ^2.3.1
+  auto_size_text: ^3.0.0
+  introduction_screen: ^3.0.2
+  http: ^0.13.5
+  # speech_to_text: ^6.1.0
+  csv: ^5.0.1
+  
+  record: ^4.4.3
+  audioplayers: ^1.1.1
+  path_provider: ^2.0.11
 
+  # firebase plugins and packages
+  firebase_core: ^2.3.0
+  cloud_firestore: ^4.1.0
+  firebase_auth: ^4.1.5
+  firebase_storage: ^11.0.6
+  
+  # excel: ^2.0.0-null-safety-3
+  # simple_s3: ^0.3.2
 
 dev_dependencies:
   flutter_test:
@@ -52,8 +65,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  introduction_screen: ^3.0.2
-
+  
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -69,6 +81,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

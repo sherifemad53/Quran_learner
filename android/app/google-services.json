@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1004469585703",
+    "project_id": "quran-c5cbe",
+    "storage_bucket": "quran-c5cbe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004469585703:android:129bb20493210ff93f0b02",
+        "android_client_info": {
+          "package_name": "com.example.quran_leaner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004469585703-dctt9opis98l3cv0oara5u1k4397mom0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxFlHUYlCQqtgO8yZcl5Sf9bfhdUHLEwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004469585703-dctt9opis98l3cv0oara5u1k4397mom0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:introduction_screen/introduction_screen.dart';
+
 import 'package:quran_leaner/screens/home_page/homapage.dart';
 
 class OnboardScreen extends StatelessWidget {
@@ -7,51 +9,39 @@ class OnboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/rm194-aew-13.jpg'),
-              fit: BoxFit.fill,
-            ),
-            //backgroundBlendMode: BlendMode.color,
+    return SafeArea(
+      child: IntroductionScreen(
+        pages: [
+          PageViewModel(
+            title: "Title of first page",
+            body:
+                "Here you can write the description of the page, to explain someting...",
+            // image: const Center(
+            //   child: Image(
+            //     image: AssetImage('assets/images/rm194-aew-13.jpg'),
+            //   ),
+            // ),
+            decoration: const PageDecoration(pageColor: Colors.grey),
           ),
-        ),
-        SafeArea(
-          child: IntroductionScreen(
-            pages: [
-              PageViewModel(
-                  title: "Title of first page",
-                  body:
-                      "Here you can write the description of the page, to explain someting...",
-                  image: const Center(
-                    child: Image(
-                        image: AssetImage('assets/images/rm194-aew-13.jpg'),
-                        height: 170),
-                  ),
-                  decoration: const PageDecoration(pageColor: Colors.grey)),
-              PageViewModel(
-                title: "Title of first page",
-                body:
-                    "Here you can write the description of the page, to explain someting...",
-                decoration: const PageDecoration(pageColor: Colors.grey),
-              )
-            ],
-            done: const Text('Get Started',
-                style: TextStyle(fontWeight: FontWeight.w600)),
-            onDone: () => goToHome(context),
-            showSkipButton: true,
-            skip: const Text('Skip'),
-            onSkip: () => goToHome(context),
-            next: const Icon(Icons.arrow_forward),
-            dotsDecorator: getDotDecoration(),
-            onChange: (index) => debugPrint('Page $index selected'),
-            globalBackgroundColor: Theme.of(context).backgroundColor,
-            nextFlex: 0,
+          PageViewModel(
+            title: "Title of first page",
+            body:
+                "Here you can write the description of the page, to explain someting...",
+            decoration: const PageDecoration(pageColor: Colors.grey),
           ),
-        ),
-      ],
+        ],
+        done: const Text('Get Started',
+            style: TextStyle(fontWeight: FontWeight.w600)),
+        onDone: () => goToHome(context),
+        showSkipButton: true,
+        skip: const Text('Skip'),
+        onSkip: () => goToHome(context),
+        next: const Icon(Icons.arrow_forward),
+        dotsDecorator: getDotDecoration(),
+        onChange: (index) => debugPrint('Page $index selected'),
+        globalBackgroundColor: Theme.of(context).backgroundColor,
+        nextFlex: 0,
+      ),
     );
   }
 

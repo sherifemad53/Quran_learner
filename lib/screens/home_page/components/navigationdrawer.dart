@@ -36,7 +36,8 @@ class NavigationDrawer extends StatelessWidget {
                     }));
               },
             ),
-            Divider(height: 1, thickness: 2, color: ThemeData().primaryColor),
+            Divider(
+                height: 1, thickness: 2, color: Theme.of(context).primaryColor),
             ListTile(
               leading: const Icon(Icons.search),
               title: const Text(

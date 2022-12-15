@@ -108,7 +108,9 @@ class _TopicModelingScreenState extends State<TopicModelingScreen> {
                       child: TextField(
                         decoration: InputDecoration(
                           //border: const OutlineInputBorder(),
+                          enabledBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                           //suffixIcon: const Icon(Icons.search),
                           hintText: _qarunVersehint,
                           icon: const Icon(Icons.search),

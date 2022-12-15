@@ -1,0 +1,56 @@
+  //final _simpleS3 = SimpleS3();
+
+  // Future<String?> _upload() async {
+  //   String? result;
+
+  //   if (result == null) {
+  //     try {
+  //       setState(() {
+  //         isLoading = true;
+  //       });
+
+  //       result = await _simpleS3.uploadFile(
+  //         File(_filepath),
+  //         "anz-wavfilebucket",
+  //         "us-east-1:c235f792-b7a0-4b24-8e61-547517e81dfd",
+  //         AWSRegions.usEast1,
+  //         debugLog: true,
+  //         //s3FolderPath: "test",
+  //         accessControl: S3AccessControl.publicRead,
+  //       );
+
+  //       setState(() {
+  //         isUploaded = true;
+  //         isLoading = false;
+  //       });
+  //     } catch (e) {
+  //       debugPrint(e.toString());
+  //     }
+  //   }
+  //   return result;
+  // }
+
+  void listen() async {
+  //   if (!isListening) {
+  //     bool? available = await speech!.initialize(
+  //       onStatus: (val) => debugPrint('onStatus: $val'),
+  //       onError: (val) => debugPrint('onError: $val'),
+  //     );
+  //     if (available) {
+  //       //var locale = await speech?.locales().then((value) => print(value));
+  //       //print(locale);
+  //       setState(() => isListening = true);
+  //       speech!.listen(
+  //         onResult: (val) => setState(() {
+  //           text = val.recognizedWords;
+  //           if (val.hasConfidenceRating && val.confidence > 0) {
+  //             confidence = val.confidence;
+  //           }
+  //         }),
+  //       );
+  //     }
+  //   } else {
+  //     setState(() => isListening = false);
+  //     speech!.stop();
+  //   }
+  // }
