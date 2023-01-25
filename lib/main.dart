@@ -10,23 +10,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //debugPrint('done-------');
     return MaterialApp(
       title: 'Quran Learner',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: kPrimaryColor,
-        appBarTheme: AppBarTheme(color: kPrimaryColor),
+        primarySwatch: Colors.grey,
+        appBarTheme: AppBarTheme(color: Colors.green[700]),
         backgroundColor: kBackgroundColor,
       ),
       debugShowMaterialGrid: false,
@@ -37,8 +34,8 @@ class MyApp extends StatelessWidget {
           } else if (constrains.maxWidth > 500 && constrains.maxWidth < 1000) {
             return const OnboardScreen();
           } else {
-            return const Scaffold(
-              body: Center(child: Text('test')),
+            return Center(
+              child: Text("hello"),
             );
           }
         },

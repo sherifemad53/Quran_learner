@@ -2,26 +2,33 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'api_handling/topicmodeling_json.dart';
+import 'api_handling/sentencesimilarity_json.dart';
 import 'package:http/http.dart' as http;
 import 'package:quran_leaner/constrains.dart';
 
 import 'components/veruscard.dart';
 
-class TopicModelingScreen extends StatefulWidget {
-  const TopicModelingScreen({Key? key}) : super(key: key);
+class SentenceSimilarityScreen extends StatefulWidget {
+  const SentenceSimilarityScreen({Key? key}) : super(key: key);
 
   @override
-  State<TopicModelingScreen> createState() => _TopicModelingScreenState();
+  State<SentenceSimilarityScreen> createState() =>
+      _SentenceSimilarityScreenState();
 }
 
-class _TopicModelingScreenState extends State<TopicModelingScreen> {
+class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
   final String _qarunVersehint = 'Enter Verus here';
+  Future? similarityData;
   String? _qarunVersetext;
+
+  TextEditingController myController = TextEditingController();
+
   //var _isSearching = false;
-  //bool _isloading = true;
+  bool _isloaded = false;
 
   Future<Datum> tpgetData(text) async {
+    //static int counter = 0;
+    debugPrint("loaded again");
     Tp jz;
     var uri = Uri.parse(
         'https://anzhir2011-sentencesimilarity-quran-v2.hf.space/api/predict');
@@ -52,7 +59,7 @@ class _TopicModelingScreenState extends State<TopicModelingScreen> {
   }
 
   bool isProbablyArabic(String s) {
-    for (int i = 0; i < s.length;) {
+    for (int i = 0; i < s.length; i++) {
       int c = s.codeUnitAt(i);
       if (c >= 0x0600 && c <= 0x06E0) {
         return true;
@@ -61,43 +68,52 @@ class _TopicModelingScreenState extends State<TopicModelingScreen> {
     return false;
   }
 
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   //similarityData = tpgetData(_qarunVersetext);
+  //   super.initState();
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+
+  //   super.didChangeDependencies();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Title(
-          color: Colors.blue,
+          color: Theme.of(context).primaryColor,
           child: const Text(
             'S E N T E N S E  S I M I L A R I T Y',
             style: TextStyle(fontSize: 20),
           ),
         ),
-        // actions: <Widget>[
-        //   IconButton(
-        //     onPressed: () => setState(() {
-        //       //_isSearching = true;
-        //     }),
-        //     icon: const Icon(Icons.search, color: Colors.white),
-        //   )
-        // ],
       ),
       /*
       todo 1- search bar doesn't load the body each time even on submiting 
-      todo 2- Should check if the entered language was arabic first before fetching data
-      todo 3- should it has a Quran dict to check if the verse the entered corrent before fetching data?
-      todo 4- add a filter for choosing the Aya quran
+      todo 2- Should check if the entered language was arabic first before fetching data (done)
+      todo 4- add a filter for choosing the Aya quran 
       todo 5- remember the searched data 
-      todo 6- add clear button to search bar
+      todo 6- add clear button to search bar (done)
       */
-      body: Container(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          //physics: const NeverScrollableScrollPhysics(),
+      body: SingleChildScrollView(
+        //physics: const NeverScrollableScrollPhysics(),
+        child: Container(
+          padding: const EdgeInsets.all(5),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              const SizedBox(
+                height: 10,
+              ),
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: kSecendoryColor),
+                  border: Border.all(color: Colors.black),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Row(
@@ -106,6 +122,7 @@ class _TopicModelingScreenState extends State<TopicModelingScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: TextField(
+                        controller: myController,
                         decoration: InputDecoration(
                           //border: const OutlineInputBorder(),
                           enabledBorder: InputBorder.none,
@@ -113,20 +130,24 @@ class _TopicModelingScreenState extends State<TopicModelingScreen> {
                           focusedBorder: InputBorder.none,
                           //suffixIcon: const Icon(Icons.search),
                           hintText: _qarunVersehint,
-                          icon: const Icon(Icons.search),
                         ),
                         keyboardType: TextInputType.text,
                         onSubmitted: (value) {
-                          setState(() {
-                            _qarunVersetext = value;
-                            // _qarunVersehint = value;
-                          });
+                          if (isProbablyArabic(value)) {
+                            setState(() {
+                              _qarunVersetext = value;
+                              _isloaded = true;
+                              similarityData = tpgetData(_qarunVersetext);
+                            });
+                          }
                         },
+                        onTap: () {},
+                        scrollPhysics: const NeverScrollableScrollPhysics(),
                       ),
                     ),
                     IconButton(
                         onPressed: () {
-                          debugPrint("hello");
+                          myController.clear();
                         },
                         icon: const Icon(Icons.clear))
                   ],
@@ -134,25 +155,28 @@ class _TopicModelingScreenState extends State<TopicModelingScreen> {
               ),
               //const SizedBox.shrink(),
               FutureBuilder(
-                  future: tpgetData(_qarunVersetext),
+                  future: similarityData,
                   builder: (context, snapshot) {
                     //_isSearching = false;
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                          child: CircularProgressIndicator.adaptive());
                     } else if (snapshot.hasError) {
-                      return const Card(child: Text(''));
+                      return const Card(child: Text('An error Occured'));
                     } else {
                       return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: snapshot.data!.confidences!.length,
                           itemBuilder: (BuildContext context, int index) {
+                            _isloaded = false;
                             return VerusCard(
                                 label: snapshot.data!.confidences![index].label,
                                 confidance: snapshot
                                     .data!.confidences![index].confidence!);
                           });
                     }
-                  }),
+                  })
             ],
           ),
         ),

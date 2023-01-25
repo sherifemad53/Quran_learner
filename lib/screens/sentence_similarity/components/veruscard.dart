@@ -27,7 +27,7 @@ class VerusCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.75,
+                    width: MediaQuery.of(context).size.width * 0.79,
                     child: AutoSizeText(
                       label.toString(),
                       style: const TextStyle(
@@ -38,6 +38,7 @@ class VerusCard extends StatelessWidget {
                       wrapWords: true,
                       minFontSize: 18,
                       maxFontSize: 30,
+                      textAlign: TextAlign.end,
                     ),
                   ),
                   const SizedBox(height: 20),

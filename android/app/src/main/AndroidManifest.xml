@@ -32,5 +32,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-    </application>
+        </application>
 </manifest>

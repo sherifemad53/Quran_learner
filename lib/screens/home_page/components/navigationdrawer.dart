@@ -6,7 +6,7 @@ import 'package:quran_leaner/screens/speech_to_text/stt.dart';
 
 import '/screens/home_page/homapage.dart';
 import '/screens/quran_reader/quranreader.dart';
-import '/screens/topic_modeling/topicmodeling.dart';
+import '../../sentence_similarity/sentencesimilarity.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
@@ -46,7 +46,7 @@ class NavigationDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                  return const TopicModelingScreen();
+                  return const SentenceSimilarityScreen();
                 }));
               },
             ),
