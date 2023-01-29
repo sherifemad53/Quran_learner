@@ -28,6 +28,9 @@ class SpeechToTextScreen extends StatefulWidget {
 class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //stt.SpeechToText? speech;
 
+  final record = Record();
+  final audioPlayer = AudioPlayer();
+
   //var db = FirebaseFirestore.instance;
   var counter = 0;
 
@@ -47,14 +50,9 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
 
   String text = "Press the Button and start speaking";
 
-  final record = Record();
-  final audioPlayer = AudioPlayer();
-
   @override
   void initState() {
     super.initState();
-    //speech = stt.SpeechToText();
-    //speech?.initialize();
 
     audioPlayer.onDurationChanged.listen((dur) {
       setState(() {
@@ -67,6 +65,12 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
         position = pos;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    record.dispose();
+    super.dispose();
   }
 
   Future<String> _speechToText() async {
@@ -146,10 +150,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
       if (await record.hasPermission()) {
         Directory directory = await getApplicationDocumentsDirectory();
         counter += 100;
-        _filename = "${counter}.wav";
-
-        print(_filename);
-
+        _filename = "$counter.wav";
         _filepath = '${directory.path}/$_filename';
         // Start recording
         setState(() {
@@ -158,7 +159,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
         });
 
         //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
-        //
+
         await record.start(
           path: _filepath,
           encoder: AudioEncoder.wav, // by default
@@ -182,12 +183,13 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
       ),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.width,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(color: Colors.amber),
                 padding: const EdgeInsets.all(20),
                 child: Text(
                   text,
@@ -197,69 +199,68 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(position!.inSeconds.toString()),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    child: Slider(
-                      min: 0,
-                      max: duration!.inSeconds.toDouble(),
-                      value: position!.inSeconds.toDouble(),
-                      onChanged: ((value) async {
-                        final curPosition = Duration(seconds: value.toInt());
-                        await audioPlayer.seek(curPosition);
-                      }),
-                    ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(position!.inSeconds.toString()),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: Slider(
+                    min: 0,
+                    max: duration!.inSeconds.toDouble(),
+                    value: position!.inSeconds.toDouble(),
+                    onChanged: ((value) async {
+                      final curPosition = Duration(seconds: value.toInt());
+                      await audioPlayer.seek(curPosition);
+                    }),
                   ),
-                  Text(duration!.inSeconds.toString()),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  if (isRecorded)
-                    IconButton(
-                      onPressed: _upload,
-                      icon: const Icon(Icons.upload_file),
-                    ),
-                  IconButton(onPressed: _record, icon: const Icon(Icons.mic)),
-                  isPlaying
-                      ? IconButton(
-                          onPressed: () async {
-                            await audioPlayer.pause();
-                            setState(() {
-                              isPlaying = false;
-                            });
-                          },
-                          icon: const Icon(Icons.pause))
-                      : IconButton(
-                          onPressed: _playRecorded,
-                          icon: const Icon(Icons.play_arrow)),
-                  if (isUploaded)
-                    IconButton(
-                      onPressed: _speechToText,
-                      icon: const Icon(Icons.text_snippet_sharp),
-                    ),
-                ],
-              )
-            ],
-          ),
+                ),
+                Text(duration!.inSeconds.toString()),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                if (isRecorded)
+                  ElevatedButton.icon(
+                    label: const Text("Upload"),
+                    onPressed: _upload,
+                    icon: const Icon(Icons.upload_file),
+                  ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _record();
+                  },
+                  icon: isRecording
+                      ? const Icon(Icons.stop)
+                      : const Icon(Icons.mic),
+                  label: isRecording ? const Text("Stop") : const Text("Start"),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: isRecording ? Colors.red : Colors.grey),
+                ),
+                isPlaying
+                    ? IconButton(
+                        onPressed: () async {
+                          await audioPlayer.pause();
+                          setState(() {
+                            isPlaying = false;
+                          });
+                        },
+                        icon: const Icon(Icons.pause))
+                    : IconButton(
+                        onPressed: _playRecorded,
+                        icon: const Icon(Icons.play_arrow)),
+                if (isUploaded)
+                  IconButton(
+                    onPressed: _speechToText,
+                    icon: const Icon(Icons.text_snippet_sharp),
+                  ),
+              ],
+            )
+          ],
         ),
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (() => FirebaseFirestore.instance
-      //           .collection("/users/n5XJX7gePIzV2xDt1ABW/messages")
-      //           .snapshots()
-      //           .listen((event) {
-      //         event.docs.forEach((element) {
-      //           print(element['text']);
-      //         });
-      //       })),
-      //   child: Icon(isRecording ? Icons.mic : Icons.mic_none),
-      // ),
     );
   }
 }

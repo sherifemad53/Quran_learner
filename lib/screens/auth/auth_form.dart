@@ -1,15 +1,35 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm({
-    Key? key,
-  }) : super(key: key);
+  const AuthForm(this.submitAuthForm, {super.key});
+
+  final void Function(String? userName, String? userPassword, String? userEmail,
+      bool isLogin) submitAuthForm;
 
   @override
   State<AuthForm> createState() => _AuthFormState();
 }
 
 class _AuthFormState extends State<AuthForm> {
+  final _formkey = GlobalKey<FormState>();
+  String? _userName, _userPassword, _userEmail;
+  bool _isLogin = true;
+
+  void _submit() {
+    final isValid = _formkey.currentState!.validate();
+
+    //To dismiss the keyboard on pressing the login button
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+
+    if (isValid) {
+      _formkey.currentState!.save();
+      widget.submitAuthForm(_userName, _userPassword, _userEmail, _isLogin);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -19,44 +39,77 @@ class _AuthFormState extends State<AuthForm> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Form(
+              key: _formkey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    decoration: const InputDecoration(
-                      labelText: "Username",
+                  if (!_isLogin)
+                    TextFormField(
+                      key: const ValueKey("username"),
+                      keyboardType: TextInputType.name,
+                      decoration: const InputDecoration(
+                        labelText: "Username",
+                      ),
+                      onSaved: (newValue) {
+                        _userName = newValue;
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty || (value.length < 4)) {
+                          return 'Enter correct username';
+                        }
+                        return null;
+                      },
                     ),
-                    onSaved: (newValue) {},
-                    validator: (value) {},
-                  ),
                   TextFormField(
+                    key: const ValueKey("email"),
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: "Email Address",
                     ),
-                    onSaved: (newValue) {},
-                    validator: (value) {},
+                    onSaved: (newValue) {
+                      _userEmail = newValue;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty || !(value.contains('@'))) {
+                        return 'Enter correct email';
+                      }
+                      return null;
+                    },
                   ),
                   TextFormField(
+                    key: const ValueKey("password"),
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       labelText: "Password",
                     ),
                     obscureText: true,
-                    onSaved: (newValue) {},
-                    validator: (value) {},
+                    onSaved: (newValue) {
+                      _userPassword = newValue;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty || (value.length < 4)) {
+                        return 'Enter correct password';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
-                    child: const Text("Sign in"),
+                    onPressed: () {
+                      _submit();
+                    },
+                    child: Text(_isLogin ? "Log in" : "Sign Up"),
                   ),
                   TextButton(
-                      onPressed: () {},
-                      child: const Text("Create new account")),
+                      onPressed: () {
+                        _isLogin = !_isLogin;
+                        setState(() {});
+                      },
+                      child: Text(_isLogin
+                          ? "Create new account"
+                          : "Already have account")),
                 ],
               ),
             ),

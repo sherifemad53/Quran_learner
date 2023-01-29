@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'api_handling/sentencesimilarity_json.dart';
 import 'package:http/http.dart' as http;
-import 'package:quran_leaner/constrains.dart';
 
 import 'components/veruscard.dart';
 
@@ -24,7 +23,7 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
   TextEditingController myController = TextEditingController();
 
   //var _isSearching = false;
-  bool _isloaded = false;
+  //bool _isloaded = false;
 
   Future<Datum> tpgetData(text) async {
     //static int counter = 0;
@@ -68,20 +67,6 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
     return false;
   }
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   //similarityData = tpgetData(_qarunVersetext);
-  //   super.initState();
-  // }
-
-  // @override
-  // void didChangeDependencies() {
-  //   // TODO: implement didChangeDependencies
-
-  //   super.didChangeDependencies();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +80,7 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
         ),
       ),
       /*
-      todo 1- search bar doesn't load the body each time even on submiting 
+      todo 1- search bar doesn't load the body each time even on submiting (done)
       todo 2- Should check if the entered language was arabic first before fetching data (done)
       todo 4- add a filter for choosing the Aya quran 
       todo 5- remember the searched data 
@@ -136,7 +121,7 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
                           if (isProbablyArabic(value)) {
                             setState(() {
                               _qarunVersetext = value;
-                              _isloaded = true;
+                              //_isloaded = true;
                               similarityData = tpgetData(_qarunVersetext);
                             });
                           }
@@ -163,13 +148,19 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
                           child: CircularProgressIndicator.adaptive());
                     } else if (snapshot.hasError) {
                       return const Card(child: Text('An error Occured'));
+                    } else if (snapshot.data == null) {
+                      return const Center(
+                        child: Text("Please enter a verus"),
+                      );
                     } else {
                       return ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
                           shrinkWrap: true,
                           itemCount: snapshot.data!.confidences!.length,
                           itemBuilder: (BuildContext context, int index) {
-                            _isloaded = false;
+                            //_isloaded = false;
                             return VerusCard(
                                 label: snapshot.data!.confidences![index].label,
                                 confidance: snapshot

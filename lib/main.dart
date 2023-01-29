@@ -30,11 +30,11 @@ class MyApp extends StatelessWidget {
       home: LayoutBuilder(
         builder: (context, constrains) {
           if (constrains.maxWidth < 500) {
-            return const OnboardScreen(); //AuthScreen();
+            return const AuthScreen(); //AuthScreen();
           } else if (constrains.maxWidth > 500 && constrains.maxWidth < 1000) {
             return const OnboardScreen();
           } else {
-            return Center(
+            return const Center(
               child: Text("hello"),
             );
           }
