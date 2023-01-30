@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitAuthForm, {super.key});
 
-  final void Function(String? userName, String? userPassword, String? userEmail,
-      bool isLogin) submitAuthForm;
+  final void Function(
+          String userName, String userPassword, String userEmail, bool isLogin)
+      submitAuthForm;
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -12,7 +13,7 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm> {
   final _formkey = GlobalKey<FormState>();
-  String? _userName, _userPassword, _userEmail;
+  String _userName = '', _userPassword = '', _userEmail = '';
   bool _isLogin = true;
 
   void _submit() {
@@ -26,7 +27,8 @@ class _AuthFormState extends State<AuthForm> {
 
     if (isValid) {
       _formkey.currentState!.save();
-      widget.submitAuthForm(_userName, _userPassword, _userEmail, _isLogin);
+      widget.submitAuthForm(
+          _userName.trim(), _userPassword.trim(), _userEmail.trim(), _isLogin);
     }
   }
 
@@ -51,7 +53,7 @@ class _AuthFormState extends State<AuthForm> {
                         labelText: "Username",
                       ),
                       onSaved: (newValue) {
-                        _userName = newValue;
+                        _userName = newValue.toString();
                       },
                       validator: (value) {
                         if (value!.isEmpty || (value.length < 4)) {
@@ -67,7 +69,7 @@ class _AuthFormState extends State<AuthForm> {
                       labelText: "Email Address",
                     ),
                     onSaved: (newValue) {
-                      _userEmail = newValue;
+                      _userEmail = newValue.toString();
                     },
                     validator: (value) {
                       if (value!.isEmpty || !(value.contains('@'))) {
@@ -84,7 +86,7 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                     obscureText: true,
                     onSaved: (newValue) {
-                      _userPassword = newValue;
+                      _userPassword = newValue.toString();
                     },
                     validator: (value) {
                       if (value!.isEmpty || (value.length < 4)) {
