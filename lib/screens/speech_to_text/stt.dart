@@ -3,20 +3,19 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:quran_leaner/screens/speech_to_text/components/quran_list.dart';
+import 'package:quran_leaner/screens/speech_to_text/components/string_similarity.dart';
 
+import 'components/decodeSTT.dart';
 //import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:path_provider/path_provider.dart';
 
+import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
-
-//import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:http/http.dart' as http;
 
-import 'decodeSTT.dart';
+//import 'package:firebase_core/firebase_core.dart';
 
 class SpeechToTextScreen extends StatefulWidget {
   const SpeechToTextScreen({Key? key}) : super(key: key);
@@ -44,6 +43,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
 
   String? _filepath;
   String? _filename;
+  String? _selectSurahName;
 
   Duration? duration = Duration.zero;
   Duration? position = Duration.zero;
@@ -120,6 +120,9 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   }
 
   void _upload() async {
+    //TODO: Give some meta data like age and gender
+    //TODO: Use better naming to keep track of each user record
+
     File wavfile = File(_filepath!);
     try {
       setState(() {
@@ -135,6 +138,14 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
       isUploaded = true;
       isLoading = false;
     });
+  }
+
+  void _checkReading(String? surahName) {
+    var arabicQurantext = quranList
+        .firstWhere((element) => element['SurahNameArabic'] == surahName);
+
+    print(StringSimilarity.similarity(
+        arabicQurantext['ArabicText'].toString(), text));
   }
 
   // Check and request permission
@@ -167,7 +178,6 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
           samplingRate: 16000, // by default
           numChannels: 1,
         );
-
         debugPrint(_filepath);
       }
     }
@@ -181,25 +191,72 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
           "S P E E C H  T O  T E X T",
         ),
       ),
-      body: SizedBox(
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(color: Colors.amber),
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.headline1!.color,
-                    fontSize: 20,
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Choose Surah',
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                ),
+                  DropdownButton<String>(
+                    value: _selectSurahName,
+                    isDense: false,
+                    items: quranList.map((e) {
+                      return DropdownMenuItem<String>(
+                        value: e['SurahNameArabic'].toString(),
+                        child: Text(
+                          e['SurahNameArabic'].toString(),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectSurahName = value;
+                      });
+                    },
+                    hint: Text('Select'.toUpperCase(),
+                        style: Theme.of(context).textTheme.bodyMedium),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(height: 10),
+            //TODO: this container shows the spelled words
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration: const BoxDecoration(
+                  color: Colors.greenAccent,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                padding: const EdgeInsets.all(20),
+                child: Text(text, style: Theme.of(context).textTheme.bodyLarge),
+              ),
+            ),
+            //TODO: this container shows the wrong words and their correnction
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.3,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+            ),
+            //player slider
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -219,6 +276,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                 Text(duration!.inSeconds.toString()),
               ],
             ),
+            //buttons to upload and edit
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -253,7 +311,10 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                         icon: const Icon(Icons.play_arrow)),
                 if (isUploaded)
                   IconButton(
-                    onPressed: _speechToText,
+                    onPressed: () {
+                      _speechToText();
+                      _checkReading(_selectSurahName);
+                    },
                     icon: const Icon(Icons.text_snippet_sharp),
                   ),
               ],

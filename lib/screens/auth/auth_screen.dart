@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'auth_form.dart';
+import 'widgets/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({Key? key}) : super(key: key);
-
+  AuthScreen({Key? key, required this.islogin}) : super(key: key);
+  bool islogin;
   @override
   State<AuthScreen> createState() => _AuthScreenState();
 }
@@ -19,16 +19,16 @@ class _AuthScreenState extends State<AuthScreen> {
   void _submitAuthForm(String userName, String userPassword, String userEmail,
       bool isLogin) async {
     User? userCredential;
-    //todo more sign in options like google, facebook
+    //TODO: more sign in options like google, facebook
     try {
       if (isLogin) {
-        //todo handle login errors
+        //TODO: handle login errors
         userCredential = (await _auth.signInWithEmailAndPassword(
                 email: userEmail, password: userPassword))
             .user;
         //print(userCredential!.uid);
       } else {
-        //todo create account error handling
+        //TODO: create account error handling
         userCredential = (await _auth.createUserWithEmailAndPassword(
                 email: userEmail, password: userPassword))
             .user;
@@ -37,12 +37,11 @@ class _AuthScreenState extends State<AuthScreen> {
             .collection('users')
             .doc(userCredential!.uid)
             .set({'username': userName, 'email': userEmail});
-        //print(userCredential!.uid);
       }
     } on FirebaseAuthException catch (err) {
       var errorMsg = "Error occured in auth";
       if (err.code == "user-not-found") {
-        //todo handle
+        //TODO: handle
         errorMsg = "user not found";
       }
 
@@ -74,7 +73,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: AuthForm(_submitAuthForm),
+      body: AuthForm(_submitAuthForm, widget.islogin),
     );
   }
 }

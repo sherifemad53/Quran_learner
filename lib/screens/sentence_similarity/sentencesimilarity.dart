@@ -67,6 +67,7 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
     return false;
   }
 
+  //FIXME:
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,11 +81,11 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
         ),
       ),
       /*
-      todo 1- search bar doesn't load the body each time even on submiting (done)
-      todo 2- Should check if the entered language was arabic first before fetching data (done)
-      todo 4- add a filter for choosing the Aya quran 
-      todo 5- remember the searched data 
-      todo 6- add clear button to search bar (done)
+      TODO: 1- search bar doesn't load the body each time even on submiting (done)
+      TODO: 2- Should check if the entered language was arabic first before fetching data (done)
+      TODO: 4- add a filter for choosing the Aya quran 
+      TODO: 5- remember the searched data 
+      TODO: 6- add clear button to search bar (done)
       */
       body: SingleChildScrollView(
         //physics: const NeverScrollableScrollPhysics(),

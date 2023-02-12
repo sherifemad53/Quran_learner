@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'components/navigationdrawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,8 +12,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _authInstance = FirebaseAuth.instance;
+
+  final _firebaseFirestore = FirebaseFirestore.instance;
+
+  var _username;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void test() async {
+    _username = await _firebaseFirestore
+        .collection('users')
+        .doc(_authInstance.currentUser!.uid)
+        .get();
+    //print(f['username']);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    test();
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -55,28 +84,100 @@ class _HomePageState extends State<HomePage> {
                 icon: const Icon(Icons.settings),
                 onChanged: ((value) {
                   if (value == 'logout') {
-                    FirebaseAuth.instance.signOut();
+                    _authInstance.signOut();
                   }
                 }),
               ),
             ),
           )
         ],
-        title: const Text('Home'),
       ),
       drawer: const NavigationDrawer(),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              "Home",
-              style: TextStyle(fontSize: 30),
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
+              child: const Text(
+                // " Hello, ${_username['username']} ",
+                'Hello ,User',
+                style: TextStyle(fontSize: 30),
+              ),
+            ),
+            Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.2,
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                color: Colors.blueAccent,
+                child: const FittedBox(child: Text("test")),
+              ),
+            ),
+            Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.2,
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                color: Colors.blueAccent,
+                child: const FittedBox(child: Text("test")),
+              ),
+            ),
+            Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.2,
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                color: Colors.blueAccent,
+                child: const FittedBox(child: Text("test")),
+              ),
+            ),
+            Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.2,
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                color: Colors.blueAccent,
+                child: const FittedBox(child: Text("test")),
+              ),
             ),
           ],
         ),
       ),
       drawerEnableOpenDragGesture: true,
+      bottomNavigationBar: BottomAppBar(
+        shape: const AutomaticNotchedShape(
+          RoundedRectangleBorder(),
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            side: BorderSide(),
+          ),
+        ),
+        notchMargin: 6,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(icon: const Icon(Icons.home), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        elevation: 0,
+        onPressed: () {},
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+        ),
+        child: const Icon(Icons.mic),
+      ),
     );
   }
 }
