@@ -143,9 +143,27 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   void _checkReading(String? surahName) {
     var arabicQurantext = quranList
         .firstWhere((element) => element['SurahNameArabic'] == surahName);
-
-    print(StringSimilarity.similarity(
-        arabicQurantext['ArabicText'].toString(), text));
+    List<String> textlist = [], speechedtext = [];
+    speechedtext = text.split(' ');
+    //print(arabicQurantext['ArabicText'].toString().split(' '));
+    for (var elm in arabicQurantext['ArabicText'].toString().split(" ")) {
+      textlist.add(elm.replaceFirst(',', '').trim());
+    }
+    int counter = 0;
+    double t;
+    for (var element in textlist) {
+      t = StringSimilarity.similarity(element, speechedtext[counter]);
+      if (t >= 0.75) {
+        print('$element good');
+      } else {
+        print('$element bad');
+      }
+      if (counter < speechedtext.length) {
+        counter++;
+      }
+    }
+    // print(StringSimilarity.similarity(
+    //     arabicQurantext['ArabicText'].toString(), text));
   }
 
   // Check and request permission

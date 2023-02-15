@@ -27,6 +27,8 @@ class StringSimilarity {
     List<List<int>> d =
         List.generate(sa + 1, (int i) => List.filled(sb + 1, 0));
 
+    // print(d.length);
+
     if (a.isEmpty) {
       levenshtein = b.length;
       return (levenshtein);
@@ -48,9 +50,11 @@ class StringSimilarity {
         } else {
           cost = 1;
         }
+
         min1 = (d[i - 1][j] + 1);
         min2 = (d[i][j - 1] + 1);
         min3 = (d[i - 1][j - 1] + cost);
+
         d[i][j] = _min(min1, _min(min2, min3));
       }
     }

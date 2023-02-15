@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 
-import '../../../constrains.dart';
+import '../../../common/constrains.dart';
 
 class VerusCard extends StatelessWidget {
   const VerusCard({

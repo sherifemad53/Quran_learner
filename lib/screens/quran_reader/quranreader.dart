@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:csv/csv.dart';
+//TODO ALI EL SHIMMY TASK IMPLEMEENT QURAN READER OR PDF VIEWER WHICH VIEWS QURAN TO READ
+//TODO SELECTABLE TEXT TO SEARCH FOR SIMILAR ONES USING OUR SEARCH ENGINE (SENSTENSE SIMILARITY)
 
 class QuranReaderScreen extends StatelessWidget {
   const QuranReaderScreen({Key? key}) : super(key: key);

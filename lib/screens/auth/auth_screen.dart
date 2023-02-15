@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 
 import 'widgets/auth_form.dart';
 
+//TODO: Sperate login from signup screen ??
+
 class AuthScreen extends StatefulWidget {
   AuthScreen({Key? key, required this.islogin}) : super(key: key);
   bool islogin;
@@ -29,6 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
         //print(userCredential!.uid);
       } else {
         //TODO: create account error handling
+        //TODO: ADD GENDER ,AGE AND NAME
         userCredential = (await _auth.createUserWithEmailAndPassword(
                 email: userEmail, password: userPassword))
             .user;
@@ -41,7 +44,8 @@ class _AuthScreenState extends State<AuthScreen> {
     } on FirebaseAuthException catch (err) {
       var errorMsg = "Error occured in auth";
       if (err.code == "user-not-found") {
-        //TODO: handle
+        //TODO: handle all error types
+
         errorMsg = "user not found";
       }
 

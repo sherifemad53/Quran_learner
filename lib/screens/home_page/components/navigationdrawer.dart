@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:quran_leaner/screens/about_us/aboutus.dart';
-import 'package:quran_leaner/screens/speech_to_text/stt.dart';
 
-//import '/constrains.dart';
-
+import '/screens/about_us/aboutus.dart';
+import '/screens/speech_to_text/stt.dart';
 import '/screens/home_page/homapage.dart';
 import '/screens/quran_reader/quranreader.dart';
-import '../../sentence_similarity/sentencesimilarity.dart';
+import '/screens/sentence_similarity/sentence_similarity.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
