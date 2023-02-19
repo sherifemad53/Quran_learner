@@ -24,11 +24,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  void test() async {
+  Future test() async {
     _username = await _firebaseFirestore
         .collection('users')
         .doc(_authInstance.currentUser!.uid)
         .get();
+    return _username['username'];
     //print(f['username']);
   }
 
@@ -98,24 +99,19 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //TODO image for user in home and profile?
             Container(
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(10),
-              child: const Text(
-                // " Hello, ${_username['username']} ",
-                'Hello ,User',
-                style: TextStyle(fontSize: 30),
-              ),
-            ),
-            Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.2,
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(10),
-                color: Colors.blueAccent,
-                child: const FittedBox(child: Text("test")),
-              ),
+              child: FutureBuilder(
+                  future: test(),
+                  builder: (context, snapshot) {
+                    return Text(
+                      // " Hello, ${_username['username']} ",
+                      'Hello, ${snapshot.data}',
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    );
+                  }),
             ),
             Center(
               child: Container(

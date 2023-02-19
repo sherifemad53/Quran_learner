@@ -1,4 +1,4 @@
-List<Map<String, Object>> quranList = [
+List<Map<String, dynamic>> quranList = [
   {
     'JuzNameArabic': 'الم',
     'SurahNameArabic': 'الفاتحة',

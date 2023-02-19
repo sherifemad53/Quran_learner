@@ -19,27 +19,37 @@ class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
 
   void _submitAuthForm(String userName, String userPassword, String userEmail,
-      bool isLogin) async {
+      DateTime userBirthday, String userGender, bool isLogin) async {
     User? userCredential;
     //TODO: more sign in options like google, facebook
     try {
       if (isLogin) {
         //TODO: handle login errors
-        userCredential = (await _auth.signInWithEmailAndPassword(
-                email: userEmail, password: userPassword))
-            .user;
+        (await _auth
+            .signInWithEmailAndPassword(
+                email: userEmail, password: userPassword)
+            .then((value) => Navigator.of(context).pop()));
+        userCredential = _auth.currentUser;
         //print(userCredential!.uid);
       } else {
         //TODO: create account error handling
-        //TODO: ADD GENDER ,AGE AND NAME
-        userCredential = (await _auth.createUserWithEmailAndPassword(
-                email: userEmail, password: userPassword))
-            .user;
+        //TODO: ADD GENDER, AGE AND NAME
+        (await _auth
+            .createUserWithEmailAndPassword(
+                email: userEmail, password: userPassword)
+            .then((value) => Navigator.of(context).pop()));
+        userCredential = _auth.currentUser;
         final firebaseFirestore = FirebaseFirestore.instance;
         await firebaseFirestore
             .collection('users')
             .doc(userCredential!.uid)
-            .set({'username': userName, 'email': userEmail});
+            .set({
+          'username': userName,
+          'email': userEmail,
+          'gender': userGender,
+          'birthdate':
+              '${userBirthday.month.toString()}/${userBirthday.year.toString()}'
+        }).onError((error, stackTrace) => print("errorr:$error"));
       }
     } on FirebaseAuthException catch (err) {
       var errorMsg = "Error occured in auth";

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quran_leaner/screens/speech_to_text/components/quran_list.dart';
 import 'package:quran_leaner/screens/speech_to_text/components/string_similarity.dart';
@@ -29,7 +31,9 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
 
   final record = Record();
   final audioPlayer = AudioPlayer();
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   //var db = FirebaseFirestore.instance;
   var counter = 0;
 
@@ -39,6 +43,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   bool isLoading = false;
   bool isUploaded = false;
   bool isPlaying = false;
+  bool _isChecked = false;
   // bool doneUploading = false;
 
   String? _filepath;
@@ -50,6 +55,11 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
 
   String text = "Press the Button and start speaking";
 
+  var quranWords = List<Map<String, dynamic>>.filled(
+      0, {'word': 'str', 'value': 0.0},
+      growable: true);
+
+  //TODO make it in realtime not record and send
   @override
   void initState() {
     super.initState();
@@ -73,8 +83,11 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     super.dispose();
   }
 
-  Future<String> _speechToText() async {
+  Future<String> _speechToText(
+    String filename,
+  ) async {
     //print(_filename);
+    var user = _auth.currentUser!;
     var uri =
         Uri.parse('https://anzhir2011-quran-recitation.hf.space/run/predict');
     var post = await http.post(
@@ -86,14 +99,15 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
         HttpHeaders.acceptHeader: 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, List<String>>{
-        'data': [_filename!]
+        'data': ['${user.uid}/$filename']
       }),
     );
     try {
       if (post.statusCode == 200) {
-        var data = decodeSttFromJson(utf8.decode(post.bodyBytes));
-        text = data.data!.elementAt(0);
-        setState(() {});
+        text =
+            decodeSttFromJson(utf8.decode(post.bodyBytes)).data!.elementAt(0);
+        //print(text);
+        //setState(() {});
       } else if (post.statusCode >= 400 && post.statusCode <= 499) {}
     } on Exception catch (e) {
       debugPrint(e.toString());
@@ -120,17 +134,35 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   }
 
   void _upload() async {
-    //TODO: Give some meta data like age and gender
+    //TODO: Give some meta data like age and gender (done)
     //TODO: Use better naming to keep track of each user record
-
+    //TODO: ADD BUCKET(folder) FOR EACH USER (done)
     File wavfile = File(_filepath!);
+
+    var user = _auth.currentUser!;
+    var userdata =
+        await _firebaseFirestore.collection('users').doc(user.uid).get();
+
+    SettableMetadata metadata = SettableMetadata(customMetadata: {
+      'uid': user.uid.toString(),
+      'email': user.email.toString(),
+      'gender': userdata['gender'].toString(),
+      'birthdate': userdata['birthdate'].toString()
+    });
+
     try {
       setState(() {
         isLoading = true;
       });
-      final ref =
-          FirebaseStorage.instance.ref().child("wavfiles").child(_filename!);
-      await ref.putFile(wavfile).whenComplete(() => debugPrint("done++"));
+      var firebasefiledir = _firebaseStorage
+          .ref()
+          .child("wavfiles")
+          .child(user.uid)
+          .child(_filename!);
+      await firebasefiledir
+          .putFile(wavfile)
+          .whenComplete(() => debugPrint(" uploaded completely ++"));
+      await firebasefiledir.updateMetadata(metadata);
     } catch (error) {
       debugPrint(error.toString());
     }
@@ -141,29 +173,40 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   }
 
   void _checkReading(String? surahName) {
+    setState(() {
+      _isChecked = false;
+      //quranWords.clear();
+    });
+    quranWords.clear();
     var arabicQurantext = quranList
         .firstWhere((element) => element['SurahNameArabic'] == surahName);
     List<String> textlist = [], speechedtext = [];
     speechedtext = text.split(' ');
     //print(arabicQurantext['ArabicText'].toString().split(' '));
     for (var elm in arabicQurantext['ArabicText'].toString().split(" ")) {
-      textlist.add(elm.replaceFirst(',', '').trim());
+      textlist.add(elm
+          .replaceFirst(',', '')
+          .replaceFirst('[', '')
+          .replaceFirst(']', '')
+          .trim());
     }
+    //print(textlist);
+
     int counter = 0;
     double t;
     for (var element in textlist) {
       t = StringSimilarity.similarity(element, speechedtext[counter]);
-      if (t >= 0.75) {
-        print('$element good');
-      } else {
-        print('$element bad');
-      }
+      quranWords.add({'word': element, 'value': t});
       if (counter < speechedtext.length) {
         counter++;
       }
     }
+    //print(quranWords);
     // print(StringSimilarity.similarity(
     //     arabicQurantext['ArabicText'].toString(), text));
+    setState(() {
+      _isChecked = true;
+    });
   }
 
   // Check and request permission
@@ -177,7 +220,9 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
       // Future aval = record.isRecording();
     } else {
       if (await record.hasPermission()) {
+        //TODO Clear wav files from device after a while
         Directory directory = await getApplicationDocumentsDirectory();
+        //TODO CHANGE FILE NAME
         counter += 100;
         _filename = "$counter.wav";
         _filepath = '${directory.path}/$_filename';
@@ -203,6 +248,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("build");
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -252,27 +298,49 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            //TODO: this container shows the spelled words
+            //this container shows the spelled words
             Expanded(
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 decoration: const BoxDecoration(
-                  color: Colors.greenAccent,
+                  color: Color.fromARGB(255, 112, 181, 183),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                padding: const EdgeInsets.all(20),
-                child: Text(text, style: Theme.of(context).textTheme.bodyLarge),
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  text,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.right,
+                ),
               ),
             ),
-            //TODO: this container shows the wrong words and their correnction
+            //this container shows the wrong words and their correnction
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.3,
               margin: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.all(10),
               decoration: const BoxDecoration(
-                color: Colors.blue,
+                color: Color.fromARGB(255, 168, 202, 146),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
+              child: _isChecked
+                  ? RichText(
+                      textAlign: TextAlign.right,
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          children: <TextSpan>[
+                            for (var element in quranWords)
+                              TextSpan(
+                                  text: "${element['word']} ",
+                                  style: TextStyle(
+                                      color: element['value'] > 0.7
+                                          ? Colors.black
+                                          : Colors.red)),
+                          ]))
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
             ),
             //player slider
             Row(
@@ -330,8 +398,8 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                 if (isUploaded)
                   IconButton(
                     onPressed: () {
-                      _speechToText();
-                      _checkReading(_selectSurahName);
+                      _speechToText(_filename as String)
+                          .whenComplete(() => _checkReading(_selectSurahName));
                     },
                     icon: const Icon(Icons.text_snippet_sharp),
                   ),

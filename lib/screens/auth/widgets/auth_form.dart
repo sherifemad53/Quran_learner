@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:quran_leaner/screens/auth/components/form_validator.dart';
 
-enum gender { male, female }
+enum Gender { male, female }
 
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitAuthForm, this.islogin, {super.key});
 
-  final void Function(
-          String userName, String userPassword, String userEmail, bool isLogin)
-      submitAuthForm;
+  final void Function(String userName, String userPassword, String userEmail,
+      DateTime userBirthday, String userGender, bool isLogin) submitAuthForm;
 
   final bool islogin;
   @override
@@ -18,8 +17,10 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm> {
   final _formkey = GlobalKey<FormState>();
   String _userName = '', _userPassword = '', _userEmail = '';
-  gender? _gender;
+  Gender _userGender = Gender.male;
   bool _isLogin = true;
+  DateTime _userBirthdayDate = DateTime.now();
+  bool _isSelectedDate = false;
 
   void _submit() {
     final isValid = _formkey.currentState!.validate();
@@ -29,25 +30,32 @@ class _AuthFormState extends State<AuthForm> {
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
-
+    String ugender;
+    if (_userGender == Gender.male) {
+      ugender = 'male';
+    } else {
+      ugender = 'female';
+    }
     if (isValid) {
       _formkey.currentState!.save();
-      widget.submitAuthForm(
-          _userName.trim(), _userPassword.trim(), _userEmail.trim(), _isLogin);
+      widget.submitAuthForm(_userName.trim(), _userPassword.trim(),
+          _userEmail.trim(), _userBirthdayDate, ugender, _isLogin);
     }
   }
 
-  DateTime selectedDate = DateTime.now();
-
   Future<void> _selectDate(BuildContext context) async {
+    // setState(() {
+    //   _isSelectedDate = false;
+    // });
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
+        initialDate: _userBirthdayDate,
+        firstDate: DateTime(1920, 1),
+        lastDate: DateTime.now());
+    if (picked != null && picked != _userBirthdayDate) {
       setState(() {
-        selectedDate = picked;
+        _isSelectedDate = true;
+        _userBirthdayDate = picked;
       });
     }
   }
@@ -61,7 +69,7 @@ class _AuthFormState extends State<AuthForm> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -69,7 +77,7 @@ class _AuthFormState extends State<AuthForm> {
               Hero(
                 tag: 'welcome_image',
                 child: Image(
-                  image: const AssetImage('assets/images/welcome_image.jpg'),
+                  image: const AssetImage('assets/images/welcome_image.png'),
                   width: size.width,
                   height: size.height * 0.3,
                   alignment: Alignment.center,
@@ -149,30 +157,29 @@ class _AuthFormState extends State<AuthForm> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            const Text(
+                            Text(
                               "Gender: ",
+                              style: Theme.of(context).textTheme.headlineMedium,
                             ),
                             Expanded(
-                              child: RadioListTile<gender>(
+                              child: RadioListTile<Gender>(
                                 contentPadding: const EdgeInsets.all(0),
-                                value: gender.male,
-                                dense: true,
-                                groupValue: _gender,
+                                value: Gender.male,
+                                groupValue: _userGender,
                                 onChanged: (value) {
-                                  _gender = value;
+                                  _userGender = value as Gender;
                                   setState(() {});
                                 },
                                 title: const Text('Male'),
                               ),
                             ),
                             Expanded(
-                              child: RadioListTile<gender>(
+                              child: RadioListTile<Gender>(
                                 contentPadding: const EdgeInsets.all(0),
-                                value: gender.female,
-                                dense: true,
-                                groupValue: _gender,
+                                value: Gender.female,
+                                groupValue: _userGender,
                                 onChanged: (value) {
-                                  _gender = value;
+                                  _userGender = value as Gender;
                                   setState(() {});
                                 },
                                 title: const Text('Female'),
@@ -185,13 +192,23 @@ class _AuthFormState extends State<AuthForm> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            const Text('Birthday:'),
+                            Text(
+                              'Birthday:',
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
                             const SizedBox(
                               width: 20.0,
                             ),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  elevation: 1),
                               onPressed: () => _selectDate(context),
-                              child: const Text('Select date'),
+                              child: _isSelectedDate
+                                  ? Text(
+                                      '${_userBirthdayDate.month.toString()}/${_userBirthdayDate.year.toString()}')
+                                  : const Text('Select date'),
                             ),
                             const SizedBox(
                               width: 20.0,

@@ -16,7 +16,7 @@ class WelcomeScreen extends StatelessWidget {
         Hero(
           tag: 'welcome_image',
           child: Image(
-            image: const AssetImage('assets/images/welcome_image.jpg'),
+            image: const AssetImage('assets/images/welcome_image.png'),
             width: size.width,
             height: size.height * 0.5,
             alignment: Alignment.center,
@@ -47,7 +47,7 @@ class WelcomeScreen extends StatelessWidget {
               width: size.width * 0.9,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  Navigator.of(context).push(MaterialPageRoute(
                       fullscreenDialog: true,
                       builder: (_) {
                         return AuthScreen(
@@ -71,12 +71,12 @@ class WelcomeScreen extends StatelessWidget {
                     splashFactory: NoSplash.splashFactory),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      fullscreenDialog: true,
+                      //fullscreenDialog: true,
                       builder: (_) {
-                        return AuthScreen(
-                          islogin: true,
-                        );
-                      }));
+                    return AuthScreen(
+                      islogin: true,
+                    );
+                  }));
                 },
                 child: Text.rich(TextSpan(children: [
                   TextSpan(
