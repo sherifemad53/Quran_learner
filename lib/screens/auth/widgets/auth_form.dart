@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quran_leaner/screens/auth/components/form_validator.dart';
 
+import 'form_text_field_widget.dart';
+
 enum Gender { male, female }
 
 class AuthForm extends StatefulWidget {
@@ -22,9 +24,15 @@ class _AuthFormState extends State<AuthForm> {
   DateTime _userBirthdayDate = DateTime.now();
   bool _isSelectedDate = false;
 
+  final TextEditingController _userNameTextEditingController =
+      TextEditingController();
+  final TextEditingController _userEmailTextEditingController =
+      TextEditingController();
+  final TextEditingController _userPasswordTextEditingController =
+      TextEditingController();
+
   void _submit() {
     final isValid = _formkey.currentState!.validate();
-
     //To dismiss the keyboard on pressing the login button
     FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus) {
@@ -38,8 +46,13 @@ class _AuthFormState extends State<AuthForm> {
     }
     if (isValid) {
       _formkey.currentState!.save();
-      widget.submitAuthForm(_userName.trim(), _userPassword.trim(),
-          _userEmail.trim(), _userBirthdayDate, ugender, _isLogin);
+      widget.submitAuthForm(
+          _userNameTextEditingController.text.trim(),
+          _userPasswordTextEditingController.text.trim(),
+          _userEmailTextEditingController.text.trim(),
+          _userBirthdayDate,
+          ugender,
+          _isLogin);
     }
   }
 
@@ -66,7 +79,6 @@ class _AuthFormState extends State<AuthForm> {
     final size = mediaQuery.size;
     _isLogin = widget.islogin;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -110,48 +122,30 @@ class _AuthFormState extends State<AuthForm> {
                     children: [
                       if (!_isLogin) const SizedBox(height: 10),
                       if (!_isLogin)
-                        TextFormField(
-                          key: const ValueKey("username"),
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
-                            labelText: "User Name",
-                            border: OutlineInputBorder(),
-                          ),
-                          onSaved: (newValue) {
-                            _userName = newValue.toString();
-                          },
-                          validator: (value) =>
-                              FormValidator.usernameValidator(value),
-                        ),
+                        FormTextField(
+                            key: const ValueKey('username'),
+                            labeltext: "User Name",
+                            validator: FormValidator.usernameValidator,
+                            textEditingController:
+                                _userNameTextEditingController,
+                            isObscuretext: false),
                       const SizedBox(height: 15),
-                      TextFormField(
-                        key: const ValueKey("email"),
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          labelText: "Email Address",
-                          border: OutlineInputBorder(),
-                        ),
-                        onSaved: (newValue) {
-                          _userEmail = newValue.toString();
-                        },
-                        validator: (value) =>
-                            FormValidator.emailValidator(value),
-                      ), //emailtextfield
+                      FormTextField(
+                          key: const ValueKey('email'),
+                          labeltext: 'Email Address',
+                          validator: FormValidator.emailValidator,
+                          textEditingController:
+                              _userEmailTextEditingController,
+                          isObscuretext: false),
                       const SizedBox(height: 15),
-                      TextFormField(
-                        key: const ValueKey("password"),
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          labelText: "Password",
-                          border: OutlineInputBorder(),
-                        ),
-                        obscureText: true,
-                        onSaved: (newValue) {
-                          _userPassword = newValue.toString();
-                        },
-                        validator: (value) =>
-                            FormValidator.passwordValidator(value),
-                      ), // passwordtestfield
+                      FormTextField(
+                          key: const ValueKey('password'),
+                          labeltext: 'Password',
+                          validator: FormValidator.passwordValidator,
+                          textEditingController:
+                              _userPasswordTextEditingController,
+                          isObscuretext: true),
+                      // passwordtestfield
                       const SizedBox(height: 10),
                       if (!_isLogin)
                         Row(
@@ -258,8 +252,7 @@ class _AuthFormState extends State<AuthForm> {
                   },
                   label: const Text('Sign up with Google'),
                   icon: const Image(
-                    image: AssetImage(
-                        'assets/icons/icons8-google-192(-xxxhdpi).png'),
+                    image: AssetImage('assets/icons/google_icon.png'),
                     width: 30,
                   ),
                 ),

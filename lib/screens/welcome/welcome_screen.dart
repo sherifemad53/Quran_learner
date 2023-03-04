@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quran_leaner/screens/auth/auth_screen.dart';
 
+import '../../common/constants.dart';
+
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
@@ -16,25 +18,25 @@ class WelcomeScreen extends StatelessWidget {
         Hero(
           tag: 'welcome_image',
           child: Image(
-            image: const AssetImage('assets/images/welcome_image.png'),
+            image: const AssetImage(kWelcomeImagePath),
             width: size.width,
             height: size.height * 0.5,
             alignment: Alignment.center,
           ),
         ),
-        const SizedBox(height: 20),
+        kSizedBox,
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(kdefualtPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
               Text(
-                'Quranic tool box',
+                kAppTitle,
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               Text(
-                'Our main goal starting this project is to help people learn Quran easily.',
+                kWelcomeSubtitle,
                 style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),
@@ -60,14 +62,14 @@ class WelcomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: 20, horizontal: 30),
                     foregroundColor: Colors.black),
-                child: Text("signup".toUpperCase()),
+                child: Text(kSignup.toUpperCase()),
               ),
             ),
             SizedBox(
               width: size.width * 0.9,
               child: TextButton(
                 style: TextButton.styleFrom(
-                    foregroundColor: Colors.blueGrey,
+                    //foregroundColor: Colors.blueGrey,
                     splashFactory: NoSplash.splashFactory),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -80,9 +82,9 @@ class WelcomeScreen extends StatelessWidget {
                 },
                 child: Text.rich(TextSpan(children: [
                   TextSpan(
-                      text: 'Already have an account?',
+                      text: kAlreadyHaveAccount,
                       style: Theme.of(context).textTheme.bodySmall),
-                  TextSpan(text: ' login'.toUpperCase()),
+                  TextSpan(text: kLogin.toUpperCase()),
                 ])),
               ),
             ),

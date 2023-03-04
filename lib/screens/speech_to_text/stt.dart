@@ -2,22 +2,21 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:quran_leaner/common/constants.dart';
+
+import 'components/quran_list.dart';
+import 'components/string_similarity.dart';
+import 'components/decodeSTT.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:quran_leaner/screens/speech_to_text/components/quran_list.dart';
-import 'package:quran_leaner/screens/speech_to_text/components/string_similarity.dart';
-
-import 'components/decodeSTT.dart';
-//import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
-
-//import 'package:firebase_core/firebase_core.dart';
 
 class SpeechToTextScreen extends StatefulWidget {
   const SpeechToTextScreen({Key? key}) : super(key: key);
@@ -27,14 +26,11 @@ class SpeechToTextScreen extends StatefulWidget {
 }
 
 class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
-  //stt.SpeechToText? speech;
-
   final record = Record();
   final audioPlayer = AudioPlayer();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  //var db = FirebaseFirestore.instance;
   var counter = 0;
 
   bool isListening = false;
@@ -60,23 +56,6 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
       growable: true);
 
   //TODO make it in realtime not record and send
-  @override
-  void initState() {
-    super.initState();
-
-    audioPlayer.onDurationChanged.listen((dur) {
-      setState(() {
-        duration = dur;
-      });
-    });
-
-    audioPlayer.onPositionChanged.listen((pos) {
-      setState(() {
-        position = pos;
-      });
-    });
-  }
-
   @override
   void dispose() {
     record.dispose();
@@ -159,9 +138,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
           .child("wavfiles")
           .child(user.uid)
           .child(_filename!);
-      await firebasefiledir
-          .putFile(wavfile)
-          .whenComplete(() => debugPrint(" uploaded completely ++"));
+      await firebasefiledir.putFile(wavfile);
       await firebasefiledir.updateMetadata(metadata);
     } catch (error) {
       debugPrint(error.toString());
@@ -190,20 +167,21 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
           .replaceFirst(']', '')
           .trim());
     }
-    //print(textlist);
-
     int counter = 0;
     double t;
-    for (var element in textlist) {
-      t = StringSimilarity.similarity(element, speechedtext[counter]);
-      quranWords.add({'word': element, 'value': t});
-      if (counter < speechedtext.length) {
-        counter++;
-      }
+    try {
+      if (textlist.length == speechedtext.length) {
+        for (var element in textlist) {
+          t = StringSimilarity.similarity(element, speechedtext[counter]);
+          quranWords.add({'word': element, 'value': t});
+          if (counter < speechedtext.length) {
+            counter++;
+          }
+        }
+      } else {}
+    } on Exception catch (e) {
+      print(e.toString());
     }
-    //print(quranWords);
-    // print(StringSimilarity.similarity(
-    //     arabicQurantext['ArabicText'].toString(), text));
     setState(() {
       _isChecked = true;
     });
@@ -241,171 +219,257 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
           samplingRate: 16000, // by default
           numChannels: 1,
         );
+        //await record.getAmplitude();
+        //debugPrint(amp.toString());
         debugPrint(_filepath);
       }
     }
   }
 
+  final _isSelected = false;
   @override
   Widget build(BuildContext context) {
-    print("build");
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "S P E E C H  T O  T E X T",
+      // appBar: AppBar(
+      //   title: const Text(
+      //     "M E M O R I Z A T I O N",
+      //   ),
+      // ),
+      body: SafeArea(
+        child: Container(
+          padding:
+              const EdgeInsets.symmetric(horizontal: kdefualtHorizontalPadding),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: kdefualtVerticalPadding),
+                alignment: Alignment.topLeft,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Setect Sura",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          Text(
+                            "To Memoritize",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              //const SizedBox(height: 10),
+              //Choose surah listview
+              //this container shows the spelled words
+              Container(
+                height: size.height * 0.35,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                //padding: const EdgeInsets.all(10),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectSurahName =
+                              quranList[index]['SurahNameArabic'];
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 3),
+                        child: ListTile(
+                          leading: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: Text('${index + 1}'),
+                          ),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "سورة ${quranList[index]['SurahNameArabic']}",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    quranList[index]['SurahNameEnglish'],
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                  Text(
+                                    '${quranList[index]['VerusCount']} verus',
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () {},
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: quranList.length,
+                ),
+              ),
+              //this container shows the wrong words and their correnction
+              CustomTextView(isChecked: _isChecked, quranWords: quranWords),
+              //buttons to upload and edit
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  if (isRecorded)
+                    ElevatedButton.icon(
+                      label: const Text("Upload"),
+                      onPressed: _upload,
+                      icon: const Icon(Icons.upload_file),
+                    ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      _record();
+                    },
+                    icon: isRecording
+                        ? const Icon(Icons.stop)
+                        : const Icon(Icons.mic),
+                    label:
+                        isRecording ? const Text("Stop") : const Text("Start"),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            isRecording ? Colors.red : Colors.grey),
+                  ),
+                  if (isUploaded)
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        _speechToText(_filename as String).whenComplete(
+                            () => _checkReading(_selectSurahName));
+                      },
+                      icon: const Icon(Icons.text_snippet_sharp),
+                      label: const Text("Test"),
+                    ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
+    );
+  }
+}
+
+class CustomTextView extends StatelessWidget {
+  const CustomTextView({
+    Key? key,
+    required bool isChecked,
+    required this.quranWords,
+  })  : _isChecked = isChecked,
+        super(key: key);
+
+  final bool _isChecked;
+  final List<Map<String, dynamic>> quranWords;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.30,
+      margin: const EdgeInsets.symmetric(vertical: kdefualtVerticalMargin),
+      padding:
+          const EdgeInsets.symmetric(horizontal: kdefualtHorizontalPadding),
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 168, 202, 146),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: _isChecked
+          ? RichText(
+              textAlign: TextAlign.right,
+              text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  children: <TextSpan>[
+                    for (var element in quranWords)
+                      TextSpan(
+                          text: "${element['word']} ",
+                          style: TextStyle(
+                              color: element['value'] > 0.7
+                                  ? Colors.black
+                                  : Colors.red)),
+                  ]))
+          : const Center(
+              child: CircularProgressIndicator(),
+            ),
+    );
+  }
+}
+
+class QuranListTile extends StatelessWidget {
+  QuranListTile({super.key, required this.index, required this.isSelected});
+
+  int index;
+  bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 3),
+        decoration: BoxDecoration(
+            border: Border.all(
+                width: 2, style: BorderStyle.solid, color: Colors.black),
+            borderRadius: const BorderRadius.all(Radius.circular(25)),
+            color: isSelected ? Colors.grey[700] : Colors.grey[200]),
+        child: ListTile(
+          leading: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Text('${index + 1}'),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "سورة ${quranList[index]['SurahNameArabic']}",
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-              child: Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Choose Surah',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    quranList[index]['SurahNameEnglish'],
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  DropdownButton<String>(
-                    value: _selectSurahName,
-                    isDense: false,
-                    items: quranList.map((e) {
-                      return DropdownMenuItem<String>(
-                        value: e['SurahNameArabic'].toString(),
-                        child: Text(
-                          e['SurahNameArabic'].toString(),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectSurahName = value;
-                      });
-                    },
-                    hint: Text('Select'.toUpperCase(),
-                        style: Theme.of(context).textTheme.bodyMedium),
+                  Text(
+                    '${quranList[index]['VerusCount']} verus',
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 10),
-            //this container shows the spelled words
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 112, 181, 183),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  text,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  textAlign: TextAlign.right,
-                ),
-              ),
-            ),
-            //this container shows the wrong words and their correnction
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.3,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 168, 202, 146),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: _isChecked
-                  ? RichText(
-                      textAlign: TextAlign.right,
-                      text: TextSpan(
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          children: <TextSpan>[
-                            for (var element in quranWords)
-                              TextSpan(
-                                  text: "${element['word']} ",
-                                  style: TextStyle(
-                                      color: element['value'] > 0.7
-                                          ? Colors.black
-                                          : Colors.red)),
-                          ]))
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-            ),
-            //player slider
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(position!.inSeconds.toString()),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: Slider(
-                    min: 0,
-                    max: duration!.inSeconds.toDouble(),
-                    value: position!.inSeconds.toDouble(),
-                    onChanged: ((value) async {
-                      final curPosition = Duration(seconds: value.toInt());
-                      await audioPlayer.seek(curPosition);
-                    }),
-                  ),
-                ),
-                Text(duration!.inSeconds.toString()),
-              ],
-            ),
-            //buttons to upload and edit
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                if (isRecorded)
-                  ElevatedButton.icon(
-                    label: const Text("Upload"),
-                    onPressed: _upload,
-                    icon: const Icon(Icons.upload_file),
-                  ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _record();
-                  },
-                  icon: isRecording
-                      ? const Icon(Icons.stop)
-                      : const Icon(Icons.mic),
-                  label: isRecording ? const Text("Stop") : const Text("Start"),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: isRecording ? Colors.red : Colors.grey),
-                ),
-                isPlaying
-                    ? IconButton(
-                        onPressed: () async {
-                          await audioPlayer.pause();
-                          setState(() {
-                            isPlaying = false;
-                          });
-                        },
-                        icon: const Icon(Icons.pause))
-                    : IconButton(
-                        onPressed: _playRecorded,
-                        icon: const Icon(Icons.play_arrow)),
-                if (isUploaded)
-                  IconButton(
-                    onPressed: () {
-                      _speechToText(_filename as String)
-                          .whenComplete(() => _checkReading(_selectSurahName));
-                    },
-                    icon: const Icon(Icons.text_snippet_sharp),
-                  ),
-              ],
-            )
-          ],
+            ],
+          ),
+          trailing: IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {},
+          ),
         ),
       ),
     );

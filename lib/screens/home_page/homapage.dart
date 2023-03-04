@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quran_leaner/app_routes.dart';
+import 'package:quran_leaner/common/constants.dart';
 
+import '../profile/profile_screen.dart';
 import 'components/navigationdrawer.dart';
+import 'quran_list.dart';
+import 'widgets/custom_appbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,137 +18,193 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _authInstance = FirebaseAuth.instance;
-
   final _firebaseFirestore = FirebaseFirestore.instance;
 
-  var _username;
+  var searchablequranlist = quranList;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  Future test() async {
-    _username = await _firebaseFirestore
+  Future _getUser() async {
+    var username = await _firebaseFirestore
         .collection('users')
         .doc(_authInstance.currentUser!.uid)
         .get();
-    return _username['username'];
-    //print(f['username']);
+    return username['username'];
+    //return 'hello';
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
+  void searchSurahName(String query) {
+    final suggestations = quranList.where((element) {
+      final surahName = element['SurahNameArabic'] as String;
+      return (surahName).contains(query);
+    }).toList();
+    setState(() {
+      searchablequranlist = suggestations;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    test();
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                elevation: 0,
-                items: [
-                  DropdownMenuItem(
-                    value: 'Settings',
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.settings),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text("Settings")
-                        ],
-                      ),
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: 'logout',
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.exit_to_app),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text("logout")
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-                icon: const Icon(Icons.settings),
-                onChanged: ((value) {
-                  if (value == 'logout') {
-                    _authInstance.signOut();
-                  }
-                }),
-              ),
-            ),
-          )
-        ],
-      ),
       drawer: const NavigationDrawer(),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //TODO image for user in home and profile?
-            Container(
-              margin: const EdgeInsets.all(10),
-              padding: const EdgeInsets.all(10),
-              child: FutureBuilder(
-                  future: test(),
-                  builder: (context, snapshot) {
-                    return Text(
-                      // " Hello, ${_username['username']} ",
-                      'Hello, ${snapshot.data}',
-                      style: Theme.of(context).textTheme.headlineLarge,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //TODO image for user in home and profile?
+              const CustomAppBar(),
+              Container(
+                margin: const EdgeInsets.all(kdefualtMargin),
+                padding: const EdgeInsets.only(
+                  left: kdefualtLeftPadding,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello,',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        const SizedBox(
+                          height: 3,
+                        ),
+                        FutureBuilder(
+                            future: _getUser(),
+                            builder: (context, snapshot) {
+                              return Text(
+                                '${snapshot.data}'.toUpperCase(),
+                                style:
+                                    Theme.of(context).textTheme.headlineLarge,
+                              );
+                            }),
+                      ],
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (_) {
+                          return const ProfileScreen();
+                        }));
+                      },
+                      icon: Image.asset(
+                        'assets/icons/male_profile_icon.png',
+                        width: 45,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(kdefualtMargin),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: kdefualtHorizontalPadding),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: const [
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                      testt(),
+                    ],
+                  ),
+                ),
+              ),
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: kdefualtHorizontalMargin,
+                      vertical: kdefualtVerticalMargin),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: kdefualtHorizontalPadding),
+                  child: TextField(
+                    onChanged: (value) => searchSurahName(value),
+                    decoration: const InputDecoration(
+                        hintText: "Enter Surah Name",
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20)))),
+                  ),
+                ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                //padding: const EdgeInsets.all(10),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(AppRoutes.surahView,
+                            arguments: {
+                              'index': index,
+                              'surahName': searchablequranlist[index]
+                                  ['SurahNameArabic']
+                            });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 3),
+                        child: ListTile(
+                          leading: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: Text('${index + 1}'),
+                          ),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "سورة ${searchablequranlist[index]['SurahNameArabic']}",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    searchablequranlist[index]
+                                        ['SurahNameEnglish'],
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                  Text(
+                                    '${searchablequranlist[index]['VerusCount']} verus',
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () {},
+                          ),
+                        ),
+                      ),
                     );
-                  }),
-            ),
-            Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.2,
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(10),
-                color: Colors.blueAccent,
-                child: const FittedBox(child: Text("test")),
+                  },
+                  itemCount: searchablequranlist.length,
+                ),
               ),
-            ),
-            Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.2,
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(10),
-                color: Colors.blueAccent,
-                child: const FittedBox(child: Text("test")),
-              ),
-            ),
-            Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.2,
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(10),
-                color: Colors.blueAccent,
-                child: const FittedBox(child: Text("test")),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       drawerEnableOpenDragGesture: true,
@@ -173,6 +234,32 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         child: const Icon(Icons.mic),
+      ),
+    );
+  }
+}
+
+class testt extends StatelessWidget {
+  const testt({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.all(8),
+      decoration: const BoxDecoration(
+          color: Colors.blueGrey,
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      child: Column(
+        children: [
+          Text(
+            "Sat",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          Text("5", style: Theme.of(context).textTheme.bodyLarge),
+        ],
       ),
     );
   }

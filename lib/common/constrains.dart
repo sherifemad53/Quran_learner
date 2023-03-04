@@ -9,12 +9,7 @@ MaterialColor kPrimaryColor = MaterialColor(
   0xff322e2d,
   getSwatch(const Color(0xff322e2d)),
 );
-Color kTextColor = const Color(0xff8a7255);
-const Color kSecendoryColor = Color(0xff85817c);
-const Color kBackgroundColor = Color(0xff7e5934);
-const Color kSurfaceColor = Color.fromARGB(255, 182, 103, 103);
 
-const double kdefualtPadding = 20;
 
 Map<int, Color> getSwatch(Color color) {
   final hslColor = HSLColor.fromColor(color);

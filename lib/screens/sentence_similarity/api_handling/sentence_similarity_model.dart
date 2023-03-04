@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final tp = tpFromJson(jsonString);
+//     final SentenceSimilarityModel = SentenceSimilarityModelFromJson(jsonString);
 
 import 'dart:convert';
 
-Tp tpFromJson(String str) => Tp.fromJson(json.decode(str));
+SentenceSimilarityModel SentenceSimilarityModelFromJson(String str) => SentenceSimilarityModel.fromJson(json.decode(str));
 
-//String tpToJson(Tp data) => json.encode(data.toJson());
+//String SentenceSimilarityModelToJson(SentenceSimilarityModel data) => json.encode(data.toJson());
 
-class Tp {
-  Tp({
+class SentenceSimilarityModel {
+  SentenceSimilarityModel({
     this.data,
     this.isGenerating,
     this.duration,
@@ -21,7 +21,7 @@ class Tp {
   double? duration;
   double? averageDuration;
 
-  factory Tp.fromJson(Map<String, dynamic> json) => Tp(
+  factory SentenceSimilarityModel.fromJson(Map<String, dynamic> json) => SentenceSimilarityModel(
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
         isGenerating: json["is_generating"],
         duration: json["duration"].toDouble(),

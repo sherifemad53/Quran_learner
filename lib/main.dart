@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quran_leaner/app_routes.dart';
+import 'package:quran_leaner/screens/about_us/aboutus.dart';
+import 'package:quran_leaner/screens/profile/profile_screen.dart';
+import 'package:quran_leaner/screens/surahview/surahview.dart';
 //import 'package:firebase_core/firebase_options.dart';
 
+import 'common/constants.dart';
 import 'screens/home_page/homapage.dart';
 import 'screens/welcome/welcome_screen.dart';
 import 'theme/app_theme.dart';
@@ -23,37 +28,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quran Learner',
+      title: kAppTitle,
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
-      debugShowMaterialGrid: false,
       home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (ctx, userSnapshot) {
-            if (userSnapshot.connectionState == ConnectionState.active) {
-              if (userSnapshot.hasData) {
-                return const HomePage();
-              } else if (userSnapshot.hasError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(userSnapshot.error.toString()),
-                  backgroundColor: Colors.red,
-                ));
-              } else {}
-            } else {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            }
-            return const WelcomeScreen();
-            //else if (userSnapshot.connectionState == ConnectionState.waiting) {
-            //   return const Center(
-            //     child: CircularProgressIndicator.adaptive(),
-            //   );
-            // }
-            //intro screen with authform
-          }),
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (ctx, userSnapshot) {
+          if (userSnapshot.connectionState == ConnectionState.active) {
+            if (userSnapshot.hasData) {
+              return const HomePage();
+            } else if (userSnapshot.hasError) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(userSnapshot.error.toString()),
+                backgroundColor: Colors.red,
+              ));
+            } else {}
+          } else {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+          return const WelcomeScreen();
+        },
+      ),
+      routes: {
+        AppRoutes.profile: (context) => const ProfileScreen(),
+        AppRoutes.aboutUs: (context) => const AboutUsScreen(),
+        AppRoutes.welcome: (context) => const WelcomeScreen(),
+        AppRoutes.surahView: (context) => SurahViewScreen(),
+      },
     ); //AuthScreen();
   }
 }
