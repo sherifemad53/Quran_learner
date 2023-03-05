@@ -57,9 +57,6 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    // setState(() {
-    //   _isSelectedDate = false;
-    // });
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: _userBirthdayDate,

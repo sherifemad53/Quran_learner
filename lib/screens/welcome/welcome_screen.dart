@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quran_leaner/screens/auth/auth_screen.dart';
+import 'package:quran_leaner/app_routes.dart';
 
 import '../../common/constants.dart';
 
@@ -48,15 +48,8 @@ class WelcomeScreen extends StatelessWidget {
             SizedBox(
               width: size.width * 0.9,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (_) {
-                        return AuthScreen(
-                          islogin: false,
-                        );
-                      }));
-                },
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(AppRoutes.signup),
                 style: ElevatedButton.styleFrom(
                     elevation: 1,
                     padding: const EdgeInsets.symmetric(
@@ -71,15 +64,8 @@ class WelcomeScreen extends StatelessWidget {
                 style: TextButton.styleFrom(
                     //foregroundColor: Colors.blueGrey,
                     splashFactory: NoSplash.splashFactory),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      //fullscreenDialog: true,
-                      builder: (_) {
-                    return AuthScreen(
-                      islogin: true,
-                    );
-                  }));
-                },
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(AppRoutes.login),
                 child: Text.rich(TextSpan(children: [
                   TextSpan(
                       text: kAlreadyHaveAccount,

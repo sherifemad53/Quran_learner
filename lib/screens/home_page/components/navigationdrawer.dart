@@ -74,7 +74,7 @@ class NavigationDrawer extends StatelessWidget {
               title: const Text('About US'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                  return const AboutUsScreen();
+                  return  AboutUsScreen();
                 }));
               },
             ),

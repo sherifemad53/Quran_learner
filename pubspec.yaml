@@ -41,7 +41,7 @@ dependencies:
     # speech_to_text: ^6.1.0
     # csv: ^5.0.1
     # scrollable_positioned_list: ^0.3.5
-    
+
     #State managment system
     provider: ^6.0.5
 
@@ -51,6 +51,7 @@ dependencies:
     firebase_auth: ^4.1.5
     firebase_storage: ^11.0.6
 
+    flutter_sound: ^9.2.13
     record: ^4.4.3
     audioplayers: ^1.1.1
     path_provider: ^2.0.11

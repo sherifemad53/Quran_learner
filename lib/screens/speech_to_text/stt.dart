@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+
+//TODO: Remove dart:io package to make the app support web
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -46,8 +48,8 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   String? _filename;
   String? _selectSurahName;
 
-  Duration? duration = Duration.zero;
-  Duration? position = Duration.zero;
+  // Duration? duration = Duration.zero;
+  // Duration? position = Duration.zero;
 
   String text = "Press the Button and start speaking";
 
@@ -62,9 +64,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     super.dispose();
   }
 
-  Future<String> _speechToText(
-    String filename,
-  ) async {
+  Future<String> _speechToText(String filename) async {
     //print(_filename);
     var user = _auth.currentUser!;
     var uri =
@@ -85,7 +85,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
       if (post.statusCode == 200) {
         text =
             decodeSttFromJson(utf8.decode(post.bodyBytes)).data!.elementAt(0);
-        //print(text);
+        print(text);
         //setState(() {});
       } else if (post.statusCode >= 400 && post.statusCode <= 499) {}
     } on Exception catch (e) {
@@ -178,51 +178,95 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
             counter++;
           }
         }
-      } else {}
+      } else {
+        for (var element in textlist) {
+          t = StringSimilarity.similarity(element, speechedtext[counter]);
+          quranWords.add({'word': element, 'value': t});
+          if (counter < speechedtext.length) {
+            counter++;
+          }
+        }
+      }
     } on Exception catch (e) {
       print(e.toString());
     }
     setState(() {
       _isChecked = true;
     });
+    print(quranWords);
   }
 
   // Check and request permission
+  // Future<void> _record() async {
+  //   if (isRecording) {
+  //     record.stop();
+  //     setState(() {
+  //       isRecording = false;
+  //       isRecorded = true;
+  //     });
+  //     // Future aval = record.isRecording();
+  //   } else {
+  //     if (await record.hasPermission()) {
+  //       Directory directory = await getApplicationDocumentsDirectory();
+  //       //TODO CHANGE FILE NAME
+  //       counter += 100;
+  //       _filename = "$counter.wav";
+  //       _filepath = '${directory.path}/$_filename';
+  //       // Start recording
+  //       setState(() {
+  //         isRecording = true;
+  //         isRecorded = false;
+  //       });
+
+  //       //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+  //       await record.start(
+  //         path: _filepath,
+  //         encoder: AudioEncoder.wav, // by default
+  //         bitRate: 256000, // by default
+  //         samplingRate: 16000, // by default
+  //         numChannels: 1,
+  //       );
+  //       debugPrint(_filepath);
+  //     }
+  //   }
+  // }
+
   Future<void> _record() async {
-    if (isRecording) {
-      record.stop();
-      setState(() {
-        isRecording = false;
-        isRecorded = true;
-      });
-      // Future aval = record.isRecording();
-    } else {
-      if (await record.hasPermission()) {
-        //TODO Clear wav files from device after a while
-        Directory directory = await getApplicationDocumentsDirectory();
-        //TODO CHANGE FILE NAME
-        counter += 100;
-        _filename = "$counter.wav";
-        _filepath = '${directory.path}/$_filename';
-        // Start recording
-        setState(() {
-          isRecording = true;
-          isRecorded = false;
-        });
+    // if (isRecording) {
 
-        //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+    //   setState(() {
+    //     isRecording = false;
+    //     isRecorded = true;
+    //   });
+    //   // Future aval = record.isRecording();
+    // } else {
+    if (await record.hasPermission()) {
+      Directory directory = await getApplicationDocumentsDirectory();
+      //TODO CHANGE FILE NAME
+      counter += 100;
+      _filename = "$counter.wav";
+      _filepath = '${directory.path}/$_filename';
+      // Start recording
+      // setState(() {
+      //   isRecording = true;
+      //   isRecorded = false;
+      // });
 
-        await record.start(
-          path: _filepath,
-          encoder: AudioEncoder.wav, // by default
-          bitRate: 256000, // by default
-          samplingRate: 16000, // by default
-          numChannels: 1,
-        );
-        //await record.getAmplitude();
-        //debugPrint(amp.toString());
-        debugPrint(_filepath);
-      }
+      //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+      await record.start(
+        path: _filepath,
+        encoder: AudioEncoder.wav, // by default
+        bitRate: 256000, // by default
+        samplingRate: 16000, // by default
+        numChannels: 1,
+      );
+
+      await Future.delayed(const Duration(seconds: 10));
+
+      await record.stop();
+      debugPrint(_filepath);
+
+      //}
     }
   }
 
@@ -286,10 +330,8 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        setState(() {
-                          _selectSurahName =
-                              quranList[index]['SurahNameArabic'];
-                        });
+                        _selectSurahName = quranList[index]['SurahNameArabic'];
+                        print(_selectSurahName);
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(vertical: 3),

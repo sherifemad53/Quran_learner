@@ -6,4 +6,5 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String surahView = '/surahView';
   static const String aboutUs = '/aboutus';
+  static const String responsiveLayout = '/responsiveLayout';
 }

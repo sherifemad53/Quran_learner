@@ -1,13 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:quran_leaner/app_routes.dart';
 import 'package:quran_leaner/common/constants.dart';
+import 'package:quran_leaner/providers/user_provider.dart';
 
 import '../profile/profile_screen.dart';
 import 'components/navigationdrawer.dart';
 import 'quran_list.dart';
 import 'widgets/custom_appbar.dart';
+import '../../model/user_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,18 +19,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _authInstance = FirebaseAuth.instance;
-  final _firebaseFirestore = FirebaseFirestore.instance;
+  // final _authInstance = FirebaseAuth.instance;
+  // final _firebaseFirestore = FirebaseFirestore.instance;
 
   var searchablequranlist = quranList;
 
-  Future _getUser() async {
-    var username = await _firebaseFirestore
-        .collection('users')
-        .doc(_authInstance.currentUser!.uid)
-        .get();
-    return username['username'];
-    //return 'hello';
+  // Future _getUser() async {
+  //   var username = await _firebaseFirestore
+  //       .collection('users')
+  //       .doc(_authInstance.currentUser!.uid)
+  //       .get();
+  //   return username['username'];
+  //   //return 'hello';
+  // }
+  @override
+  void initState() {
+    super.initState();
+    addData();
+  }
+
+  void addData() async {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    await userProvider.refreshUser();
   }
 
   void searchSurahName(String query) {
@@ -43,6 +56,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       drawer: const NavigationDrawer(),
       body: SafeArea(
@@ -68,18 +82,11 @@ class _HomePageState extends State<HomePage> {
                           'Hello,',
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
-                        const SizedBox(
-                          height: 3,
+                        const SizedBox(height: 3),
+                        Text(
+                          user.name.toUpperCase(),
+                          style: Theme.of(context).textTheme.headlineLarge,
                         ),
-                        FutureBuilder(
-                            future: _getUser(),
-                            builder: (context, snapshot) {
-                              return Text(
-                                '${snapshot.data}'.toUpperCase(),
-                                style:
-                                    Theme.of(context).textTheme.headlineLarge,
-                              );
-                            }),
                       ],
                     ),
                     IconButton(
@@ -191,10 +198,6 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                             ],
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: () {},
                           ),
                         ),
                       ),
