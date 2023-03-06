@@ -19,23 +19,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final _authInstance = FirebaseAuth.instance;
-  // final _firebaseFirestore = FirebaseFirestore.instance;
+  List<Map<String, dynamic>> searchablequranlist = quranList;
 
-  var searchablequranlist = quranList;
-
-  // Future _getUser() async {
-  //   var username = await _firebaseFirestore
-  //       .collection('users')
-  //       .doc(_authInstance.currentUser!.uid)
-  //       .get();
-  //   return username['username'];
-  //   //return 'hello';
-  // }
   @override
   void initState() {
-    super.initState();
     addData();
+    super.initState();
   }
 
   void addData() async {
@@ -65,13 +54,10 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //TODO image for user in home and profile?
               const CustomAppBar(),
               Container(
                 margin: const EdgeInsets.all(kdefualtMargin),
-                padding: const EdgeInsets.only(
-                  left: kdefualtLeftPadding,
-                ),
+                padding: const EdgeInsets.only(left: kdefualtLeftPadding),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -104,33 +90,33 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.all(kdefualtMargin),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: kdefualtHorizontalPadding),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: const [
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                      testt(),
-                    ],
-                  ),
-                ),
-              ),
+              // Container(
+              //   margin: const EdgeInsets.all(kdefualtMargin),
+              //   padding: const EdgeInsets.symmetric(
+              //       horizontal: kdefualtHorizontalPadding),
+              //   child: SingleChildScrollView(
+              //     scrollDirection: Axis.horizontal,
+              //     child: Row(
+              //       children: const [
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //         testt(),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Center(
                 child: Container(
                   margin: const EdgeInsets.symmetric(
@@ -150,18 +136,18 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                //padding: const EdgeInsets.all(10),
+                height: MediaQuery.of(context).size.height * 0.6,
+                margin: const EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return GestureDetector(
+                      key: ValueKey(index),
                       onTap: () {
                         Navigator.of(context).pushNamed(AppRoutes.surahView,
                             arguments: {
-                              'index': index,
-                              'surahName': searchablequranlist[index]
+                              'SurahNameArabic': searchablequranlist[index]
                                   ['SurahNameArabic']
                             });
                       },
@@ -191,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                                         Theme.of(context).textTheme.bodySmall,
                                   ),
                                   Text(
-                                    '${searchablequranlist[index]['VerusCount']} verus',
+                                    '${searchablequranlist[index]['VerusCount']} verses',
                                     style:
                                         Theme.of(context).textTheme.bodySmall,
                                   ),
@@ -212,31 +198,15 @@ class _HomePageState extends State<HomePage> {
       ),
       drawerEnableOpenDragGesture: true,
       bottomNavigationBar: BottomAppBar(
-        shape: const AutomaticNotchedShape(
-          RoundedRectangleBorder(),
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-            side: BorderSide(),
-          ),
-        ),
-        notchMargin: 6,
         child: Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(icon: const Icon(Icons.home), onPressed: () {}),
             IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.read_more), onPressed: () {}),
           ],
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        elevation: 0,
-        onPressed: () {},
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-        ),
-        child: const Icon(Icons.mic),
       ),
     );
   }

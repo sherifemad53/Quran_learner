@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '/screens/about_us/aboutus.dart';
 import '/screens/speech_to_text/stt.dart';
-import '/screens/home_page/homapage.dart';
+import '../homapage_screen.dart';
 import '/screens/quran_reader/quranreader.dart';
 import '/screens/sentence_similarity/sentence_similarity.dart';
 

@@ -198,12 +198,12 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
 
   // Check and request permission
   // Future<void> _record() async {
-  //   if (isRecording) {
-  //     record.stop();
-  //     setState(() {
-  //       isRecording = false;
-  //       isRecorded = true;
-  //     });
+  // if (isRecording) {
+  //   record.stop();
+  //   setState(() {
+  //     isRecording = false;
+  //     isRecorded = true;
+  //   });
   //     // Future aval = record.isRecording();
   //   } else {
   //     if (await record.hasPermission()) {
@@ -232,25 +232,16 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   // }
 
   Future<void> _record() async {
-    // if (isRecording) {
-
-    //   setState(() {
-    //     isRecording = false;
-    //     isRecorded = true;
-    //   });
-    //   // Future aval = record.isRecording();
-    // } else {
+    setState(() {
+      isRecording = false;
+      isRecorded = true;
+    });
     if (await record.hasPermission()) {
       Directory directory = await getApplicationDocumentsDirectory();
       //TODO CHANGE FILE NAME
       counter += 100;
       _filename = "$counter.wav";
       _filepath = '${directory.path}/$_filename';
-      // Start recording
-      // setState(() {
-      //   isRecording = true;
-      //   isRecorded = false;
-      // });
 
       //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
       await record.start(
@@ -264,13 +255,17 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
       await Future.delayed(const Duration(seconds: 10));
 
       await record.stop();
-      debugPrint(_filepath);
 
-      //}
+      setState(() {
+        isRecording = true;
+        isRecorded = false;
+      });
+      debugPrint(_filepath);
     }
   }
 
-  final _isSelected = false;
+  final isSelected = false;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -426,10 +421,10 @@ class CustomTextView extends StatelessWidget {
     Key? key,
     required bool isChecked,
     required this.quranWords,
-  })  : _isChecked = isChecked,
+  })  : isChecked = isChecked,
         super(key: key);
 
-  final bool _isChecked;
+  final bool isChecked;
   final List<Map<String, dynamic>> quranWords;
 
   @override
@@ -443,7 +438,7 @@ class CustomTextView extends StatelessWidget {
         color: Color.fromARGB(255, 168, 202, 146),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      child: _isChecked
+      child: isChecked
           ? RichText(
               textAlign: TextAlign.right,
               text: TextSpan(

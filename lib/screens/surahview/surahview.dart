@@ -12,50 +12,58 @@ class SurahViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
-    final index = args['index'];
-    final surahName = args['surahName'];
+    String surahName = args['SurahNameArabic'];
+    var selectedSurah = quranList
+        .firstWhere((element) => element['SurahNameArabic'] == surahName);
+    // print(selectedSurah);
     return Scaffold(
       appBar: AppBar(
         title: Text(surahName),
       ),
-      body: Container(
-          child: ListView.builder(
-        itemBuilder: (BuildContext context, int i) {
-          return Column(
-            children: [
-              if (i == 0) const RetunBasmala(),
-              Container(
-                color: i % 2 != 0
-                    ? const Color.fromARGB(255, 253, 251, 240)
-                    : const Color.fromARGB(255, 253, 247, 230),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          quranList[index]['OrignalArabicText'][i],
-                          textDirection: TextDirection.rtl,
-                          style: TextStyle(
-                            fontSize: arabicFontSize,
-                            fontFamily: arabicFont,
-                            color: const Color.fromARGB(196, 0, 0, 0),
-                          ),
+      body: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.78,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const RetunBasmala(),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int i) {
+                    return Container(
+                      color: i % 2 != 0
+                          ? const Color.fromARGB(255, 253, 251, 240)
+                          : const Color.fromARGB(255, 253, 247, 230),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                selectedSurah['OrignalArabicText'][i],
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                  fontSize: arabicFontSize,
+                                  fontFamily: arabicFont,
+                                  color: const Color.fromARGB(196, 0, 0, 0),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
+                  itemCount: selectedSurah['VerusCount'],
                 ),
-              ),
-            ],
-          );
-        },
-        itemCount: quranList[index]['VerusCount'],
-      )),
+              ],
+            ),
+          )),
       bottomSheet: Container(
           decoration: BoxDecoration(
               color: Colors.amber[100],
-              borderRadius: const BorderRadius.all(Radius.circular(20))),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20))),
           padding: const EdgeInsets.all(kdefualtPadding),
           width: double.infinity,
           child: Row(

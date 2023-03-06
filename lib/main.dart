@@ -11,7 +11,7 @@ import 'package:quran_leaner/screens/surahview/surahview.dart';
 //import 'package:firebase_core/firebase_options.dart';
 
 import 'common/constants.dart';
-import 'screens/home_page/homapage.dart';
+import 'screens/home_page/homapage_screen.dart';
 import 'screens/welcome/welcome_screen.dart';
 import 'theme/app_theme.dart';
 
