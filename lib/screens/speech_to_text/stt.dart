@@ -3,22 +3,27 @@ import 'dart:convert';
 
 //TODO: Remove dart:io package to make the app support web
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quran_leaner/common/constants.dart';
 
+import '../../providers/user_provider.dart';
 import 'components/quran_list.dart';
 import 'components/string_similarity.dart';
 import 'components/decodeSTT.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
+
+import '../../model/user_model.dart' as model;
 
 class SpeechToTextScreen extends StatefulWidget {
   const SpeechToTextScreen({Key? key}) : super(key: key);
@@ -32,8 +37,8 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   final audioPlayer = AudioPlayer();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  var counter = 0;
+  //final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  int? counter;
 
   bool isListening = false;
   bool isRecording = false;
@@ -112,42 +117,42 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     setState(() {});
   }
 
-  void _upload() async {
-    //TODO: Give some meta data like age and gender (done)
-    //TODO: Use better naming to keep track of each user record
-    //TODO: ADD BUCKET(folder) FOR EACH USER (done)
-    File wavfile = File(_filepath!);
+  // void _upload() async {
+  //   //TODO: Give some meta data like age and gender (done)
+  //   //TODO: Use better naming to keep track of each user record
+  //   //TODO: ADD BUCKET(folder) FOR EACH USER (done)
+  //   File wavfile = File(_filepath!);
 
-    var user = _auth.currentUser!;
-    var userdata =
-        await _firebaseFirestore.collection('users').doc(user.uid).get();
+  //   var user = _auth.currentUser!;
+  //   var userdata =
+  //       await _firebaseFirestore.collection('users').doc(user.uid).get();
 
-    SettableMetadata metadata = SettableMetadata(customMetadata: {
-      'uid': user.uid.toString(),
-      'email': user.email.toString(),
-      'gender': userdata['gender'].toString(),
-      'birthdate': userdata['birthdate'].toString()
-    });
+  //   SettableMetadata metadata = SettableMetadata(customMetadata: {
+  //     'uid': user.uid.toString(),
+  //     'email': user.email.toString(),
+  //     'gender': userdata['gender'].toString(),
+  //     'birthdate': userdata['birthdate'].toString()
+  //   });
 
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      var firebasefiledir = _firebaseStorage
-          .ref()
-          .child("wavfiles")
-          .child(user.uid)
-          .child(_filename!);
-      await firebasefiledir.putFile(wavfile);
-      await firebasefiledir.updateMetadata(metadata);
-    } catch (error) {
-      debugPrint(error.toString());
-    }
-    setState(() {
-      isUploaded = true;
-      isLoading = false;
-    });
-  }
+  //   try {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+  //     var firebasefiledir = _firebaseStorage
+  //         .ref()
+  //         .child("wavfiles")
+  //         .child(user.uid)
+  //         .child(_filename!);
+  //     await firebasefiledir.putFile(wavfile);
+  //     await firebasefiledir.updateMetadata(metadata);
+  //   } catch (error) {
+  //     debugPrint(error.toString());
+  //   }
+  //   setState(() {
+  //     isUploaded = true;
+  //     isLoading = false;
+  //   });
+  // }
 
   void _checkReading(String? surahName) {
     setState(() {
@@ -179,13 +184,14 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
           }
         }
       } else {
-        for (var element in textlist) {
-          t = StringSimilarity.similarity(element, speechedtext[counter]);
-          quranWords.add({'word': element, 'value': t});
-          if (counter < speechedtext.length) {
-            counter++;
-          }
-        }
+        // for (var element in textlist) {
+        //   t = StringSimilarity.similarity(element, speechedtext[counter]);
+        //   quranWords.add({'word': element, 'value': t});
+        //   if (counter < speechedtext.length) {
+        //     counter++;
+        //   }
+        // }
+        print(speechedtext);
       }
     } on Exception catch (e) {
       print(e.toString());
@@ -217,8 +223,6 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //         isRecording = true;
   //         isRecorded = false;
   //       });
-
-  //       //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
   //       await record.start(
   //         path: _filepath,
   //         encoder: AudioEncoder.wav, // by default
@@ -231,43 +235,147 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //   }
   // }
 
-  Future<void> _record() async {
+  // Future<void> _record() async {
+  //   setState(() {
+  //     isRecording = true;
+  //     isRecorded = false;
+  //   });
+  //   if (await record.hasPermission()) {
+  //     Directory directory = await getApplicationDocumentsDirectory();
+  //     //TODO CHANGE FILE NAME
+  //     counter += 100;
+  //     _filename = "$counter.wav";
+  //     _filepath = '${directory.path}/$_filename';
+
+  //     //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+  //     await record.start(
+  //       path: _filepath,
+  //       encoder: AudioEncoder.wav, // by default
+  //       bitRate: 256000, // by default
+  //       samplingRate: 16000, // by default
+  //       numChannels: 1,
+  //     );
+
+  //     await Future.delayed(const Duration(seconds: 10));
+
+  //     await record.stop();
+
+  //     setState(() {
+  //       isRecording = false;
+  //       isRecorded = true;
+  //     });
+  //     debugPrint(_filepath);
+  //   }
+  // }
+
+  void _upload(model.User user) async {
+    File wavfile = File(_filepath!);
+    SettableMetadata metadata = SettableMetadata(customMetadata: {
+      'uid': user.uid,
+      'name': user.name,
+      'username': user.username,
+      'email': user.email,
+      'gender': user.gender,
+      'birthdate': user.birthdate.toString(),
+    });
+
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      var firebasefiledir = _firebaseStorage
+          .ref()
+          .child("wavfiles")
+          .child(user.uid)
+          .child(_filename!);
+      await firebasefiledir.putFile(wavfile, metadata);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+    setState(() {
+      isUploaded = true;
+      isLoading = false;
+    });
+  }
+
+  bool isPressed = false;
+
+  Future<void> _continousRecord(model.User user) async {
+    Directory directory = await getApplicationDocumentsDirectory();
+    String? str;
+    setState(() {
+      isRecording = true;
+      isRecorded = false;
+    });
+    Random random = Random();
+    while (isPressed) {
+      if (await record.hasPermission()) {
+        counter = random.nextInt(0xffffffff);
+
+        _filename = "$counter.wav";
+        _filepath = '${directory.path}/$_filename';
+        //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+        await record.start(
+          path: _filepath,
+          encoder: AudioEncoder.wav, // by default
+          bitRate: 256000, // by default
+          samplingRate: 16000, // by default
+          numChannels: 1,
+        );
+
+        await Future.delayed(const Duration(seconds: 5));
+        str = await record.stop();
+        print(str);
+        http.StreamedResponse response;
+        try {
+          // var file = File(_filepath as String);
+          // var request = http.MultipartRequest(
+          //     'POST', Uri.parse('http://192.168.1.106/api/data'));
+
+          // var xx = await file.readAsBytes();
+          // var multipartFile = http.MultipartFile(
+          //     'file', file.readAsBytes().asStream(), file.lengthSync(),
+          //     filename: _filename);
+
+          // request.files.add(multipartFile);
+          // var response = await request.send();
+          // print(xx.buffer);
+
+          var url = Uri.parse('http://192.168.1.106/api/data');
+          var file = File(_filepath as String);
+          var stream = http.ByteStream(file.openRead());
+          var length = await file.length();
+
+          var request = http.MultipartRequest("POST", url);
+          request.headers["Content-Type"] = "multipart/form-data";
+          var multipartFile = http.MultipartFile('file', stream, length,
+              filename: basename(file.path));
+          request.files.add(multipartFile);
+          response = await request.send();
+
+          if (response.statusCode == 200) {
+            print("File Uploaded");
+          } else {
+            print("Upload Failed");
+          }
+
+          _upload(user);
+        } on SocketException catch (e) {
+          print(e.message);
+        }
+      }
+    }
     setState(() {
       isRecording = false;
       isRecorded = true;
     });
-    if (await record.hasPermission()) {
-      Directory directory = await getApplicationDocumentsDirectory();
-      //TODO CHANGE FILE NAME
-      counter += 100;
-      _filename = "$counter.wav";
-      _filepath = '${directory.path}/$_filename';
-
-      //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
-      await record.start(
-        path: _filepath,
-        encoder: AudioEncoder.wav, // by default
-        bitRate: 256000, // by default
-        samplingRate: 16000, // by default
-        numChannels: 1,
-      );
-
-      await Future.delayed(const Duration(seconds: 10));
-
-      await record.stop();
-
-      setState(() {
-        isRecording = true;
-        isRecorded = false;
-      });
-      debugPrint(_filepath);
-    }
   }
 
   final isSelected = false;
 
   @override
   Widget build(BuildContext context) {
+    model.User user = Provider.of<UserProvider>(context).getUser;
     var size = MediaQuery.of(context).size;
     return Scaffold(
       // appBar: AppBar(
@@ -323,7 +431,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
+                    return InkWell(
                       onTap: () {
                         _selectSurahName = quranList[index]['SurahNameArabic'];
                         print(_selectSurahName);
@@ -381,12 +489,14 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                   if (isRecorded)
                     ElevatedButton.icon(
                       label: const Text("Upload"),
-                      onPressed: _upload,
+                      onPressed: () => _upload(user),
                       icon: const Icon(Icons.upload_file),
                     ),
                   ElevatedButton.icon(
                     onPressed: () {
-                      _record();
+                      // _record();
+                      isPressed = !isPressed;
+                      _continousRecord(user);
                     },
                     icon: isRecording
                         ? const Icon(Icons.stop)
