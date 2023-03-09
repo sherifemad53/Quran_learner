@@ -204,29 +204,3 @@ class _HomePageState extends State<HomePage> {
           );
   }
 }
-
-class testt extends StatelessWidget {
-  const testt({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.all(8),
-      decoration: const BoxDecoration(
-          color: Colors.blueGrey,
-          borderRadius: BorderRadius.all(Radius.circular(10))),
-      child: Column(
-        children: [
-          Text(
-            "Sat",
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          Text("5", style: Theme.of(context).textTheme.bodyLarge),
-        ],
-      ),
-    );
-  }
-}
