@@ -2,22 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_leaner/app_routes.dart';
-import 'package:quran_leaner/providers/user_provider.dart';
-import 'package:quran_leaner/screens/auth/login_screen.dart';
-import 'package:quran_leaner/screens/auth/signup_screen.dart';
-import 'package:quran_leaner/screens/profile/profile_screen.dart';
-import 'package:quran_leaner/screens/surahview/surahview.dart';
-//import 'package:firebase_core/firebase_options.dart';
 
-import 'common/constants.dart';
-import 'screens/home_page/homapage_screen.dart';
+import 'screens/auth/login_screen.dart';
+import 'screens/auth/signup_screen.dart';
+import 'screens/profile/profile_screen.dart';
 import 'screens/welcome/welcome_screen.dart';
+import 'screens/home_page/homapage_screen.dart';
+import 'screens/surahview/surahview.dart';
+
+import 'app_routes.dart';
+import 'providers/user_provider.dart';
+import 'common/constants.dart';
 import 'theme/app_theme.dart';
 
 //TODO Use state management system to provide user for all widgets
 //IS firebase package enough for state management answer is no
 //TODO Store user data in firestore and also in local store to be accessed faster
+//TODO GETX BETTER THAN PROVIDER
+//TODO READ QURAN FROM JSON FOR BETTER VIEWING
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

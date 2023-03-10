@@ -25,8 +25,8 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'S E N T E N S E  S I M I L A R I T Y',
-          style: Theme.of(context).textTheme.headlineMedium,
+          'SENTENSE  SIMILARITY',
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
       resizeToAvoidBottomInset: false,
@@ -62,7 +62,7 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
                                 enabledBorder: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
-                                hintText: 'Enter text',
+                                // hintText: 'Enter text',
                               ),
                               keyboardType: TextInputType.text,
                               onSubmitted: (value) {
