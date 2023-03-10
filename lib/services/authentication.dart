@@ -94,6 +94,10 @@ class Authentication {
     }
   }
 
+  static void signOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
   // ScaffoldMessenger.of(context).showSnackBar(
   //   SnackBar(
   //     content: Text(eer),
