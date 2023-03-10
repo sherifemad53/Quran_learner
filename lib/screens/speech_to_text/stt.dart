@@ -139,6 +139,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   Future<void> _record(model.User user) async {
     if (isRecording) {
       record.stop();
+      _upload(user);
       setState(() {
         isRecording = false;
         isRecorded = true;
