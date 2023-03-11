@@ -1,3 +1,4 @@
+
 List<Map<String, dynamic>> quranList = [
   {
     'JuzNameArabic': 'الم',

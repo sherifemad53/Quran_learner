@@ -26,6 +26,15 @@ class User {
         'birthdate': birthdate,
       };
 
+  Map<String, String> tojsonString() => {
+        'uid': uid,
+        'name': name,
+        'username': username,
+        'email': email,
+        'gender': gender,
+        'birthdate': birthdate.toString(),
+      };
+
   static User fromSpan(DocumentSnapshot snap) {
     var snapshot = (snap.data()) as Map<String, dynamic>;
 

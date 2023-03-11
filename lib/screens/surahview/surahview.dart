@@ -6,15 +6,17 @@ class SurahViewScreen extends StatelessWidget {
   const SurahViewScreen({super.key});
 
   final String arabicFont = 'quran';
-  final double arabicFontSize = 28;
+  final double arabicFontSize = 24;
   final double mushafFontSize = 40;
 
   @override
   Widget build(BuildContext context) {
+    final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
     final args = ModalRoute.of(context)!.settings.arguments as Map;
     String surahName = args['SurahNameArabic'];
     var selectedSurah = quranList
         .firstWhere((element) => element['SurahNameArabic'] == surahName);
+    // print(selectedSurah.keys);
     // print(selectedSurah);
     return Scaffold(
       appBar: AppBar(
@@ -38,6 +40,16 @@ class SurahViewScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 12),
+                              margin: const EdgeInsets.only(left: 20),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(50))),
+                              child: Text((i + 1).toString()),
+                            ),
                             Expanded(
                               child: Text(
                                 selectedSurah['OrignalArabicText'][i],
@@ -48,7 +60,7 @@ class SurahViewScreen extends StatelessWidget {
                                   color: const Color.fromARGB(196, 0, 0, 0),
                                 ),
                               ),
-                            ),
+                            )
                           ],
                         ),
                       ),

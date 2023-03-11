@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quran_leaner/screens/ahadith/ahadith_screen.dart';
 
-import '/screens/about_us/aboutus.dart';
 import '/screens/speech_to_text/stt.dart';
 import '../homapage_screen.dart';
 import '/screens/quran_reader/quranreader.dart';
-import '/screens/sentence_similarity/sentence_similarity.dart';
+import '../../sentence_similarity/sentence_similarity_screen.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
@@ -70,11 +70,11 @@ class NavigationDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.people),
-              title: const Text('About US'),
+              leading: const Icon(Icons.book),
+              title: const Text('Ahadith'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                  return  AboutUsScreen();
+                  return const AhadithScreen();
                 }));
               },
             ),
