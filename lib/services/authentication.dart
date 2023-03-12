@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
-import '../model/user_model.dart' as model;
+import '../models/user_model.dart' as model;
 
 //TODO: more sign in options like google, facebook
 class Authentication {

@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:quran_leaner/screens/sentence_similarity/tafser_model.dart';
-import '../senstenseSimilarity_model.dart';
+import 'package:quran_leaner/models/tafser_model.dart';
+import '../../../models/senstenseSimilarity_model.dart';
 
 // Future<Datum> tpgetData(text) async {
 //   debugPrint("loaded again");
@@ -50,7 +50,7 @@ Future<List<SenstenceSimilarityModel>> similarVerseModelhApi(text) async {
       HttpHeaders.acceptHeader: 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, List<String>>{
-      'data': ['الحمد']
+      'data': [text]
     }),
   );
   try {

@@ -17,7 +17,7 @@ import 'components/string_similarity.dart';
 import 'components/decodeSTT.dart';
 
 import '../../providers/user_provider.dart';
-import '../../model/user_model.dart' as model;
+import '../../models/user_model.dart' as model;
 import '../../common/constants.dart';
 
 class SpeechToTextScreen extends StatefulWidget {

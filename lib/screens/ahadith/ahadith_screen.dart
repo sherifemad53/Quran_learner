@@ -4,7 +4,7 @@ import 'package:quran_leaner/screens/ahadith/athadith_api_handler.dart';
 
 import '../../common/constants.dart';
 import '../../utils/utils.dart';
-import 'ahadith_model.dart';
+import '../../models/ahadith_model.dart';
 
 class AhadithScreen extends StatefulWidget {
   const AhadithScreen({super.key});

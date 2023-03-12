@@ -9,7 +9,6 @@ class CircularQueue<T> {
   }
 
   bool get isEmpty => _count == 0;
-
   bool get isFull => _count == _buffer.length;
 
   void enqueue(T item) {

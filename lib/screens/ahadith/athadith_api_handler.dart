@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:quran_leaner/screens/ahadith/ahadith_model.dart';
+import 'package:quran_leaner/models/ahadith_model.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<AhadithModel>> similarAhadithApi(text) async {

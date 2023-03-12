@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quran_leaner/screens/sentence_similarity/senstenseSimilarity_model.dart';
+import 'package:quran_leaner/models/senstenseSimilarity_model.dart';
 
 import 'api_handling/senstence_Similarity_api_handler.dart';
 import 'widgets/veruscard.dart';

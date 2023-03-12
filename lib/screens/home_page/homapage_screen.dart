@@ -6,10 +6,10 @@ import 'package:quran_leaner/common/constants.dart';
 import 'package:quran_leaner/providers/user_provider.dart';
 
 import '../profile/profile_screen.dart';
-import 'components/navigationdrawer.dart';
+import 'widgets/custom_nav_drawer.dart';
 import 'quran_list.dart';
 import 'widgets/custom_appbar.dart';
-import '../../model/user_model.dart';
+import '../../models/user_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
             body: Center(child: CircularProgressIndicator.adaptive()),
           )
         : Scaffold(
-            drawer: const NavigationDrawer(),
+            drawer: const CustomNavigationDrawer(),
             body: SafeArea(
               child: SingleChildScrollView(
                 child: Column(

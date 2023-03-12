@@ -7,4 +7,8 @@ class AppRoutes {
   static const String surahView = '/surahView';
   static const String aboutUs = '/aboutus';
   static const String responsiveLayout = '/responsiveLayout';
+  static const String ayatMotshbha = '/ayatMotshbha';
+  static const String ahadithMotshbha = '/ahadithMotshbha';
+  static const String recitation = '/recitation';
+  
 }

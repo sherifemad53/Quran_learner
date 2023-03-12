@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:quran_leaner/screens/ahadith/ahadith_screen.dart';
+import 'package:quran_leaner/screens/sentence_similarity/sentence_similarity_screen.dart';
 
+import 'screens/about_us/aboutus.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/profile/profile_screen.dart';
+import 'screens/speech_to_text/stt.dart';
 import 'screens/welcome/welcome_screen.dart';
 import 'screens/home_page/homapage_screen.dart';
 import 'screens/surahview/surahview.dart';
@@ -66,11 +70,14 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           AppRoutes.profile: (context) => const ProfileScreen(),
-          //AppRoutes.aboutUs: (context) => const AboutUsScreen(),
+          AppRoutes.aboutUs: (context) => const AboutUsScreen(),
           AppRoutes.welcome: (context) => const WelcomeScreen(),
           AppRoutes.surahView: (context) => const SurahViewScreen(),
           AppRoutes.signup: (context) => const SignupScreen(),
           AppRoutes.login: (context) => const LoginScreen(),
+          AppRoutes.ayatMotshbha: (context) => const SentenceSimilarityScreen(),
+          AppRoutes.ahadithMotshbha: (context) => const AhadithScreen(),
+          AppRoutes.recitation: (context) => const SpeechToTextScreen(),
         },
       ),
     ); //AuthScreen();
