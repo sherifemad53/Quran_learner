@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:introduction_screen/introduction_screen.dart';
 
-import 'package:quran_leaner/screens/home_page/homapage_screen.dart';
+import '/screens/home_page/homapage_screen.dart';
 
 class OnboardScreen extends StatelessWidget {
   const OnboardScreen({Key? key}) : super(key: key);

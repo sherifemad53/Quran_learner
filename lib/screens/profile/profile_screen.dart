@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_leaner/common/constants.dart';
 
-import '../../services/authentication.dart';
-import '../../providers/user_provider.dart';
-import '../../models/user_model.dart';
+import '/services/authentication.dart';
+import '/providers/user_provider.dart';
+import '/models/user_model.dart';
+import '/common/constants.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

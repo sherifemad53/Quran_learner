@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
-import 'package:quran_leaner/screens/ahadith/athadith_api_handler.dart';
 
 import '../../common/constants.dart';
 import '../../utils/utils.dart';
 import '../../models/ahadith_model.dart';
+
+import '../../services/athadith_api_handler.dart';
 
 class AhadithScreen extends StatefulWidget {
   const AhadithScreen({super.key});

@@ -14,14 +14,10 @@ class Authentication {
 
   Future<model.User> getUserDetails() async {
     _userCredential = _auth.currentUser;
-
     DocumentSnapshot snap = await _firebaseFirestore
         .collection('users')
         .doc(_userCredential!.uid)
         .get();
-    // print(((snap.data() as Map<String, dynamic>)['birthdate'] as Timestamp)
-    //     .toDate()
-    //     .year);
     return model.User.fromSpan(snap);
   }
 
@@ -36,6 +32,7 @@ class Authentication {
     try {
       (await _auth.createUserWithEmailAndPassword(
           email: userEmail, password: userPassword));
+
       _userCredential = _auth.currentUser;
       model.User user = model.User(
         uid: _userCredential!.uid,
@@ -101,19 +98,6 @@ class Authentication {
   // ScaffoldMessenger.of(context).showSnackBar(
   //   SnackBar(
   //     content: Text(eer),
-  //     backgroundColor: Theme.of(context).errorColor,
-  //   ),
-  // );
-
-  // var message = "An error occured please check your credentials";
-  // if (err.message != null) {
-  //   message = err.message.toString();
-  //   debugPrint(message);
-  // }
-
-  // ScaffoldMessenger.of(context).showSnackBar(
-  //   SnackBar(
-  //     content: Text(message),
   //     backgroundColor: Theme.of(context).errorColor,
   //   ),
   // );

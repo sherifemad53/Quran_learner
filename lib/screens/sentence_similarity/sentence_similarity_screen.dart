@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quran_leaner/models/senstenseSimilarity_model.dart';
+import '/models/senstenseSimilarity_model.dart';
 
-import 'api_handling/senstence_Similarity_api_handler.dart';
+import '../../services/senstence_Similarity_api_handler.dart';
 import 'widgets/veruscard.dart';
 import '../../utils/utils.dart';
 
@@ -15,7 +15,7 @@ class SentenceSimilarityScreen extends StatefulWidget {
 
 class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
   Future<List<SenstenceSimilarityModel>>? similarityData;
-  String? _qarunVersetext;
+  // String? _qarunVersetext;
   bool isFirstSearch = true;
   bool ishadith = false;
 
@@ -69,7 +69,7 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
                               onSubmitted: (value) {
                                 if (Utils.isProbablyArabic(value)) {
                                   setState(() {
-                                    _qarunVersetext = value;
+                                    // _qarunVersetext = value;
                                     similarityData =
                                         similarVerseModelhApi(value);
                                     //_isloaded = true;

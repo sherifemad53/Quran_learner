@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_leaner/app_routes.dart';
-import 'package:quran_leaner/common/constants.dart';
-import 'package:quran_leaner/providers/user_provider.dart';
+import '/app_routes.dart';
+import '/common/constants.dart';
+import '/providers/user_provider.dart';
 
 import '../profile/profile_screen.dart';
 import 'widgets/custom_nav_drawer.dart';
-import 'quran_list.dart';
+import '/data/quran_list.dart';
 import 'widgets/custom_appbar.dart';
 import '../../models/user_model.dart';
 

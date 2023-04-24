@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 
 import '../../../common/constants.dart';
-import '../api_handling/senstence_Similarity_api_handler.dart';
+import '../../../services/senstence_Similarity_api_handler.dart';
 
 class VerusCard extends StatefulWidget {
   const VerusCard(
@@ -65,9 +65,7 @@ class _VerusCardState extends State<VerusCard> {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                //fit: FlexFit.tight,
                 width: MediaQuery.of(context).size.width * 0.75,
-                //color: Colors.red,
                 child: FAProgressBar(
                   animatedDuration: const Duration(milliseconds: 1000),
                   maxValue: 100,
@@ -84,11 +82,13 @@ class _VerusCardState extends State<VerusCard> {
               const SizedBox(height: 10),
               if (isPressed)
                 FutureBuilder(
-                  future: tafseReadJson(
+                  future: tafserReadJson(
                       widget.surahName, widget.surahNum, widget.ayaNum),
                   builder: (_, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Text('');
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
                     } else {
                       return Text(
                         snapshot.data!,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quran_leaner/app_routes.dart';
+import '/app_routes.dart';
 
 import '../../common/constants.dart';
 

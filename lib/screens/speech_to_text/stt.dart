@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
@@ -55,7 +56,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     // print('start transcripting');
     Stopwatch stopwatch = Stopwatch()..start();
     var uri =
-        Uri.parse('https://anzhir2011-quran-recitation.hf.space/run/predict');
+        Uri.parse('https://omarelsayeed-quran-recitation.hf.space/run/predict');
     var response = await http.post(
       uri,
       headers: {
@@ -82,50 +83,24 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     debugPrint(
         'time elapsed transcripting ${stopwatch.elapsed.inMilliseconds}');
     stopwatch.stop();
-    // print('end transcripting');
-    // return '';
   }
 
-  void _checkReading(String? surahName) {
+  String _checkReading(String? surahName) {
     //TODO
     setState(() {
       _isChecked = false;
-      //quranWords.clear();
     });
     quranWords.clear();
     var arabicQurantext = quranList
         .firstWhere((element) => element['SurahNameArabic'] == surahName);
-    List<String> textlist = [], speechedtext = [];
-    speechedtext = text.split(' ');
-    //print(arabicQurantext['ArabicText'].toString().split(' '));
-    for (var elm in arabicQurantext['ArabicText'].toString().split(" ")) {
-      textlist.add(elm
-          .replaceFirst(',', '')
-          .replaceFirst('[', '')
-          .replaceFirst(']', '')
-          .trim());
+    var temp = '';
+    var y = '';
+    for (var element in (arabicQurantext['ArabicText'] as List)) {
+      temp = '$temp ' + element;
     }
-    int counter = 0;
-    double t;
+
     try {
-      if (textlist.length == speechedtext.length) {
-        for (var element in textlist) {
-          t = StringSimilarity.similarity(element, speechedtext[counter]);
-          quranWords.add({'word': element, 'value': t});
-          if (counter < speechedtext.length) {
-            counter++;
-          }
-        }
-      } else {
-        for (var element in textlist) {
-          t = StringSimilarity.similarity(element, speechedtext[counter]);
-          quranWords.add({'word': element, 'value': t});
-          if (counter < speechedtext.length) {
-            counter++;
-          }
-        }
-        print(speechedtext);
-      }
+      y = StringSimilarity.needlemanWunsch(temp, text);
     } on RangeError {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -134,12 +109,69 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
+    } catch (err) {
+      debugPrint('Error occured');
     }
     setState(() {
       _isChecked = true;
     });
     print(quranWords);
+    return y;
   }
+
+  // void _checkReading(String? surahName) {
+  //   setState(() {
+  //     _isChecked = false;
+  //  quranWords.clear();
+  //   });
+  //   quranWords.clear();
+  //   var arabicQurantext = quranList
+  //       .firstWhere((element) => element['SurahNameArabic'] == surahName);
+  //   List<String> textlist = [], speechedtext = [];
+  //   speechedtext = text.split(' ');
+  //    print(arabicQurantext['ArabicText'].toString().split(' '));
+  //   for (var elm in arabicQurantext['ArabicText'].toString().split(" ")) {
+  //     textlist.add(elm
+  //         .replaceFirst(',', '')
+  //         .replaceFirst('[', '')
+  //         .replaceFirst(']', '')
+  //         .trim());
+  //   }
+  //   int counter = 0;
+  //   double t;
+  //   try {
+  //     if (textlist.length == speechedtext.length) {
+  //       for (var element in textlist) {
+  //         t = StringSimilarity.similarity(element, speechedtext[counter]);
+  //         quranWords.add({'word': element, 'value': t});
+  //         if (counter < speechedtext.length) {
+  //           counter++;
+  //         }
+  //       }
+  //     } else {
+  //       for (var element in textlist) {
+  //         t = StringSimilarity.similarity(element, speechedtext[counter]);
+  //         quranWords.add({'word': element, 'value': t});
+  //         if (counter < speechedtext.length) {
+  //           counter++;
+  //         }
+  //       }
+  //       print(speechedtext);
+  //     }
+  //   } on RangeError {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: const Text(
+  //             'You haven\'t completed recitation  please start again'),
+  //         backgroundColor: Theme.of(context).errorColor,
+  //       ),
+  //     );
+  //   }
+  //   setState(() {
+  //     _isChecked = true;
+  //   });
+  //   print(quranWords);
+  // }
 
   // Future<void> _record(model.User user) async {
   //   List<String>? filepath = List<String>.filled(3, '');
@@ -148,12 +180,10 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //   int counter = 0;
   //   Stopwatch stopwatch;
   //   Directory directory = await getApplicationDocumentsDirectory();
-
-  //   //Random random = Random();
-
+  //    Random random = Random();
   //   if (isRecording) {
   //     record.stop();
-  //     //_upload(user, filepath, filename);
+  //      _upload(user, filepath, filename);
   //     setState(() {
   //       isRecording = false;
   //       isRecorded = true;
@@ -167,12 +197,11 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //         counter += 1;
   //         filename[index] = "$counter.wav";
   //         filepath[index] = '${directory.path}/${filename[index]}';
-
   //         setState(() {
   //           isRecording = true;
   //           isRecorded = false;
   //         });
-  //         //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+  //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
   //         await record.start(
   //           path: filepath[index],
   //           encoder: AudioEncoder.wav, // by default
@@ -182,11 +211,8 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //         );
   //         await Future.delayed(const Duration(seconds: 5));
   //         await record.stop();
-
   //         debugPrint(filepath.toString());
-
   //         stopwatch = Stopwatch()..start();
-
   //         if (filepath[(index + 2) % 3].isNotEmpty) {
   //           debugPrint('the file uploaded: ${filepath[(index + 2) % 3]}');
   //           Future.delayed(
@@ -195,13 +221,11 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //                 user, filepath[(index + 2) % 3], filename[(index + 2) % 3]),
   //           );
   //         }
-
   //         if (filepath[(index + 1) % 3].isNotEmpty) {
   //           debugPrint('the file stt: ${filepath[(index + 1) % 3]}');
   //           Future.delayed(const Duration(milliseconds: 500),
   //               () => _speechToText(filename[(index + 1) % 3], user));
   //         }
-
   //         stopwatch.stop();
   //         debugPrint('time elapsed ${stopwatch.elapsed.inMilliseconds}');
   //         index == 2 ? index = 0 : index++;
@@ -216,35 +240,30 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
 
   String filepath = '';
   String filename = '';
+
   Future<void> _record(model.User user) async {
     int index = 0;
     int counter = 0;
     if (isRecording) {
-      // record.stop();
-      // _upload(user);
       setState(() {
         isRecording = false;
         isRecorded = true;
       });
       await record.stop();
-
       await _upload(user, filepath, filename)
           .then((value) async => await _speechToText(filename, user))
-          .then((value) => _checkReading(_selectSurahName));
+          .then((value) => text = _checkReading(_selectSurahName));
     } else {
       if (await record.hasPermission()) {
         setState(() {
           isRecording = true;
           isRecorded = false;
         });
-
         Directory directory = await getApplicationDocumentsDirectory();
         Random random = Random();
-
         counter = random.nextInt(0xffffffff);
         filename = "$counter.wav";
         filepath = '${directory.path}/$filename';
-
         //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
         await record.start(
           path: filepath,
@@ -253,12 +272,6 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
           samplingRate: 16000, // by default
           numChannels: 1,
         );
-        // await Future.delayed(const Duration(seconds: 10));
-
-        // setState(() {
-        //   isRecording = false;
-        //   isRecorded = true;
-        // });
         debugPrint(filepath);
       }
     }
@@ -271,7 +284,6 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
 
     SettableMetadata metadata =
         SettableMetadata(customMetadata: user.tojsonString());
-
     try {
       // setState(() {
       //   isLoading = true;
@@ -453,7 +465,23 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                 ),
               ),
               //this container shows the wrong words and their correnction
-              CustomTextView(isChecked: _isChecked, quranWords: quranWords),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.30,
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(
+                    vertical: kdefualtVerticalMargin),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: kdefualtHorizontalPadding),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 117, 179, 145),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: _isChecked
+                    ? Html(data: text)
+                    : const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+              ),
               //buttons to upload and edit
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -474,14 +502,6 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                         backgroundColor:
                             isRecording ? Colors.red : Colors.grey),
                   ),
-                  // if (isUploaded)
-                  //   ElevatedButton.icon(
-                  //     onPressed: () {
-                  //       _checkReading(_selectSurahName);
-                  //     },
-                  //     icon: const Icon(Icons.text_snippet_sharp),
-                  //     label: const Text("Test"),
-                  //   ),
                 ],
               )
             ],

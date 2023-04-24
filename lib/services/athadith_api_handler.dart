@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:quran_leaner/models/ahadith_model.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/ahadith_model.dart';
 
 Future<List<AhadithModel>> similarAhadithApi(text) async {
   var uri = Uri.parse(
-      'https://anzhir2011-a7ades-similarity-quran-v2.hf.space/api/predict');
+      'https://omarelsayeed-a7ades-similarity-quran-v2.hf.space/api/predict');
   var post = await http.post(
     uri,
     headers: {
@@ -15,23 +16,24 @@ Future<List<AhadithModel>> similarAhadithApi(text) async {
       HttpHeaders.acceptHeader: 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, List<String>>{
-      'data': ['الحمدلله رب العالمين']
+      'data': [text]
     }),
-    //encoding: Encoding.getByName('utf-8'),
   );
   try {
     if (post.statusCode == 200) {
-      //var x = utf8.decode(post.bodyBytes);
-      var x = (((json.decode(utf8.decode(post.bodyBytes))['data']) as List)
-              .elementAt(0) as List)
-          .map((e) => AhadithModel.fromJson(e as Map<String, dynamic>));
+      List<AhadithModel> temp =
+          (((json.decode(utf8.decode(post.bodyBytes))['data']) as List)
+                  .elementAt(0) as List)
+              .map((element) =>
+                  AhadithModel.fromJson(element as Map<String, dynamic>))
+              .toList();
 
-      return x.toList();
+      return temp;
     } else if (post.statusCode >= 400 && post.statusCode <= 499) {
       debugPrint(post.statusCode.toString());
     }
-  } on Exception catch (e) {
-    debugPrint("Error: $e");
+  } catch (error) {
+    debugPrint("Error: $error");
   }
   return [];
 }

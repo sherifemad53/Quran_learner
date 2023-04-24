@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_leaner/app_routes.dart';
-import 'package:quran_leaner/providers/user_provider.dart';
 
-import '../../../models/user_model.dart';
+import '/providers/user_provider.dart';
+import '/models/user_model.dart';
+import '/app_routes.dart';
 
 class CustomNavigationDrawer extends StatelessWidget {
   const CustomNavigationDrawer({Key? key}) : super(key: key);

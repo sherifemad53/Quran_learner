@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_leaner/screens/ahadith/ahadith_screen.dart';
-import 'package:quran_leaner/screens/sentence_similarity/sentence_similarity_screen.dart';
 
+import 'screens/ahadith/ahadith_screen.dart';
+import 'screens/sentence_similarity/sentence_similarity_screen.dart';
 import 'screens/about_us/aboutus.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/signup_screen.dart';
