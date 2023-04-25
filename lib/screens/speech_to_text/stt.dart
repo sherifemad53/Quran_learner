@@ -14,7 +14,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'components/quran_list.dart';
-import 'components/string_similarity.dart';
+import '../surahview/string_similarity.dart';
 import 'components/decodeSTT.dart';
 
 import '../../providers/user_provider.dart';
@@ -158,9 +158,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     }
   }
 
-  Future<void> _upload(
-      model.User user, String? filePath, String? fileName) async {
-    // print('Started uploading');
+  Future<void> _upload(model.User user, String? filePath, String? fileName) async {
     File wavfile = File(filePath!);
 
     SettableMetadata metadata =
