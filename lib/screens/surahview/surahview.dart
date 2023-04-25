@@ -86,7 +86,11 @@ class SurahViewScreen extends StatelessWidget {
             children: [
               const Text("Start Memorization"),
               IconButton(
-                onPressed: (() {}),
+                onPressed: () {
+
+
+
+                },
                 icon: const Icon(Icons.mic),
               ),
             ],

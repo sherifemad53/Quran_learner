@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
 
   void searchSurahName(String query) {
     final suggestations = quranList.where((element) {
-      final surahName = element['SurahNameArabic'] as String;
+    final surahName = element['SurahNameArabic'] as String;
       return (surahName).contains(query);
     }).toList();
     setState(() {

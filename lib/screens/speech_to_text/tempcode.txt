@@ -1,0 +1,118 @@
+ // void _checkReading(String? surahName) {
+  //   setState(() {
+  //     _isChecked = false;
+  //  quranWords.clear();
+  //   });
+  //   quranWords.clear();
+  //   var arabicQurantext = quranList
+  //       .firstWhere((element) => element['SurahNameArabic'] == surahName);
+  //   List<String> textlist = [], speechedtext = [];
+  //   speechedtext = text.split(' ');
+  //    print(arabicQurantext['ArabicText'].toString().split(' '));
+  //   for (var elm in arabicQurantext['ArabicText'].toString().split(" ")) {
+  //     textlist.add(elm
+  //         .replaceFirst(',', '')
+  //         .replaceFirst('[', '')
+  //         .replaceFirst(']', '')
+  //         .trim());
+  //   }
+  //   int counter = 0;
+  //   double t;
+  //   try {
+  //     if (textlist.length == speechedtext.length) {
+  //       for (var element in textlist) {
+  //         t = StringSimilarity.similarity(element, speechedtext[counter]);
+  //         quranWords.add({'word': element, 'value': t});
+  //         if (counter < speechedtext.length) {
+  //           counter++;
+  //         }
+  //       }
+  //     } else {
+  //       for (var element in textlist) {
+  //         t = StringSimilarity.similarity(element, speechedtext[counter]);
+  //         quranWords.add({'word': element, 'value': t});
+  //         if (counter < speechedtext.length) {
+  //           counter++;
+  //         }
+  //       }
+  //       print(speechedtext);
+  //     }
+  //   } on RangeError {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: const Text(
+  //             'You haven\'t completed recitation  please start again'),
+  //         backgroundColor: Theme.of(context).errorColor,
+  //       ),
+  //     );
+  //   }
+  //   setState(() {
+  //     _isChecked = true;
+  //   });
+  //   print(quranWords);
+  // }
+
+  // Future<void> _record(model.User user) async {
+  //   List<String>? filepath = List<String>.filled(3, '');
+  //   List<String>? filename = List<String>.filled(3, '');
+  //   int index = 0;
+  //   int counter = 0;
+  //   Stopwatch stopwatch;
+  //   Directory directory = await getApplicationDocumentsDirectory();
+  //    Random random = Random();
+  //   if (isRecording) {
+  //     record.stop();
+  //      _upload(user, filepath, filename);
+  //     setState(() {
+  //       isRecording = false;
+  //       isRecorded = true;
+  //     });
+  //   } else {
+  //     if (await record.hasPermission()) {
+  //       while (isPressed) {
+  //         //TODO Merge wav files
+  //         //TODO what if the internet is bad what the mirgin of error that this won't work
+  //         //??Test the number of seconds that is best
+  //         counter += 1;
+  //         filename[index] = "$counter.wav";
+  //         filepath[index] = '${directory.path}/${filename[index]}';
+  //         setState(() {
+  //           isRecording = true;
+  //           isRecorded = false;
+  //         });
+  //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+  //         await record.start(
+  //           path: filepath[index],
+  //           encoder: AudioEncoder.wav, // by default
+  //           bitRate: 192000, // by default
+  //           samplingRate: 16000, // by default
+  //           numChannels: 1,
+  //         );
+  //         await Future.delayed(const Duration(seconds: 5));
+  //         await record.stop();
+  //         debugPrint(filepath.toString());
+  //         stopwatch = Stopwatch()..start();
+  //         if (filepath[(index + 2) % 3].isNotEmpty) {
+  //           debugPrint('the file uploaded: ${filepath[(index + 2) % 3]}');
+  //           Future.delayed(
+  //             const Duration(milliseconds: 500),
+  //             () => _upload(
+  //                 user, filepath[(index + 2) % 3], filename[(index + 2) % 3]),
+  //           );
+  //         }
+  //         if (filepath[(index + 1) % 3].isNotEmpty) {
+  //           debugPrint('the file stt: ${filepath[(index + 1) % 3]}');
+  //           Future.delayed(const Duration(milliseconds: 500),
+  //               () => _speechToText(filename[(index + 1) % 3], user));
+  //         }
+  //         stopwatch.stop();
+  //         debugPrint('time elapsed ${stopwatch.elapsed.inMilliseconds}');
+  //         index == 2 ? index = 0 : index++;
+  //       }
+  //       setState(() {
+  //         isRecording = false;
+  //         isRecorded = true;
+  //       });
+  //     }
+  //   }
+  // }

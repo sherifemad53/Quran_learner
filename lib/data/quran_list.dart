@@ -13612,7 +13612,7 @@ List<Map<String, dynamic>> quranList = [
     ],
   },
 ];
-List<Map> arabicName = [
+List<Map> surahArabicName = [
   {"surah": "1", "name": "الفاتحة"},
   {"surah": "2", "name": "البقرة"},
   {"surah": "3", "name": "آل عمران"},

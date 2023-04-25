@@ -1,19 +1,8 @@
 class StringSimilarity {
   StringSimilarity._();
 
-  static int _min(int a, int b) {
-    if (a > b) {
-      return b;
-    }
-    return a;
-  }
-
-  static int _max(int a, int b) {
-    if (a > b) {
-      return a;
-    }
-    return b;
-  }
+  static int _min(int a, int b) => a < b ? a : b;
+  static int _max(int a, int b) => a > b ? a : b;
 
   static String needlemanWunsch(String refText, String recitedText) {
     int rows = refText.length + 1;
