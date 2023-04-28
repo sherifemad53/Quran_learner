@@ -3,61 +3,100 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 
 import '../../../common/constants.dart';
+import '../../../services/senstence_Similarity_api_handler.dart';
 
-class VerusCard extends StatelessWidget {
-  const VerusCard({
-    Key? key,
-    this.label,
-    this.confidance,
-  }) : super(key: key);
+class VerusCard extends StatefulWidget {
+  const VerusCard(
+      {Key? key,
+      this.ayaText,
+      this.surahName,
+      this.similartyScore,
+      this.ayaNum,
+      this.surahNum})
+      : super(key: key);
 
-  final String? label;
-  final double? confidance;
+  final String? ayaText;
+  final String? surahName;
+  final int? ayaNum;
+  final int? surahNum;
+  final double? similartyScore;
 
+  @override
+  State<VerusCard> createState() => _VerusCardState();
+}
+
+class _VerusCardState extends State<VerusCard> {
+  String tasferStr = '';
+  bool isPressed = false;
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () => print(label),
+        onTap: () {
+          setState(() {
+            isPressed = !isPressed;
+            // tasferStr = await
+          });
+        },
         child: ListTile(
-          title: Row(
+          title: Column(
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.79,
-                    child: AutoSizeText(
-                      label.toString(),
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w600),
-                      maxLines: 3,
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                      wrapWords: true,
-                      minFontSize: 18,
-                      maxFontSize: 30,
-                      textAlign: TextAlign.end,
-                    ),
+              Center(
+                child: Text(
+                  widget.surahName.toString(),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.79,
+                child: AutoSizeText(
+                  widget.ayaText.toString(),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w600),
+                  maxLines: 3,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  wrapWords: true,
+                  minFontSize: 18,
+                  maxFontSize: 30,
+                  textAlign: TextAlign.end,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.75,
+                child: FAProgressBar(
+                  animatedDuration: const Duration(milliseconds: 1000),
+                  maxValue: 100,
+                  currentValue: widget.similartyScore! * 100,
+                  displayText: '%',
+                  progressGradient: LinearGradient(
+                    colors: [
+                      kSecendoryColor.withOpacity(0.75),
+                      kBackgroundColor.withOpacity(0.75),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    //fit: FlexFit.tight,
-                    width: MediaQuery.of(context).size.width * 0.75,
-                    //color: Colors.red,
-                    child: FAProgressBar(
-                      currentValue: confidance! * 100,
-                      displayText: '%',
-                      progressGradient: LinearGradient(
-                        colors: [
-                          kSecendoryColor.withOpacity(0.75),
-                          kBackgroundColor.withOpacity(0.75),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              )
+                ),
+              ),
+              const SizedBox(height: 10),
+              if (isPressed)
+                FutureBuilder(
+                  future: tafserReadJson(
+                      widget.surahName, widget.surahNum, widget.ayaNum),
+                  builder: (_, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    } else {
+                      return Text(
+                        snapshot.data!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      );
+                    }
+                  },
+                )
             ],
           ),
         ),

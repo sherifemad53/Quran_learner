@@ -64,6 +64,13 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    /*NOTE:Added for this error:
+        Some input files use or override a deprecated API.
+        Recompile with -Xlint:deprecation for details.*/
+    packagingOptions {
+    exclude 'META-INF/services/javax.annotation.processing.Processor'
+  }
 }
 
 flutter {
@@ -71,7 +78,7 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     
     // both added for firebase
     implementation platform('com.google.firebase:firebase-bom:31.1.0')

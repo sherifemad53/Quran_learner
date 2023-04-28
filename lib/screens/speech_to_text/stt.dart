@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
@@ -18,7 +18,7 @@ import 'components/string_similarity.dart';
 import 'components/decodeSTT.dart';
 
 import '../../providers/user_provider.dart';
-import '../../model/user_model.dart' as model;
+import '../../models/user_model.dart' as model;
 import '../../common/constants.dart';
 
 class SpeechToTextScreen extends StatefulWidget {
@@ -31,36 +31,32 @@ class SpeechToTextScreen extends StatefulWidget {
 class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   final record = Record();
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
-  int? counter;
 
   bool isListening = false;
   bool isRecording = false;
   bool isRecorded = false;
-  bool isLoading = false;
   bool isUploaded = false;
-  bool isPlaying = false;
   bool _isChecked = false;
 
-  String? _filepath;
-  String? _filename;
   String? _selectSurahName;
 
-  String text = "Press the Button and start speaking";
+  String text = '';
 
   var quranWords = List<Map<String, dynamic>>.filled(
       0, {'word': 'str', 'value': 0.0},
       growable: true);
 
-  //TODO make it in realtime not record and send
   @override
   void dispose() {
     record.dispose();
     super.dispose();
   }
 
-  Future<String> _speechToText(String filename, model.User user) async {
+  Future<void> _speechToText(String? filename, model.User user) async {
+    // print('start transcripting');
+    Stopwatch stopwatch = Stopwatch()..start();
     var uri =
-        Uri.parse('https://anzhir2011-quran-recitation.hf.space/run/predict');
+        Uri.parse('https://omarelsayeed-quran-recitation.hf.space/run/predict');
     var response = await http.post(
       uri,
       headers: {
@@ -84,197 +80,177 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     } on Exception catch (e) {
       debugPrint(e.toString());
     }
-    return '';
+    debugPrint(
+        'time elapsed transcripting ${stopwatch.elapsed.inMilliseconds}');
+    stopwatch.stop();
   }
 
-  void _checkReading(String? surahName) {
+  String _checkReading(String? surahName) {
     //TODO
     setState(() {
       _isChecked = false;
-      //quranWords.clear();
     });
     quranWords.clear();
     var arabicQurantext = quranList
         .firstWhere((element) => element['SurahNameArabic'] == surahName);
-    List<String> textlist = [], speechedtext = [];
-    speechedtext = text.split(' ');
-    //print(arabicQurantext['ArabicText'].toString().split(' '));
-    for (var elm in arabicQurantext['ArabicText'].toString().split(" ")) {
-      textlist.add(elm
-          .replaceFirst(',', '')
-          .replaceFirst('[', '')
-          .replaceFirst(']', '')
-          .trim());
+    var temp = '';
+    var y = '';
+    for (var element in (arabicQurantext['ArabicText'] as List)) {
+      temp = '$temp ' + element;
     }
-    int counter = 0;
-    double t;
+
     try {
-      if (textlist.length == speechedtext.length) {
-        for (var element in textlist) {
-          t = StringSimilarity.similarity(element, speechedtext[counter]);
-          quranWords.add({'word': element, 'value': t});
-          if (counter < speechedtext.length) {
-            counter++;
-          }
-        }
-      } else {
-        for (var element in textlist) {
-          t = StringSimilarity.similarity(element, speechedtext[counter]);
-          quranWords.add({'word': element, 'value': t});
-          if (counter < speechedtext.length) {
-            counter++;
-          }
-        }
-        print(speechedtext);
-      }
-    } on Exception catch (e) {
-      print(e.toString());
+      y = StringSimilarity.needlemanWunsch(temp, text);
+    } on RangeError {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+              'You haven\'t completed recitation  please start again'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+    } catch (err) {
+      debugPrint('Error occured');
     }
     setState(() {
       _isChecked = true;
     });
     print(quranWords);
+    return y;
   }
 
+  String filepath = '';
+  String filename = '';
+
   Future<void> _record(model.User user) async {
+    int index = 0;
+    int counter = 0;
     if (isRecording) {
-      record.stop();
-      _upload(user);
       setState(() {
         isRecording = false;
         isRecorded = true;
       });
+      await record.stop();
+      await _upload(user, filepath, filename)
+          .then((value) async => await _speechToText(filename, user))
+          .then((value) => text = _checkReading(_selectSurahName));
     } else {
       if (await record.hasPermission()) {
         setState(() {
           isRecording = true;
           isRecorded = false;
         });
-
         Directory directory = await getApplicationDocumentsDirectory();
         Random random = Random();
-
         counter = random.nextInt(0xffffffff);
-        _filename = "$counter.wav";
-        _filepath = '${directory.path}/$_filename';
-
+        filename = "$counter.wav";
+        filepath = '${directory.path}/$filename';
         //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
         await record.start(
-          path: _filepath,
+          path: filepath,
           encoder: AudioEncoder.wav, // by default
           bitRate: 256000, // by default
           samplingRate: 16000, // by default
           numChannels: 1,
         );
-        await Future.delayed(const Duration(seconds: 20));
-        await record.stop();
-
-        _upload(user);
-        setState(() {
-          isRecording = false;
-          isRecorded = true;
-        });
-        debugPrint(_filepath);
+        debugPrint(filepath);
       }
     }
   }
 
-  void _upload(model.User user) async {
-    File wavfile = File(_filepath!);
+  Future<void> _upload(
+      model.User user, String? filePath, String? fileName) async {
+    // print('Started uploading');
+    File wavfile = File(filePath!);
 
-    SettableMetadata metadata = SettableMetadata(customMetadata: {
-      'uid': user.uid,
-      'name': user.name,
-      'username': user.username,
-      'email': user.email,
-      'gender': user.gender,
-      'birthdate': user.birthdate.toString(),
-    });
-
+    SettableMetadata metadata =
+        SettableMetadata(customMetadata: user.tojsonString());
     try {
-      setState(() {
-        isLoading = true;
-      });
+      // setState(() {
+      //   isLoading = true;
+      // });
+      Stopwatch stopwatch = Stopwatch()..start();
       var firebasefiledir = _firebaseStorage
           .ref()
           .child("wavfiles")
           .child(user.uid)
-          .child(_filename!);
+          .child(fileName!);
       await firebasefiledir.putFile(wavfile, metadata);
+      debugPrint('time elapsed upload ${stopwatch.elapsed.inMilliseconds}');
+      stopwatch.stop();
     } catch (error) {
       debugPrint(error.toString());
     }
-    setState(() {
-      isUploaded = true;
-      isLoading = false;
-    });
+    // setState(() {
+    //   isUploaded = true;
+    // });
+    // debugPrint('done uploading');
   }
 
   //Note: this is the new function to record and send to server for uploading
-  bool isPressed = false;
-  Future<void> _continousRecord(model.User user) async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    String? str;
-    setState(() {
-      isRecording = true;
-      isRecorded = false;
-    });
-    Random random = Random();
-    if (await record.hasPermission()) {
-      while (isPressed) {
-        counter = random.nextInt(0xffffffff);
-        _filename = "$counter.wav";
-        _filepath = '${directory.path}/$_filename';
-        //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
-        final recorder = FlutterSoundRecorder();
-        await recorder.openRecorder();
-        await recorder.startRecorder(
-          toFile: _filepath,
-          codec: Codec.pcm16WAV,
-          bitRate: 256000,
-          sampleRate: 16000,
-          numChannels: 1,
-        );
-        await Future.delayed(const Duration(seconds: 5));
-        await recorder.stopRecorder();
-        await recorder.closeRecorder();
+  // Future<void> _continousRecord(model.User user) async {
+  //   Directory directory = await getApplicationDocumentsDirectory();
+  //   String? str;
+  //   setState(() {
+  //     isRecording = true;
+  //     isRecorded = false;
+  //   });
+  //   Random random = Random();
+  //   if (await record.hasPermission()) {
+  //     while (isPressed) {
+  //       counter = random.nextInt(0xffffffff);
+  //       _filename = "$counter.wav";
+  //       _filepath = '${directory.path}/$_filename';
+  //       //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+  //       final recorder = FlutterSoundRecorder();
+  //       await recorder.openRecorder();
+  //       await recorder.startRecorder(
+  //         toFile: _filepath,
+  //         codec: Codec.pcm16WAV,
+  //         bitRate: 256000,
+  //         sampleRate: 16000,
+  //         numChannels: 1,
+  //       );
+  //       await Future.delayed(const Duration(seconds: 5));
+  //       await recorder.stopRecorder();
+  //       await recorder.closeRecorder();
 
-        // await record.start(
-        //   path: _filepath,
-        //   encoder: AudioEncoder.wav, // by default
-        //   bitRate: 256000, // by default
-        //   samplingRate: 16000, // by default
-        //   numChannels: 1,
-        // );
-        // await Future.delayed(const Duration(seconds: 5));
-        //  await record.stop();
+  //       // await record.start(
+  //       //   path: _filepath,
+  //       //   encoder: AudioEncoder.wav, // by default
+  //       //   bitRate: 256000, // by default
+  //       //   samplingRate: 16000, // by default
+  //       //   numChannels: 1,
+  //       // );
+  //       // await Future.delayed(const Duration(seconds: 5));
+  //       //  await record.stop();
 
-        http.Response response;
-        try {
-          var url = Uri.parse('http://192.168.1.106:5000');
-          var file = File(_filepath as String);
-          var stream = await http.ByteStream(file.openRead()).toBytes();
-          var length = await file.length();
+  //       http.Response response;
+  //       try {
+  //         var url = Uri.parse('http://192.168.1.106:5000');
+  //         var file = File(_filepath as String);
+  //         var stream = await http.ByteStream(file.openRead()).toBytes();
+  //         var length = await file.length();
 
-          response = await http.post(url,
-              headers: {HttpHeaders.contentTypeHeader: "audio/wav;"},
-              body: stream);
-          if (response.statusCode == 200) {
-            debugPrint("File Uploaded");
-          } else {
-            debugPrint("Upload Failed");
-          }
-          // _upload(user);
-        } on SocketException catch (e) {
-          debugPrint(e.message);
-        }
-      }
-    }
-    setState(() {
-      isRecording = false;
-      isRecorded = true;
-    });
-  }
+  //         response = await http.post(url,
+  //             headers: {HttpHeaders.contentTypeHeader: "audio/wav;"},
+  //             body: stream);
+  //         if (response.statusCode == 200) {
+  //           debugPrint("File Uploaded");
+  //         } else {
+  //           debugPrint("Upload Failed");
+  //         }
+  //         // _upload(user);
+  //       } on SocketException catch (e) {
+  //         debugPrint(e.message);
+  //       }
+  //     }
+  //   }
+  //   setState(() {
+  //     isRecording = false;
+  //     isRecorded = true;
+  //   });
+  // }
 
   final isSelected = false;
 
@@ -291,107 +267,110 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: kdefualtVerticalPadding),
-                alignment: Alignment.topLeft,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Setect Sura",
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          Text(
-                            "To Memoritize",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              const CustomSTTappBar(),
               //const SizedBox(height: 10),
               //Choose surah listview
               //this container shows the spelled words
-              Container(
-                height: size.height * 0.35,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        _selectSurahName = quranList[index]['SurahNameArabic'];
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 3),
-                        child: ListTile(
-                          leading: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: Text('${index + 1}'),
-                          ),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                  "سورة ${quranList[index]['SurahNameArabic']}",
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(quranList[index]['SurahNameEnglish'],
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall),
-                                  Text(
-                                      '${quranList[index]['VerusCount']} verus',
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall)
-                                ],
-                              )
-                            ],
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: () {},
+              Card(
+                child: Center(
+                  child: Container(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(
+                        _selectSurahName == null
+                            ? ''
+                            : _selectSurahName.toString(),
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      )),
+                ),
+              ),
+              Card(
+                child: Container(
+                  height: size.height * 0.35,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            _selectSurahName =
+                                quranList[index]['SurahNameArabic'];
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 3),
+                          child: ListTile(
+                            leading: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              child: Text('${index + 1}'),
+                            ),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    "سورة ${quranList[index]['SurahNameArabic']}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(quranList[index]['SurahNameEnglish'],
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall),
+                                    Text(
+                                        '${quranList[index]['VerusCount']} verus',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall)
+                                  ],
+                                )
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () => setState(() {
+                                _selectSurahName =
+                                    quranList[index]['SurahNameArabic'];
+                              }),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  itemCount: quranList.length,
+                      );
+                    },
+                    itemCount: quranList.length,
+                  ),
                 ),
               ),
               //this container shows the wrong words and their correnction
-              CustomTextView(isChecked: _isChecked, quranWords: quranWords),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.30,
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(
+                    vertical: kdefualtVerticalMargin),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: kdefualtHorizontalPadding),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 117, 179, 145),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: _isChecked
+                    ? Html(data: text)
+                    : const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+              ),
               //buttons to upload and edit
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // if (isRecorded)
-                  //   ElevatedButton.icon(
-                  //     label: const Text("Upload"),
-                  //     onPressed: () => _upload(user),
-                  //     icon: const Icon(Icons.upload_file),
-                  //   ),
                   ElevatedButton.icon(
                     onPressed: () {
                       _record(user);
-                      isPressed = !isPressed;
+                      //isRecording = !isRecording;
+                      // isPressed = !isPressed;
                       // _continousRecord(user);
                     },
                     icon: isRecording
@@ -403,20 +382,50 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
                         backgroundColor:
                             isRecording ? Colors.red : Colors.grey),
                   ),
-                  if (isUploaded)
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        _speechToText(_filename as String, user).whenComplete(
-                            () => _checkReading(_selectSurahName));
-                      },
-                      icon: const Icon(Icons.text_snippet_sharp),
-                      label: const Text("Test"),
-                    ),
                 ],
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CustomSTTappBar extends StatelessWidget {
+  const CustomSTTappBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: kdefualtVerticalPadding),
+      alignment: Alignment.topLeft,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Setect Sura",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                Text(
+                  "To Memoritize",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

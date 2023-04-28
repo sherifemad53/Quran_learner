@@ -21,9 +21,9 @@ const SizedBox kSizedBox = SizedBox(
 
 //homepage.dart
 
-const Color kTextColor = Color(0xff8a7255);
-const Color kSecendoryColor = Color(0xff85817c);
-const Color kBackgroundColor = Color(0xff7e5934);
+const Color kTextColor = Colors.green;
+const Color kSecendoryColor = Colors.white;
+const Color kBackgroundColor = Color.fromARGB(255, 8, 104, 11);
 const Color kSurfaceColor = Color.fromARGB(255, 182, 103, 103);
 
 //Padding Sizing

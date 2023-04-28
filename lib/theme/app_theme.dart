@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quran_leaner/theme/widget_themes/text_theme.dart';
+import '/theme/widget_themes/text_theme.dart';
 
 //TODO ELBAILY TASK CHOOSE COLORS AND CUSTIMZIE THE APPLICATION
 class TAppTheme {

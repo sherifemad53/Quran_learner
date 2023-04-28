@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_leaner/app_routes.dart';
-import 'package:quran_leaner/common/constants.dart';
-import 'package:quran_leaner/providers/user_provider.dart';
+import '/app_routes.dart';
+import '/common/constants.dart';
+import '/providers/user_provider.dart';
 
 import '../profile/profile_screen.dart';
-import 'components/navigationdrawer.dart';
-import 'quran_list.dart';
+import 'widgets/custom_nav_drawer.dart';
+import '/data/quran_list.dart';
 import 'widgets/custom_appbar.dart';
-import '../../model/user_model.dart';
+import '../../models/user_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
 
   void searchSurahName(String query) {
     final suggestations = quranList.where((element) {
-      final surahName = element['SurahNameArabic'] as String;
+    final surahName = element['SurahNameArabic'] as String;
       return (surahName).contains(query);
     }).toList();
     setState(() {
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
             body: Center(child: CircularProgressIndicator.adaptive()),
           )
         : Scaffold(
-            drawer: const NavigationDrawer(),
+            drawer: const CustomNavigationDrawer(),
             body: SafeArea(
               child: SingleChildScrollView(
                 child: Column(
