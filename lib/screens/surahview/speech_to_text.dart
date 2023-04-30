@@ -8,7 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'string_similarity.dart';
-import 'decodeSTT.dart';
+import 'decode_stt.dart';
 
 import '../../models/user_model.dart' as model;
 
@@ -16,7 +16,10 @@ class SpeechToText {
   SpeechToText._();
   static final instance = SpeechToText._();
 
-  String text = '';
+  String recitedText = '';
+  String filepath = '';
+  String filename = '';
+
   final _record = Record();
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
@@ -36,11 +39,10 @@ class SpeechToText {
     );
     try {
       if (response.statusCode == 200) {
-        text = decodeSttFromJson(utf8.decode(response.bodyBytes))
+        recitedText = decodeSttFromJson(utf8.decode(response.bodyBytes))
             .data!
             .elementAt(0);
-        // debugPrint(text);
-        //setState(() {});
+        print(recitedText);
       } else if (response.statusCode >= 400 && response.statusCode <= 499) {
         debugPrint(response.body);
       }
@@ -53,25 +55,29 @@ class SpeechToText {
   }
 
   String _checkReading(String arabicAyatext) {
-    String y = '';
-    try {
-      y = StringSimilarity.needlemanWunsch(arabicAyatext, text);
-    } on RangeError {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: const Text(
-      //         'You haven\'t completed recitation  please start again'),
-      //     backgroundColor: Theme.of(context).errorColor,
-      //   ),
-      // );
-    } catch (err) {
-      debugPrint('Error occured');
-    }
-    return y;
-  }
+    //TODO say something batter when the recitation is wrong also think for better algorithm
+    String temp = '';
+    if (arabicAyatext.length + 5 >= recitedText.length) {
+      temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
+    } else if(arabicAyatext.length < recitedText.length) {
+      temp = 'Please say it again as it is wrong';
+    }else{
 
-  String filepath = '';
-  String filename = '';
+    }
+    // try {
+    // } on RangeError {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: const Text(
+    //           'You haven\'t completed recitation  please start again'),
+    //       backgroundColor: Theme.of(context).errorColor,
+    //     ),
+    //   );
+    // } catch (err) {
+    //   debugPrint('Error occured');
+    // }
+    return temp;
+  }
 
   Future<void> _upload(
       model.User? user, String? filePath, String? fileName) async {
@@ -80,7 +86,7 @@ class SpeechToText {
         SettableMetadata(customMetadata: user!.tojsonString());
     try {
       Stopwatch stopwatch = Stopwatch()..start();
-      var firebasefiledir = _firebaseStorage
+      Reference firebasefiledir = _firebaseStorage
           .ref()
           .child("wavfiles")
           .child(user.uid)
@@ -97,7 +103,7 @@ class SpeechToText {
     await _record.stop();
     return (await _upload(user, filepath, filename)
         .then((value) async => await _speechToText(filename, user))
-        .then((value) => text = _checkReading(arabicSurahText)));
+        .then((value) => recitedText = _checkReading(arabicSurahText)));
   }
 
   void startRecord(String surahNo, String ayaNo) async {

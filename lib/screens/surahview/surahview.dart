@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
-import 'package:quranic_tool_box/screens/surahview/speech_to_text.dart';
 
 import '../../providers/user_provider.dart';
-import '/common/constants.dart';
-import '/data/quran_list.dart';
+import '../../common/constants.dart';
+import '../../data/quran_list.dart';
 import '../../models/user_model.dart' as model;
+
+import 'speech_to_text.dart';
 
 class SurahViewScreen extends StatefulWidget {
   const SurahViewScreen({super.key});
@@ -16,61 +17,22 @@ class SurahViewScreen extends StatefulWidget {
 }
 
 class _SurahViewScreenState extends State<SurahViewScreen> {
-  final String arabicFont = 'quran';
   model.User? user;
-  final double arabicFontSize = 24;
 
+  final String arabicFont = 'quran';
+  final double arabicFontSize = 24;
   final double mushafFontSize = 40;
 
-  var text;
-
-  void _showOverlay(BuildContext context) async {
-    // Declaring and Initializing OverlayState
-    // and OverlayEntry objects
-    OverlayState? overlayState = Overlay.of(context);
-    OverlayEntry? overlayEntry;
-    overlayEntry = OverlayEntry(builder: (context) {
-      // You can return any widget you like here
-      // to be displayed on the Overlay
-      return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.2,
-        height: MediaQuery.of(context).size.height * 0.2,
-        child: Stack(
-          children: [
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.13,
-              left: MediaQuery.of(context).size.width * 0.13,
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      // When the icon is pressed the OverlayEntry
-                      // is removed from Overlay
-                      overlayEntry!.remove();
-                    },
-                    icon: Icon(Icons.mic,
-                        color: Colors.green,
-                        size: MediaQuery.of(context).size.height * 0.025),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-
-    // Inserting the OverlayEntry into the Overlay
-    overlayState!.insert(overlayEntry);
-  }
+  String text = ' ';
 
   bool isPressed = false;
-  var verseNumber = 0;
+  var verseNumber = 1;
   @override
   Widget build(BuildContext context) {
     user = Provider.of<UserProvider>(context).getUser;
     final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
     final args = ModalRoute.of(context)!.settings.arguments as Map;
+
     String surahName = args['SurahNameArabic'];
     var selectedSurah = quranList
         .firstWhere((element) => element['SurahNameArabic'] == surahName);
@@ -144,6 +106,13 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
         width: double.infinity,
         child: Column(
           children: [
+            FittedBox(
+              child: text != null
+                  ? SingleChildScrollView(child: Html(data: text))
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+            ),
             Row(
               children: [
                 Text(
@@ -160,26 +129,24 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                   onPressed: () async {
                     //TODO Auto increament if the memorization is correct by return bool if the memoriztion is true else a string with the incorrent words
                     isPressed = !isPressed;
+                    setState(() {});
                     isPressed
                         ? SpeechToText.instance
                             .startRecord("1", verseNumber.toString())
-                        : text = await SpeechToText.instance
+                        : SpeechToText.instance
                             .stopRecord(user,
                                 selectedSurah['ArabicText'][verseNumber - 1])
-                            .whenComplete(() {
+                            .then((value) {
+                            text = value;
                             setState(() {});
                           });
                   },
-                  icon: const Icon(Icons.mic),
+                  icon: isPressed
+                      ? const Icon(Icons.stop_circle)
+                      : const Icon(Icons.mic),
                 ),
               ],
             ),
-            Container(
-                child: text != null
-                    ? Html(data: text)
-                    : const Center(
-                        child: CircularProgressIndicator(),
-                      )),
           ],
         ),
       ),
