@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 class WelcomeImage extends StatelessWidget {
-  const WelcomeImage({
-    Key? key,
-    required this.size,
-  }) : super(key: key);
+  const WelcomeImage({Key? key, required this.width, required this.height})
+      : super(key: key);
 
-  final Size size;
+  final double width, height;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +12,8 @@ class WelcomeImage extends StatelessWidget {
       tag: 'welcome_image',
       child: Image(
         image: const AssetImage('assets/images/welcome_image.png'),
-        width: size.width,
-        height: size.height * 0.3,
+        width: width,
+        height: height,
         alignment: Alignment.center,
       ),
     );
