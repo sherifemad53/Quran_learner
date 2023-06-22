@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'screens/ahadith/ahadith_screen.dart';
 import 'screens/sentence_similarity/sentence_similarity_screen.dart';
@@ -24,6 +25,7 @@ import 'theme/app_theme.dart';
 //TODO Store user data in firestore and also in local store to be accessed faster
 //TODO GETX BETTER THAN PROVIDER
 //TODO READ QURAN FROM JSON FOR BETTER VIEWING
+//TODO Create connectivity provider?
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +33,27 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ConnectivityResult connectivityResult = ConnectivityResult.none;
+
+  @override
+  void initState() {
+    super.initState();
+    checkConnectivity().then((value) => connectivityResult = value);
+  }
+
+  Future<ConnectivityResult> checkConnectivity() async {
+    var res = await Connectivity().checkConnectivity();
+    debugPrint(res.name);
+    return res;
+  }
 
   @override
   Widget build(BuildContext context) {

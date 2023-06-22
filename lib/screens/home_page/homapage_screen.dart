@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+
+
 import '/app_routes.dart';
 import '/common/constants.dart';
 import '/providers/user_provider.dart';
 
 import '../profile/profile_screen.dart';
 import 'widgets/custom_nav_drawer.dart';
-import '/data/quran_list.dart';
 import 'widgets/custom_appbar.dart';
+import '/data/quran_list.dart';
 import '../../models/user_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+
     getdata().whenComplete(() => {
           setState(() {
             _isloading = false;

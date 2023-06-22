@@ -108,7 +108,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
           children: [
             FittedBox(
               child: text != null
-                  ? SingleChildScrollView(child: Html(data: text))
+                  ? SingleChildScrollView(child: Html(data: text,))
                   : const Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -134,8 +134,10 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                         ? SpeechToText.instance
                             .startRecord("1", verseNumber.toString())
                         : SpeechToText.instance
-                            .stopRecord(user,
-                                selectedSurah['ArabicText'][verseNumber - 1])
+                            .stopRecord(
+                                user,
+                                selectedSurah['OrignalArabicText']
+                                    [verseNumber - 1])
                             .then((value) {
                             text = value;
                             setState(() {});
