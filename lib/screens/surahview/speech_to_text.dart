@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:record/record.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,50 +20,68 @@ class SpeechToText {
   String filepath = '';
   String filename = '';
 
-  final _record = Record();
+  // final _record = Record();
+  final _recordnew = FlutterSoundRecorder();
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
   Future<void> _speechToText(String? filename, model.User? user) async {
     Stopwatch stopwatch = Stopwatch()..start();
-    var uri =
-        Uri.parse('https://omarelsayeed-quran-recitation.hf.space/run/predict');
-    var response = await http.post(
-      uri,
-      headers: {
-        HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
-        HttpHeaders.acceptHeader: 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, List<String>>{
-        'data': ['${user!.uid}/$filename']
-      }),
-    );
     try {
-      if (response.statusCode == 200) {
-        recitedText = decodeSttFromJson(utf8.decode(response.bodyBytes))
-            .data!
-            .elementAt(0);
-        print(recitedText);
-      } else if (response.statusCode >= 400 && response.statusCode <= 499) {
-        debugPrint(response.body);
+      var uri =
+          // Uri.parse('https://omarelsayeed-quran-recitation.hf.space/run/predict');
+          Uri.parse(
+              'https://omarelsayeed-quran-recitation-wav2vecdup.hf.space/run/predict');
+      var response = await http.post(
+        uri,
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
+          HttpHeaders.acceptHeader: 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, List<String>>{
+          'data': ['${user!.uid}/$filename']
+        }),
+      );
+      try {
+        if (response.statusCode == 200) {
+          recitedText = decodeSttFromJson(utf8.decode(response.bodyBytes))
+              .data!
+              .elementAt(0);
+          print(recitedText);
+        } else if (response.statusCode >= 400 && response.statusCode <= 499) {
+          debugPrint(response.body);
+        }
+      } on Exception catch (e) {
+        debugPrint(e.toString());
       }
-    } on Exception catch (e) {
-      debugPrint(e.toString());
+    } on FormatException catch (e) {
+      print(e.message);
     }
     debugPrint(
         'time elapsed transcripting ${stopwatch.elapsed.inMilliseconds}');
     stopwatch.stop();
   }
 
+  String _swapShaddaPosition(String input) {
+    RegExp regex = RegExp(
+        r'[َُِ]ّ'); // Regular expression to match fatha, kasra, or dama followed by shadda
+
+    String modifiedInput = input.replaceAllMapped(regex, (match) {
+      String diacriticMark = match.group(0)![0];
+      String shadda = match.group(0)![1];
+      return shadda +
+          diacriticMark; // Swap the positions of shadda and diacritic mark
+    });
+    return modifiedInput;
+  }
+
   String _checkReading(String arabicAyatext) {
-    //TODO say something batter when the recitation is wrong also think for better algorithm
     String temp = '';
+    recitedText = _swapShaddaPosition(recitedText);
     if (arabicAyatext.length + 5 >= recitedText.length) {
       temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
-    } else if(arabicAyatext.length < recitedText.length) {
+    } else if (arabicAyatext.length + 5 < recitedText.length) {
       temp = 'Please say it again as it is wrong';
-    }else{
-
-    }
+    } else {}
     // try {
     // } on RangeError {
     //   ScaffoldMessenger.of(context).showSnackBar(
@@ -99,27 +117,51 @@ class SpeechToText {
     }
   }
 
+  // Future<String> stopRecord(model.User? user, String arabicSurahText) async {
+  //   await _record.stop();
+  //   return (await _upload(user, filepath, filename)
+  //       .then((value) async => await _speechToText(filename, user))
+  //       .then((value) => recitedText = _checkReading(arabicSurahText)));
+  // }
+
+  // void startRecord(String surahNo, String ayaNo) async {
+  //   if (await _record.hasPermission()) {
+  //     Directory directory = await getApplicationDocumentsDirectory();
+  //     filename = "${surahNo}_${ayaNo}_$hashCode";
+  //     filepath = '${directory.path}/$filename';
+  //     //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+  //     await _record.start(
+  //       path: filepath,
+  //       encoder: AudioEncoder.wav, // by default
+  //       bitRate: 192000, // by default
+  //       samplingRate: 20000, // by default
+  //       numChannels: 1,
+  //     );
+  //     debugPrint(filepath);
+  //   }
+  // }
+
   Future<String> stopRecord(model.User? user, String arabicSurahText) async {
-    await _record.stop();
+    await _recordnew.stopRecorder();
+    _recordnew.closeRecorder();
     return (await _upload(user, filepath, filename)
         .then((value) async => await _speechToText(filename, user))
         .then((value) => recitedText = _checkReading(arabicSurahText)));
   }
 
   void startRecord(String surahNo, String ayaNo) async {
-    if (await _record.hasPermission()) {
-      Directory directory = await getApplicationDocumentsDirectory();
-      filename = "${surahNo}_${ayaNo}_$hashCode";
-      filepath = '${directory.path}/$filename';
-      //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
-      await _record.start(
-        path: filepath,
-        encoder: AudioEncoder.wav, // by default
-        bitRate: 256000, // by default
-        samplingRate: 16000, // by default
-        numChannels: 1,
-      );
-      debugPrint(filepath);
-    }
+    await _recordnew.openRecorder();
+    Directory directory = await getApplicationDocumentsDirectory();
+    filename = "${surahNo}_${ayaNo}_$hashCode.wav";
+    filepath = '${directory.path}/$filename';
+    //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+    await _recordnew.startRecorder(
+      numChannels: 1,
+      bitRate: 192000,
+      codec: Codec.pcm16WAV,
+      sampleRate: 20000,
+      toFile: filepath,
+    );
+    debugPrint(filepath);
   }
 }
