@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '../models/aya_model.dart';
 import '/models/tafser_model.dart';
-import '/models/senstenseSimilarity_model.dart';
+import '../models/senstense_similarity_model.dart';
 
 Future<List<SenstenceSimilarityModel>> similarVerseModelhApi(text) async {
   var uri = Uri.parse('https://omarelsayeed-test.hf.space/api/predict');

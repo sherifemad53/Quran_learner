@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/models/senstenseSimilarity_model.dart';
+import '../../models/senstense_similarity_model.dart';
 
 import '../../services/senstence_Similarity_api_handler.dart';
 import 'widgets/veruscard.dart';

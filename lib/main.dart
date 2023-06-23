@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +8,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'screens/ahadith/ahadith_screen.dart';
 import 'screens/sentence_similarity/sentence_similarity_screen.dart';
-import 'screens/about_us/aboutus.dart';
+import 'screens/about_us/aboutus_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/profile/profile_screen.dart';
@@ -14,6 +16,7 @@ import 'screens/speech_to_text/stt.dart';
 import 'screens/welcome/welcome_screen.dart';
 import 'screens/home_page/homapage_screen.dart';
 import 'screens/surahview/surahview.dart';
+import 'screens/tajweed_correction/tajweed_correction_screen.dart';
 
 import 'app_routes.dart';
 import 'providers/user_provider.dart';
@@ -22,10 +25,7 @@ import 'theme/app_theme.dart';
 
 //TODO Use state management system to provide user for all widgets
 //IS firebase package enough for state management answer is no
-//TODO Store user data in firestore and also in local store to be accessed faster
-//TODO GETX BETTER THAN PROVIDER
 //TODO READ QURAN FROM JSON FOR BETTER VIEWING
-//TODO Create connectivity provider?
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,13 +46,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    checkConnectivity().then((value) => connectivityResult = value);
-  }
-
-  Future<ConnectivityResult> checkConnectivity() async {
-    var res = await Connectivity().checkConnectivity();
-    debugPrint(res.name);
-    return res;
   }
 
   @override
@@ -61,6 +54,10 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
+        ),
+        StreamProvider(
+          create: (_) => Connectivity().onConnectivityChanged,
+          initialData: ConnectivityResult.none,
         ),
       ],
       child: MaterialApp(
@@ -80,7 +77,7 @@ class _MyAppState extends State<MyApp> {
                   content: Text(userSnapshot.error.toString()),
                   backgroundColor: Colors.red,
                 ));
-              } else {}
+              }
             } else {
               return const Center(
                 child: CircularProgressIndicator.adaptive(),
@@ -99,6 +96,8 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.ayatMotshbha: (context) => const SentenceSimilarityScreen(),
           AppRoutes.ahadithMotshbha: (context) => const AhadithScreen(),
           AppRoutes.recitation: (context) => const SpeechToTextScreen(),
+          AppRoutes.tajweedCorrection: (context) =>
+              const TajweedCorrectionScreen()
         },
       ),
     ); //AuthScreen();

@@ -67,6 +67,16 @@ class CustomNavigationDrawer extends StatelessWidget {
               Navigator.of(context).pushNamed(AppRoutes.ahadithMotshbha);
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.search),
+            title: Text(
+              'Tajweed Correction',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoutes.tajweedCorrection);
+            },
+          ),
         ]),
       ),
     );
