@@ -1,15 +1,29 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 
-import '../models/quran_model.dart';
+import 'package:flutter/services.dart';
+import 'package:quranic_tool_box/models/surah_model.dart';
 
-//TODO return Quran list right why
-class QuranProvider extends ChangeNotifier {
-  List<QuranModel>? _quran;
+class QuranProvider {
+  List<SurahModel> _surahs = [];
 
-  //QuranProvider get getQuran => _quran;
+  Future<void> init() async {
+    final String response =
+        await rootBundle.loadString('assets/surahnames.json');
+    _surahs = List<SurahModel>.from(
+        (json.decode(response)).map((element) => SurahModel.fromJson(element)));
+  }
 
-  Future<void> qq() async {
-    List<QuranModel>? quran;
-    notifyListeners();
+  Future<List<SurahModel>> getSearchedSurahModel(
+      String? surahNameArabic) async {
+    List<SurahModel> x = surahNameArabic == null
+        ? _surahs
+        : _surahs.where((element) {
+            return element.surahNameArabic!.contains(surahNameArabic);
+          }).toList();
+    return x;
+  }
+
+  List<SurahModel> getSurahModel() {
+    return _surahs;
   }
 }

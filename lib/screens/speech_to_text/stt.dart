@@ -86,7 +86,6 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   }
 
   String _checkReading(String? surahName) {
-    //TODO
     setState(() {
       _isChecked = false;
     });
@@ -115,7 +114,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     setState(() {
       _isChecked = true;
     });
-    print(quranWords);
+    debugPrint(quranWords.toString());
     return y;
   }
 
@@ -158,7 +157,8 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     }
   }
 
-  Future<void> _upload(model.User user, String? filePath, String? fileName) async {
+  Future<void> _upload(
+      model.User user, String? filePath, String? fileName) async {
     File wavfile = File(filePath!);
 
     SettableMetadata metadata =
@@ -185,7 +185,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
     // debugPrint('done uploading');
   }
 
-  //Note: this is the new function to record and send to server for uploading
+  // Note: this is the new function to record and send to server for uploading
   // Future<void> _continousRecord(model.User user) async {
   //   Directory directory = await getApplicationDocumentsDirectory();
   //   String? str;
@@ -199,7 +199,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //       counter = random.nextInt(0xffffffff);
   //       _filename = "$counter.wav";
   //       _filepath = '${directory.path}/$_filename';
-  //       //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+  //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
   //       final recorder = FlutterSoundRecorder();
   //       await recorder.openRecorder();
   //       await recorder.startRecorder(
@@ -212,24 +212,21 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //       await Future.delayed(const Duration(seconds: 5));
   //       await recorder.stopRecorder();
   //       await recorder.closeRecorder();
-
-  //       // await record.start(
-  //       //   path: _filepath,
-  //       //   encoder: AudioEncoder.wav, // by default
-  //       //   bitRate: 256000, // by default
-  //       //   samplingRate: 16000, // by default
-  //       //   numChannels: 1,
-  //       // );
-  //       // await Future.delayed(const Duration(seconds: 5));
-  //       //  await record.stop();
-
+  // await record.start(
+  //   path: _filepath,
+  //   encoder: AudioEncoder.wav, // by default
+  //   bitRate: 256000, // by default
+  //   samplingRate: 16000, // by default
+  //   numChannels: 1,
+  // );
+  // await Future.delayed(const Duration(seconds: 5));
+  //  await record.stop();
   //       http.Response response;
   //       try {
   //         var url = Uri.parse('http://192.168.1.106:5000');
   //         var file = File(_filepath as String);
   //         var stream = await http.ByteStream(file.openRead()).toBytes();
   //         var length = await file.length();
-
   //         response = await http.post(url,
   //             headers: {HttpHeaders.contentTypeHeader: "audio/wav;"},
   //             body: stream);
@@ -238,7 +235,7 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   //         } else {
   //           debugPrint("Upload Failed");
   //         }
-  //         // _upload(user);
+  //  _upload(user);
   //       } on SocketException catch (e) {
   //         debugPrint(e.message);
   //       }

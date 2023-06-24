@@ -1,14 +1,17 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:quranic_tool_box/models/surah_model.dart';
+import 'package:quranic_tool_box/providers/quran_provider.dart';
+
 import '/app_routes.dart';
 import '/common/constants.dart';
 import '/providers/user_provider.dart';
 
 import '../profile/profile_screen.dart';
 import 'widgets/custom_nav_drawer.dart';
-import '/data/quran_list.dart';
 import 'widgets/custom_appbar.dart';
+import '/data/quran_list.dart';
 import '../../models/user_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,6 +25,12 @@ class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> searchablequranlist = quranList;
   User? user;
   bool _isloading = true;
+  QuranProvider quranProvider = QuranProvider();
+  List<SurahModel> surahs = [];
+
+  void searchSurah(String a) async {
+    surahs = await quranProvider.getSearchedSurahModel(a);
+  }
 
   @override
   void initState() {
@@ -34,24 +43,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getdata() async {
+    //GET USER DATA
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     await userProvider.refreshUser();
-    await Future.delayed(const Duration(milliseconds: 300));
-  }
 
-  void searchSurahName(String query) {
-    final suggestations = quranList.where((element) {
-    final surahName = element['SurahNameArabic'] as String;
-      return (surahName).contains(query);
-    }).toList();
-    setState(() {
-      searchablequranlist = suggestations;
-    });
+    //GET SURAH MODEL DATA
+    await quranProvider.init();
+    surahs = quranProvider.getSurahModel();
+
+    await Future.delayed(const Duration(milliseconds: 200));
   }
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ConnectivityResult>(context) == ConnectivityResult.wifi ||
+            Provider.of<ConnectivityResult>(context) ==
+                ConnectivityResult.mobile
+        ? print('hello')
+        : print('world');
     if (!_isloading) user = Provider.of<UserProvider>(context).getUser;
     return _isloading
         ? const Scaffold(
@@ -111,7 +121,8 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: kdefualtHorizontalPadding),
                         child: TextField(
-                          onChanged: (value) => searchSurahName(value),
+                          textAlign: TextAlign.right,
+                          onChanged: (value) => searchSurah(value),
                           decoration: const InputDecoration(
                               hintText: "Enter Surah Name",
                               prefixIcon: Icon(Icons.search),
@@ -125,63 +136,67 @@ class _HomePageState extends State<HomePage> {
                       height: MediaQuery.of(context).size.height * 0.6,
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            enableFeedback: true,
-                            canRequestFocus: true,
-                            key: ValueKey(index),
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(AppRoutes.surahView, arguments: {
-                                'SurahNameArabic': searchablequranlist[index]
-                                    ['SurahNameArabic']
-                              });
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(vertical: 3),
-                              child: ListTile(
-                                leading: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  child: Text('${index + 1}'),
-                                ),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "سورة ${searchablequranlist[index]['SurahNameArabic']}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          searchablequranlist[index]
-                                              ['SurahNameEnglish'],
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                        Text(
-                                          '${searchablequranlist[index]['VerusCount']} verses',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                      child: Card(
+                        elevation: 3,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              enableFeedback: true,
+                              canRequestFocus: true,
+                              key: ValueKey(index),
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(AppRoutes.surahView, arguments: {
+                                  'SurahNameArabic':
+                                      surahs[index].surahNameArabic,
+                                  'SurahNo': surahs[index].id.toString(),
+                                });
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(vertical: 3),
+                                child: ListTile(
+                                  leading: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 10),
+                                    child: Text('${index + 1}'),
+                                  ),
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "سورة ${surahs[index].surahNameArabic}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            surahs[index].surahNameEnglish!,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          ),
+                                          Text(
+                                            '${surahs[index].totalVerses} verses',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                        itemCount: searchablequranlist.length,
+                            );
+                          },
+                          itemCount: surahs.length,
+                        ),
                       ),
                     ),
                   ],
@@ -194,7 +209,11 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  IconButton(icon: const Icon(Icons.home), onPressed: () {}),
+                  IconButton(
+                      icon: const Icon(Icons.home),
+                      onPressed: () async {
+                        //
+                      }),
                   IconButton(icon: const Icon(Icons.search), onPressed: () {}),
                   IconButton(
                       icon: const Icon(Icons.read_more), onPressed: () {}),

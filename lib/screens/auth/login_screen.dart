@@ -62,7 +62,10 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          WelcomeImage(size: size),
+          WelcomeImage(
+            width: size.width,
+            height: size.height * 0.3,
+          ),
           const WelcomeTitle(),
           Form(
             key: _formkey,
@@ -85,24 +88,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     isObscuretext: true),
                 // passwordtestfield
                 const SizedBox(height: 10),
-                 CustomElevatedButton(
-                label: "Login",
-                size: size,
-                submit: _submit,
-              ),
-                const SizedBox(height: 7),
-                const Text(
-                  'OR',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 7),
-                SignupWithGoogleButton(
+                CustomElevatedButton(
+                  label: "Login",
                   size: size,
                   submit: _submit,
                 ),
+                // const SizedBox(height: 7),
+                // const Text(
+                //   'OR',
+                //   style: TextStyle(
+                //     fontSize: 25,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
+                // const SizedBox(height: 7),
+                // SignupWithGoogleButton(
+                //   size: size,
+                //   submit: _submit,
+                // ),
               ],
             ),
           )

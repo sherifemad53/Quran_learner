@@ -16,18 +16,21 @@ class FormTextField extends StatelessWidget {
   bool? isObscuretext = false;
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      key: key,
-      keyboardType: TextInputType.name,
-      decoration: InputDecoration(
-        labelText: labeltext,
-        border: const OutlineInputBorder(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: TextFormField(
+        key: key,
+        keyboardType: TextInputType.name,
+        decoration: InputDecoration(
+          labelText: labeltext,
+          border: const OutlineInputBorder(),
+        ),
+        onSaved: (newValue) {
+          textEditingController!.text = newValue as String;
+        },
+        validator: validator,
+        obscureText: isObscuretext as bool,
       ),
-      onSaved: (newValue) {
-        textEditingController!.text = newValue as String;
-      },
-      validator: validator,
-      obscureText: isObscuretext as bool,
     );
   }
 }
