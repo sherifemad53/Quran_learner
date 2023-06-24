@@ -4,7 +4,6 @@ import '../../services/authentication.dart';
 import 'components/form_validator.dart';
 import 'widgets/form_text_field_widget.dart';
 import 'widgets/custom_elevated_button.dart';
-import 'widgets/signup_with_google_button.dart';
 import 'widgets/welcome_title.dart';
 
 enum Gender { male, female }
@@ -60,13 +59,12 @@ class _SignupScreenState extends State<SignupScreen> {
       _formkey.currentState!.save();
 
       Authentication.createUser(
-              _nameTextEditingController.text.trim(),
-              _userNameTextEditingController.text.trim(),
-              _userEmailTextEditingController.text.trim(),
-              _userPasswordTextEditingController.text.trim(),
-              ugender,
-              _userBirthdayDate)
-          .then((value) => Navigator.of(context).pop());
+          _nameTextEditingController.text.trim(),
+          _userNameTextEditingController.text.trim(),
+          _userEmailTextEditingController.text.trim(),
+          _userPasswordTextEditingController.text.trim(),
+          ugender,
+          _userBirthdayDate);
     }
   }
 

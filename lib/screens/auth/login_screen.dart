@@ -45,8 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Authentication.login(
         _userEmailTextEditingController.text.trim(),
         _userPasswordTextEditingController.text.trim(),
-      ).ignore();
-      // (() => Navigator.of(context).pop());
+      );
     }
   }
 

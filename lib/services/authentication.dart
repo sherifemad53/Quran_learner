@@ -48,9 +48,37 @@ class Authentication {
           .doc(_userCredential!.uid)
           .set(user.tojson());
     } on FirebaseAuthException catch (err) {
-      var errorMsg = "Error occured in auth";
+      var errorMsg = err.code;
+      debugPrint(errorMsg);
+
+      switch (err.code) {
+        case "user-not-found":
+          errorMsg = "User no found!";
+          showError(errorMsg);
+          debugPrint(errorMsg);
+          break;
+        case "email-already-in-use":
+          errorMsg = "Email already in use!";
+          showError(errorMsg);
+          debugPrint(errorMsg);
+          break;
+        case "account-exists-with-different-credential":
+          errorMsg = "Account already exists!";
+          showError(errorMsg);
+          debugPrint(errorMsg);
+          break;
+        case "network-request-failed":
+          errorMsg = "No network connections!";
+          showError(errorMsg);
+          debugPrint(errorMsg);
+          break;
+        default:
+          errorMsg = "Error occured in user creation, please try again!";
+          showError(errorMsg);
+          debugPrint(errorMsg);
+          break;
+      }
       if (err.code == "user-not-found") {
-        //TODO: handle all error types
         errorMsg = "user not found";
       }
       debugPrint(err.toString());
@@ -75,7 +103,7 @@ class Authentication {
       _userCredential = _auth.currentUser;
       Navigator.of(navigatorKey.currentContext!).pop();
     } on FirebaseAuthException catch (err) {
-      var errorMsg = "Error occured in auth";
+      var errorMsg = "";
       switch (err.code) {
         case "user-not-found":
           errorMsg = "user not found";
