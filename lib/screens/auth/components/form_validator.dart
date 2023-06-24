@@ -1,4 +1,8 @@
+import 'alerts.dart';
+
 class FormValidator {
+  // const Alerts alert;
+
   static String? nameValidator(String? str) {
     if (str!.isEmpty || str.length < 4) {
       return 'Enter correct name';
@@ -8,6 +12,7 @@ class FormValidator {
 
   static String? usernameValidator(String? str) {
     if (str!.isEmpty || str.length < 4) {
+      const Alerts();
       return 'Enter correct name';
     }
     return null;
