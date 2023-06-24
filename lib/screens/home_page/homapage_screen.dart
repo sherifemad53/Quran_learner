@@ -8,7 +8,6 @@ import '/app_routes.dart';
 import '/common/constants.dart';
 import '/providers/user_provider.dart';
 
-import '../profile/profile_screen.dart';
 import 'widgets/custom_nav_drawer.dart';
 import 'widgets/custom_appbar.dart';
 import '/data/quran_list.dart';
@@ -29,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   List<SurahModel> surahs = [];
 
   void searchSurah(String a) async {
-    surahs = await quranProvider.getSearchedSurahModel(a);
+    surahs = quranProvider.getSearchedSurahModel(a);
   }
 
   @override
@@ -55,8 +54,10 @@ class _HomePageState extends State<HomePage> {
     await Future.delayed(const Duration(milliseconds: 200));
   }
 
+  Size? size;
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     Provider.of<ConnectivityResult>(context) == ConnectivityResult.wifi ||
             Provider.of<ConnectivityResult>(context) ==
                 ConnectivityResult.mobile
@@ -101,9 +102,7 @@ class _HomePageState extends State<HomePage> {
                           IconButton(
                             onPressed: () {
                               Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (_) {
-                                return const ProfileScreen();
-                              }));
+                                  .pushNamed(AppRoutes.profile);
                             },
                             icon: Image.asset(
                               'assets/icons/male_profile_icon.png',
@@ -113,27 +112,28 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    Center(
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: kdefualtHorizontalMargin,
-                            vertical: kdefualtVerticalMargin),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: kdefualtHorizontalPadding),
-                        child: TextField(
-                          textAlign: TextAlign.right,
-                          onChanged: (value) => searchSurah(value),
-                          decoration: const InputDecoration(
-                              hintText: "Enter Surah Name",
-                              prefixIcon: Icon(Icons.search),
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)))),
-                        ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: kdefualtHorizontalMargin,
+                          vertical: kdefualtVerticalMargin),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: kdefualtHorizontalPadding),
+                      child: TextField(
+                        textDirection: TextDirection.rtl,
+                        onChanged: (value) => setState(() {
+                          searchSurah(value);
+                        }),
+                        decoration: const InputDecoration(
+                            hintTextDirection: TextDirection.ltr,
+                            hintText: "Enter Surah Name",
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)))),
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.6,
+                      height: size!.height * 0.6,
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Card(
@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                                   leading: Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 10),
-                                    child: Text('${index + 1}'),
+                                    child: Text(surahs[index].id.toString()),
                                   ),
                                   title: Column(
                                     crossAxisAlignment:

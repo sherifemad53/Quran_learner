@@ -24,6 +24,9 @@ class AyaModel {
     required this.arabicText,
     required this.arabicWordCount,
     required this.arabicLetterCount,
+    isVisable,
+    isRecited,
+    isMemorized,
     isPressed,
   });
 
@@ -43,7 +46,10 @@ class AyaModel {
   final String arabicText;
   final String arabicWordCount;
   final String arabicLetterCount;
-  bool isPressed = true;
+  bool isVisable = true;
+  bool isRecited = false;
+  bool isMemorized = false;
+  bool isPressed = false;
 
   factory AyaModel.fromJson(Map<String, dynamic> json) => AyaModel(
         srNo: json["SrNo"],

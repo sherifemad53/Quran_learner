@@ -11,7 +11,10 @@ class CustomNavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<UserProvider>(context).getUser;
+    Size size = MediaQuery.of(context).size;
+
     return Drawer(
+      width: size.width * 0.65,
       child: SingleChildScrollView(
         child: Column(children: [
           Container(
