@@ -22,6 +22,7 @@ import 'app_routes.dart';
 import 'providers/user_provider.dart';
 import 'common/constants.dart';
 import 'theme/app_theme.dart';
+import 'package:quranic_tool_box/navigator_key.dart';
 
 //TODO Use state management system to provide user for all widgets
 //IS firebase package enough for state management answer is no
@@ -66,6 +67,7 @@ class _MyAppState extends State<MyApp> {
         themeMode: ThemeMode.system,
         theme: TAppTheme.lightTheme,
         darkTheme: TAppTheme.darkTheme,
+        navigatorKey: navigatorKey,
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapshot) {

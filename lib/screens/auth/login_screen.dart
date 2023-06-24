@@ -4,7 +4,6 @@ import '../../services/authentication.dart';
 import 'components/form_validator.dart';
 import 'widgets/custom_elevated_button.dart';
 import 'widgets/form_text_field_widget.dart';
-import 'widgets/signup_with_google_button.dart';
 import 'widgets/welcome_image.dart';
 import 'widgets/welcome_title.dart';
 
@@ -46,7 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
       Authentication.login(
         _userEmailTextEditingController.text.trim(),
         _userPasswordTextEditingController.text.trim(),
-      ).then((value) => Navigator.of(context).pop());
+      ).ignore();
+      // (() => Navigator.of(context).pop());
     }
   }
 
