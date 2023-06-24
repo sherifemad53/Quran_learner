@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 
 import 'string_similarity.dart';
 import 'decode_stt.dart';
@@ -19,18 +20,18 @@ class SpeechToText {
   String recitedText = '';
   String filepath = '';
   String filename = '';
-
+  String apiUrl = '';
   // final _record = Record();
   final _recordnew = FlutterSoundRecorder();
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
-  Future<void> _speechToText(String? filename, model.User? user) async {
+  Future<void> _speechToText(
+      String apiUrl, String? filename, model.User? user) async {
     Stopwatch stopwatch = Stopwatch()..start();
     try {
       var uri =
           // Uri.parse('https://omarelsayeed-quran-recitation.hf.space/run/predict');
-          Uri.parse(
-              'https://omarelsayeed-quran-recitation-wav2vecdup.hf.space/run/predict');
+          Uri.parse(apiUrl);
       var response = await http.post(
         uri,
         headers: {
@@ -46,7 +47,7 @@ class SpeechToText {
           recitedText = decodeSttFromJson(utf8.decode(response.bodyBytes))
               .data!
               .elementAt(0);
-          print(recitedText);
+          debugPrint(recitedText);
         } else if (response.statusCode >= 400 && response.statusCode <= 499) {
           debugPrint(response.body);
         }
@@ -54,7 +55,7 @@ class SpeechToText {
         debugPrint(e.toString());
       }
     } on FormatException catch (e) {
-      print(e.message);
+      debugPrint(e.message);
     }
     debugPrint(
         'time elapsed transcripting ${stopwatch.elapsed.inMilliseconds}');
@@ -117,51 +118,33 @@ class SpeechToText {
     }
   }
 
-  // Future<String> stopRecord(model.User? user, String arabicSurahText) async {
-  //   await _record.stop();
-  //   return (await _upload(user, filepath, filename)
-  //       .then((value) async => await _speechToText(filename, user))
-  //       .then((value) => recitedText = _checkReading(arabicSurahText)));
-  // }
-
-  // void startRecord(String surahNo, String ayaNo) async {
-  //   if (await _record.hasPermission()) {
-  //     Directory directory = await getApplicationDocumentsDirectory();
-  //     filename = "${surahNo}_${ayaNo}_$hashCode";
-  //     filepath = '${directory.path}/$filename';
-  //     //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
-  //     await _record.start(
-  //       path: filepath,
-  //       encoder: AudioEncoder.wav, // by default
-  //       bitRate: 192000, // by default
-  //       samplingRate: 20000, // by default
-  //       numChannels: 1,
-  //     );
-  //     debugPrint(filepath);
-  //   }
-  // }
-
-  Future<String> stopRecord(model.User? user, String arabicSurahText) async {
+  Future<String> stopRecord(
+      String apiUrl, model.User? user, String arabicSurahText) async {
     await _recordnew.stopRecorder();
     _recordnew.closeRecorder();
     return (await _upload(user, filepath, filename)
-        .then((value) async => await _speechToText(filename, user))
+        .then((value) async => await _speechToText(apiUrl, filename, user))
         .then((value) => recitedText = _checkReading(arabicSurahText)));
   }
 
   void startRecord(String surahNo, String ayaNo) async {
-    await _recordnew.openRecorder();
-    Directory directory = await getApplicationDocumentsDirectory();
-    filename = "${surahNo}_${ayaNo}_$hashCode.wav";
-    filepath = '${directory.path}/$filename';
-    //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
-    await _recordnew.startRecorder(
-      numChannels: 1,
-      bitRate: 192000,
-      codec: Codec.pcm16WAV,
-      sampleRate: 20000,
-      toFile: filepath,
-    );
-    debugPrint(filepath);
+    PermissionStatus status = await Permission.microphone.request();
+    if (status != PermissionStatus.granted) {
+      throw RecordingPermissionException("Microphone permission not granted");
+    } else {
+      await _recordnew.openRecorder();
+      Directory directory = await getApplicationDocumentsDirectory();
+      filename = "${surahNo}_${ayaNo}_$hashCode.wav";
+      filepath = '${directory.path}/$filename';
+      //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+      await _recordnew.startRecorder(
+        numChannels: 1,
+        bitRate: 192000,
+        codec: Codec.pcm16WAV,
+        sampleRate: 20000,
+        toFile: filepath,
+      );
+      debugPrint(filepath);
+    }
   }
 }

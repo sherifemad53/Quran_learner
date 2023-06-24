@@ -1,5 +1,5 @@
 name: quranic_tool_box
-description: A new Flutter project.
+description: Graduation Project
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -41,11 +41,8 @@ dependencies:
 
     # apis and web libs
     http: ^0.13.5
-    connectivity_plus: ^4.0.1
-
-    #Local caching
-    hive: ^2.2.3
-    hive_flutter: ^1.1.0
+    # TODO put the version for the package below so no error occurs
+    connectivity_plus:
 
     #State managment system
     provider: ^6.0.5
@@ -58,11 +55,10 @@ dependencies:
 
     record: ^4.4.3
     flutter_sound: ^9.2.13
+    permission_handler: ^10.3.0
     path_provider: ^2.0.11
     flutter_html: ^2.2.1
 
-    # flutter_sound: ^9.2.13
-    # audioplayers: ^1.1.1
     # excel: ^2.0.0-null-safety-3
     # simple_s3: ^0.3.2
     # speech_to_text: ^6.1.0
@@ -73,10 +69,6 @@ dev_dependencies:
     flutter_test:
         sdk: flutter
     flutter_lints: ^2.0.0
-
-    #Local caching
-    hive_generator: ^1.1.3
-    build_runner: ^2.1.11
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

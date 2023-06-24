@@ -91,8 +91,6 @@ class StringSimilarity {
     List<List<int>> d =
         List.generate(sa + 1, (int i) => List.filled(sb + 1, 0));
 
-    // print(d.length);
-
     if (a.isEmpty) {
       levenshtein = b.length;
       return (levenshtein);

@@ -1,25 +1,46 @@
 // To parse this JSON data, do
 //
-//     final quranModel = quranModelFromJson(jsonString);
+//     final surahModel = surahModelFromJson(jsonString);
 
-import 'package:quranic_tool_box/models/aya_model.dart';
+import 'dart:convert';
 
-class QuranModel extends AyaModel {
-  QuranModel(
-      {required super.srNo,
-      required super.juz,
-      required super.juzNameArabic,
-      required super.juzNameEnglish,
-      required super.surahNo,
-      required super.surahNameArabic,
-      required super.surahNameEnglish,
-      required super.surahMeaning,
-      required super.webLink,
-      required super.classification,
-      required super.ayahNo,
-      required super.englishTranslation,
-      required super.orignalArabicText,
-      required super.arabicText,
-      required super.arabicWordCount,
-      required super.arabicLetterCount});
+SurahModel surahModelFromJson(String str) =>
+    SurahModel.fromJson(json.decode(str));
+
+String surahModelToJson(SurahModel data) => json.encode(data.toJson());
+
+class SurahModel {
+  int? id;
+  String? surahNameArabic;
+  String? surahNameEnglish;
+  String? surahMeaning;
+  String? classification;
+  String? totalVerses;
+
+  SurahModel({
+    required this.id,
+    required this.surahNameArabic,
+    required this.surahNameEnglish,
+    required this.surahMeaning,
+    required this.classification,
+    required this.totalVerses,
+  });
+
+  factory SurahModel.fromJson(Map<String, dynamic> json) => SurahModel(
+        id: json["id"],
+        surahNameArabic: json["surahNameArabic"],
+        surahNameEnglish: json["SurahNameEnglish"],
+        surahMeaning: json["SurahMeaning"],
+        classification: json["Classification"],
+        totalVerses: json["total_verses"].toString(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "surahNameArabic": surahNameArabic,
+        "SurahNameEnglish": surahNameEnglish,
+        "SurahMeaning": surahMeaning,
+        "Classification": classification,
+        "total_verses": totalVerses,
+      };
 }
