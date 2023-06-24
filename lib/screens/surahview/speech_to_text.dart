@@ -75,14 +75,17 @@ class SpeechToText {
     return modifiedInput;
   }
 
-  String _checkReading(String arabicAyatext) {
+  String _checkReading(String arabicAyatext,bool isMemorizationMode) {
     String temp = '';
     recitedText = _swapShaddaPosition(recitedText);
-    if (arabicAyatext.length + 5 >= recitedText.length) {
-      temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
-    } else if (arabicAyatext.length + 5 < recitedText.length) {
-      temp = 'Please say it again as it is wrong';
-    } else {}
+    temp = isMemorizationMode ? StringSimilarity.similarity(arabicAyatext, recitedText).toString() : StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
+    // if (arabicAyatext.length + 5 >= recitedText.length) {
+    //   temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
+    // } else if (arabicAyatext.length + 5 < recitedText.length) {
+    //   temp = 'Please say it again as it is wrong';
+    // } else if(isMemorizationMode) {
+
+    // }
     // try {
     // } on RangeError {
     //   ScaffoldMessenger.of(context).showSnackBar(
@@ -119,12 +122,12 @@ class SpeechToText {
   }
 
   Future<String> stopRecord(
-      String apiUrl, model.User? user, String arabicSurahText) async {
+      String apiUrl, model.User? user, String arabicSurahText,bool isMemorizationMode) async {
     await _recordnew.stopRecorder();
     _recordnew.closeRecorder();
     return (await _upload(user, filepath, filename)
         .then((value) async => await _speechToText(apiUrl, filename, user))
-        .then((value) => recitedText = _checkReading(arabicSurahText)));
+        .then((value) => recitedText = _checkReading(arabicSurahText,isMemorizationMode)));
   }
 
   void startRecord(String surahNo, String ayaNo) async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  CustomElevatedButton({
+  const CustomElevatedButton({
     Key? key,
     required this.label,
     required this.size,
@@ -9,8 +9,8 @@ class CustomElevatedButton extends StatelessWidget {
   }) : super(key: key);
 
   final Size size;
-  String label;
-  Function submit;
+  final String label;
+  final Function submit;
 
   @override
   Widget build(BuildContext context) {
