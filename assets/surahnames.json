@@ -1,914 +1,914 @@
 [
-  {
-    "id": 1,
-    "surahNameArabic": "الفاتحة",
-    "SurahNameEnglish": "Al-Fatihah",
-    "SurahMeaning": "The Opener",
-    "Classification": "meccan",
-    "total_verses": 7
-  },
-  {
-    "id": 2,
-    "surahNameArabic": "البقرة",
-    "SurahNameEnglish": "Al-Baqarah",
-    "SurahMeaning": "The Cow",
-    "Classification": "medinan",
-    "total_verses": 286
-  },
-  {
-    "id": 3,
-    "surahNameArabic": "آل عمران",
-    "SurahNameEnglish": "Ali 'Imran",
-    "SurahMeaning": "Family of Imran",
-    "Classification": "medinan",
-    "total_verses": 200
-  },
-  {
-    "id": 4,
-    "surahNameArabic": "النساء",
-    "SurahNameEnglish": "An-Nisa",
-    "SurahMeaning": "The Women",
-    "Classification": "medinan",
-    "total_verses": 176
-  },
-  {
-    "id": 5,
-    "surahNameArabic": "المائدة",
-    "SurahNameEnglish": "Al-Ma'idah",
-    "SurahMeaning": "The Table Spread",
-    "Classification": "medinan",
-    "total_verses": 120
-  },
-  {
-    "id": 6,
-    "surahNameArabic": "الأنعام",
-    "SurahNameEnglish": "Al-An'am",
-    "SurahMeaning": "The Cattle",
-    "Classification": "meccan",
-    "total_verses": 165
-  },
-  {
-    "id": 7,
-    "surahNameArabic": "الأعراف",
-    "SurahNameEnglish": "Al-A'raf",
-    "SurahMeaning": "The Heights",
-    "Classification": "meccan",
-    "total_verses": 206
-  },
-  {
-    "id": 8,
-    "surahNameArabic": "الأنفال",
-    "SurahNameEnglish": "Al-Anfal",
-    "SurahMeaning": "The Spoils of War",
-    "Classification": "medinan",
-    "total_verses": 75
-  },
-  {
-    "id": 9,
-    "surahNameArabic": "التوبة",
-    "SurahNameEnglish": "At-Tawbah",
-    "SurahMeaning": "The Repentance",
-    "Classification": "medinan",
-    "total_verses": 129
-  },
-  {
-    "id": 10,
-    "surahNameArabic": "يونس",
-    "SurahNameEnglish": "Yunus",
-    "SurahMeaning": "Jonah",
-    "Classification": "meccan",
-    "total_verses": 109
-  },
-  {
-    "id": 11,
-    "surahNameArabic": "هود",
-    "SurahNameEnglish": "Hud",
-    "SurahMeaning": "Hud",
-    "Classification": "meccan",
-    "total_verses": 123
-  },
-  {
-    "id": 12,
-    "surahNameArabic": "يوسف",
-    "SurahNameEnglish": "Yusuf",
-    "SurahMeaning": "Joseph",
-    "Classification": "meccan",
-    "total_verses": 111
-  },
-  {
-    "id": 13,
-    "surahNameArabic": "الرعد",
-    "SurahNameEnglish": "Ar-Ra'd",
-    "SurahMeaning": "The Thunder",
-    "Classification": "medinan",
-    "total_verses": 43
-  },
-  {
-    "id": 14,
-    "surahNameArabic": "ابراهيم",
-    "SurahNameEnglish": "Ibrahim",
-    "SurahMeaning": "Abraham",
-    "Classification": "meccan",
-    "total_verses": 52
-  },
-  {
-    "id": 15,
-    "surahNameArabic": "الحجر",
-    "SurahNameEnglish": "Al-Hijr",
-    "SurahMeaning": "The Rocky Tract",
-    "Classification": "meccan",
-    "total_verses": 99
-  },
-  {
-    "id": 16,
-    "surahNameArabic": "النحل",
-    "SurahNameEnglish": "An-Nahl",
-    "SurahMeaning": "The Bee",
-    "Classification": "meccan",
-    "total_verses": 128
-  },
-  {
-    "id": 17,
-    "surahNameArabic": "الإسراء",
-    "SurahNameEnglish": "Al-Isra",
-    "SurahMeaning": "The Night Journey",
-    "Classification": "meccan",
-    "total_verses": 111
-  },
-  {
-    "id": 18,
-    "surahNameArabic": "الكهف",
-    "SurahNameEnglish": "Al-Kahf",
-    "SurahMeaning": "The Cave",
-    "Classification": "meccan",
-    "total_verses": 110
-  },
-  {
-    "id": 19,
-    "surahNameArabic": "مريم",
-    "SurahNameEnglish": "Maryam",
-    "SurahMeaning": "Mary",
-    "Classification": "meccan",
-    "total_verses": 98
-  },
-  {
-    "id": 20,
-    "surahNameArabic": "طه",
-    "SurahNameEnglish": "Taha",
-    "SurahMeaning": "Ta-Ha",
-    "Classification": "meccan",
-    "total_verses": 135
-  },
-  {
-    "id": 21,
-    "surahNameArabic": "الأنبياء",
-    "SurahNameEnglish": "Al-Anbya",
-    "SurahMeaning": "The Prophets",
-    "Classification": "meccan",
-    "total_verses": 112
-  },
-  {
-    "id": 22,
-    "surahNameArabic": "الحج",
-    "SurahNameEnglish": "Al-Hajj",
-    "SurahMeaning": "The Pilgrimage",
-    "Classification": "medinan",
-    "total_verses": 78
-  },
-  {
-    "id": 23,
-    "surahNameArabic": "المؤمنون",
-    "SurahNameEnglish": "Al-Mu'minun",
-    "SurahMeaning": "The Believers",
-    "Classification": "meccan",
-    "total_verses": 118
-  },
-  {
-    "id": 24,
-    "surahNameArabic": "النور",
-    "SurahNameEnglish": "An-Nur",
-    "SurahMeaning": "The Light",
-    "Classification": "medinan",
-    "total_verses": 64
-  },
-  {
-    "id": 25,
-    "surahNameArabic": "الفرقان",
-    "SurahNameEnglish": "Al-Furqan",
-    "SurahMeaning": "The Criterion",
-    "Classification": "meccan",
-    "total_verses": 77
-  },
-  {
-    "id": 26,
-    "surahNameArabic": "الشعراء",
-    "SurahNameEnglish": "Ash-Shu'ara",
-    "SurahMeaning": "The Poets",
-    "Classification": "meccan",
-    "total_verses": 227
-  },
-  {
-    "id": 27,
-    "surahNameArabic": "النمل",
-    "SurahNameEnglish": "An-Naml",
-    "SurahMeaning": "The Ant",
-    "Classification": "meccan",
-    "total_verses": 93
-  },
-  {
-    "id": 28,
-    "surahNameArabic": "القصص",
-    "SurahNameEnglish": "Al-Qasas",
-    "SurahMeaning": "The Stories",
-    "Classification": "meccan",
-    "total_verses": 88
-  },
-  {
-    "id": 29,
-    "surahNameArabic": "العنكبوت",
-    "SurahNameEnglish": "Al-'Ankabut",
-    "SurahMeaning": "The Spider",
-    "Classification": "meccan",
-    "total_verses": 69
-  },
-  {
-    "id": 30,
-    "surahNameArabic": "الروم",
-    "SurahNameEnglish": "Ar-Rum",
-    "SurahMeaning": "The Romans",
-    "Classification": "meccan",
-    "total_verses": 60
-  },
-  {
-    "id": 31,
-    "surahNameArabic": "لقمان",
-    "SurahNameEnglish": "Luqman",
-    "SurahMeaning": "Luqman",
-    "Classification": "meccan",
-    "total_verses": 34
-  },
-  {
-    "id": 32,
-    "surahNameArabic": "السجدة",
-    "SurahNameEnglish": "As-Sajdah",
-    "SurahMeaning": "The Prostration",
-    "Classification": "meccan",
-    "total_verses": 30
-  },
-  {
-    "id": 33,
-    "surahNameArabic": "الأحزاب",
-    "SurahNameEnglish": "Al-Ahzab",
-    "SurahMeaning": "The Combined Forces",
-    "Classification": "medinan",
-    "total_verses": 73
-  },
-  {
-    "id": 34,
-    "surahNameArabic": "سبإ",
-    "SurahNameEnglish": "Saba",
-    "SurahMeaning": "Sheba",
-    "Classification": "meccan",
-    "total_verses": 54
-  },
-  {
-    "id": 35,
-    "surahNameArabic": "فاطر",
-    "SurahNameEnglish": "Fatir",
-    "SurahMeaning": "Originator",
-    "Classification": "meccan",
-    "total_verses": 45
-  },
-  {
-    "id": 36,
-    "surahNameArabic": "يس",
-    "SurahNameEnglish": "Ya-Sin",
-    "SurahMeaning": "Ya Sin",
-    "Classification": "meccan",
-    "total_verses": 83
-  },
-  {
-    "id": 37,
-    "surahNameArabic": "الصافات",
-    "SurahNameEnglish": "As-Saffat",
-    "SurahMeaning": "Those who set the Ranks",
-    "Classification": "meccan",
-    "total_verses": 182
-  },
-  {
-    "id": 38,
-    "surahNameArabic": "ص",
-    "SurahNameEnglish": "Sad",
-    "SurahMeaning": "The Letter \"Saad\"",
-    "Classification": "meccan",
-    "total_verses": 88
-  },
-  {
-    "id": 39,
-    "surahNameArabic": "الزمر",
-    "SurahNameEnglish": "Az-Zumar",
-    "SurahMeaning": "The Troops",
-    "Classification": "meccan",
-    "total_verses": 75
-  },
-  {
-    "id": 40,
-    "surahNameArabic": "غافر",
-    "SurahNameEnglish": "Ghafir",
-    "SurahMeaning": "The Forgiver",
-    "Classification": "meccan",
-    "total_verses": 85
-  },
-  {
-    "id": 41,
-    "surahNameArabic": "فصلت",
-    "SurahNameEnglish": "Fussilat",
-    "SurahMeaning": "Explained in Detail",
-    "Classification": "meccan",
-    "total_verses": 54
-  },
-  {
-    "id": 42,
-    "surahNameArabic": "الشورى",
-    "SurahNameEnglish": "Ash-Shuraa",
-    "SurahMeaning": "The Consultation",
-    "Classification": "meccan",
-    "total_verses": 53
-  },
-  {
-    "id": 43,
-    "surahNameArabic": "الزخرف",
-    "SurahNameEnglish": "Az-Zukhruf",
-    "SurahMeaning": "The OrsurahNameArabicnts of Gold",
-    "Classification": "meccan",
-    "total_verses": 89
-  },
-  {
-    "id": 44,
-    "surahNameArabic": "الدخان",
-    "SurahNameEnglish": "Ad-Dukhan",
-    "SurahMeaning": "The Smoke",
-    "Classification": "meccan",
-    "total_verses": 59
-  },
-  {
-    "id": 45,
-    "surahNameArabic": "الجاثية",
-    "SurahNameEnglish": "Al-Jathiyah",
-    "SurahMeaning": "The Crouching",
-    "Classification": "meccan",
-    "total_verses": 37
-  },
-  {
-    "id": 46,
-    "surahNameArabic": "الأحقاف",
-    "SurahNameEnglish": "Al-Ahqaf",
-    "SurahMeaning": "The Wind-Curved Sandhills",
-    "Classification": "meccan",
-    "total_verses": 35
-  },
-  {
-    "id": 47,
-    "surahNameArabic": "محمد",
-    "SurahNameEnglish": "Muhammad",
-    "SurahMeaning": "Muhammad",
-    "Classification": "medinan",
-    "total_verses": 38
-  },
-  {
-    "id": 48,
-    "surahNameArabic": "الفتح",
-    "SurahNameEnglish": "Al-Fath",
-    "SurahMeaning": "The Victory",
-    "Classification": "medinan",
-    "total_verses": 29
-  },
-  {
-    "id": 49,
-    "surahNameArabic": "الحجرات",
-    "SurahNameEnglish": "Al-Hujurat",
-    "SurahMeaning": "The Rooms",
-    "Classification": "medinan",
-    "total_verses": 18
-  },
-  {
-    "id": 50,
-    "surahNameArabic": "ق",
-    "SurahNameEnglish": "Qaf",
-    "SurahMeaning": "The Letter \"Qaf\"",
-    "Classification": "meccan",
-    "total_verses": 45
-  },
-  {
-    "id": 51,
-    "surahNameArabic": "الذاريات",
-    "SurahNameEnglish": "Adh-Dhariyat",
-    "SurahMeaning": "The Winnowing Winds",
-    "Classification": "meccan",
-    "total_verses": 60
-  },
-  {
-    "id": 52,
-    "surahNameArabic": "الطور",
-    "SurahNameEnglish": "At-Tur",
-    "SurahMeaning": "The Mount",
-    "Classification": "meccan",
-    "total_verses": 49
-  },
-  {
-    "id": 53,
-    "surahNameArabic": "النجم",
-    "SurahNameEnglish": "An-Najm",
-    "SurahMeaning": "The Star",
-    "Classification": "meccan",
-    "total_verses": 62
-  },
-  {
-    "id": 54,
-    "surahNameArabic": "القمر",
-    "SurahNameEnglish": "Al-Qamar",
-    "SurahMeaning": "The Moon",
-    "Classification": "meccan",
-    "total_verses": 55
-  },
-  {
-    "id": 55,
-    "surahNameArabic": "الرحمن",
-    "SurahNameEnglish": "Ar-Rahman",
-    "SurahMeaning": "The Beneficent",
-    "Classification": "medinan",
-    "total_verses": 78
-  },
-  {
-    "id": 56,
-    "surahNameArabic": "الواقعة",
-    "SurahNameEnglish": "Al-Waqi'ah",
-    "SurahMeaning": "The Inevitable",
-    "Classification": "meccan",
-    "total_verses": 96
-  },
-  {
-    "id": 57,
-    "surahNameArabic": "الحديد",
-    "SurahNameEnglish": "Al-Hadid",
-    "SurahMeaning": "The Iron",
-    "Classification": "medinan",
-    "total_verses": 29
-  },
-  {
-    "id": 58,
-    "surahNameArabic": "المجادلة",
-    "SurahNameEnglish": "Al-Mujadila",
-    "SurahMeaning": "The Pleading Woman",
-    "Classification": "medinan",
-    "total_verses": 22
-  },
-  {
-    "id": 59,
-    "surahNameArabic": "الحشر",
-    "SurahNameEnglish": "Al-Hashr",
-    "SurahMeaning": "The Exile",
-    "Classification": "medinan",
-    "total_verses": 24
-  },
-  {
-    "id": 60,
-    "surahNameArabic": "الممتحنة",
-    "SurahNameEnglish": "Al-Mumtahanah",
-    "SurahMeaning": "She that is to be examined",
-    "Classification": "medinan",
-    "total_verses": 13
-  },
-  {
-    "id": 61,
-    "surahNameArabic": "الصف",
-    "SurahNameEnglish": "As-Saf",
-    "SurahMeaning": "The Ranks",
-    "Classification": "medinan",
-    "total_verses": 14
-  },
-  {
-    "id": 62,
-    "surahNameArabic": "الجمعة",
-    "SurahNameEnglish": "Al-Jumu'ah",
-    "SurahMeaning": "The Congregation, Friday",
-    "Classification": "medinan",
-    "total_verses": 11
-  },
-  {
-    "id": 63,
-    "surahNameArabic": "المنافقون",
-    "SurahNameEnglish": "Al-Munafiqun",
-    "SurahMeaning": "The Hypocrites",
-    "Classification": "medinan",
-    "total_verses": 11
-  },
-  {
-    "id": 64,
-    "surahNameArabic": "التغابن",
-    "SurahNameEnglish": "At-Taghabun",
-    "SurahMeaning": "The Mutual Disillusion",
-    "Classification": "medinan",
-    "total_verses": 18
-  },
-  {
-    "id": 65,
-    "surahNameArabic": "الطلاق",
-    "SurahNameEnglish": "At-Talaq",
-    "SurahMeaning": "The Divorce",
-    "Classification": "medinan",
-    "total_verses": 12
-  },
-  {
-    "id": 66,
-    "surahNameArabic": "التحريم",
-    "SurahNameEnglish": "At-Tahrim",
-    "SurahMeaning": "The Prohibition",
-    "Classification": "medinan",
-    "total_verses": 12
-  },
-  {
-    "id": 67,
-    "surahNameArabic": "الملك",
-    "SurahNameEnglish": "Al-Mulk",
-    "SurahMeaning": "The Sovereignty",
-    "Classification": "meccan",
-    "total_verses": 30
-  },
-  {
-    "id": 68,
-    "surahNameArabic": "القلم",
-    "SurahNameEnglish": "Al-Qalam",
-    "SurahMeaning": "The Pen",
-    "Classification": "meccan",
-    "total_verses": 52
-  },
-  {
-    "id": 69,
-    "surahNameArabic": "الحاقة",
-    "SurahNameEnglish": "Al-Haqqah",
-    "SurahMeaning": "The Reality",
-    "Classification": "meccan",
-    "total_verses": 52
-  },
-  {
-    "id": 70,
-    "surahNameArabic": "المعارج",
-    "SurahNameEnglish": "Al-Ma'arij",
-    "SurahMeaning": "The Ascending Stairways",
-    "Classification": "meccan",
-    "total_verses": 44
-  },
-  {
-    "id": 71,
-    "surahNameArabic": "نوح",
-    "SurahNameEnglish": "Nuh",
-    "SurahMeaning": "Noah",
-    "Classification": "meccan",
-    "total_verses": 28
-  },
-  {
-    "id": 72,
-    "surahNameArabic": "الجن",
-    "SurahNameEnglish": "Al-Jinn",
-    "SurahMeaning": "The Jinn",
-    "Classification": "meccan",
-    "total_verses": 28
-  },
-  {
-    "id": 73,
-    "surahNameArabic": "المزمل",
-    "SurahNameEnglish": "Al-Muzzammil",
-    "SurahMeaning": "The Enshrouded One",
-    "Classification": "meccan",
-    "total_verses": 20
-  },
-  {
-    "id": 74,
-    "surahNameArabic": "المدثر",
-    "SurahNameEnglish": "Al-Muddaththir",
-    "SurahMeaning": "The Cloaked One",
-    "Classification": "meccan",
-    "total_verses": 56
-  },
-  {
-    "id": 75,
-    "surahNameArabic": "القيامة",
-    "SurahNameEnglish": "Al-Qiyamah",
-    "SurahMeaning": "The Resurrection",
-    "Classification": "meccan",
-    "total_verses": 40
-  },
-  {
-    "id": 76,
-    "surahNameArabic": "الانسان",
-    "SurahNameEnglish": "Al-Insan",
-    "SurahMeaning": "The Man",
-    "Classification": "medinan",
-    "total_verses": 31
-  },
-  {
-    "id": 77,
-    "surahNameArabic": "المرسلات",
-    "SurahNameEnglish": "Al-Mursalat",
-    "SurahMeaning": "The Emissaries",
-    "Classification": "meccan",
-    "total_verses": 50
-  },
-  {
-    "id": 78,
-    "surahNameArabic": "النبإ",
-    "SurahNameEnglish": "An-Naba",
-    "SurahMeaning": "The Tidings",
-    "Classification": "meccan",
-    "total_verses": 40
-  },
-  {
-    "id": 79,
-    "surahNameArabic": "النازعات",
-    "SurahNameEnglish": "An-Nazi'at",
-    "SurahMeaning": "Those who drag forth",
-    "Classification": "meccan",
-    "total_verses": 46
-  },
-  {
-    "id": 80,
-    "surahNameArabic": "عبس",
-    "SurahNameEnglish": "'Abasa",
-    "SurahMeaning": "He Frowned",
-    "Classification": "meccan",
-    "total_verses": 42
-  },
-  {
-    "id": 81,
-    "surahNameArabic": "التكوير",
-    "SurahNameEnglish": "At-Takwir",
-    "SurahMeaning": "The Overthrowing",
-    "Classification": "meccan",
-    "total_verses": 29
-  },
-  {
-    "id": 82,
-    "surahNameArabic": "الإنفطار",
-    "SurahNameEnglish": "Al-Infitar",
-    "SurahMeaning": "The Cleaving",
-    "Classification": "meccan",
-    "total_verses": 19
-  },
-  {
-    "id": 83,
-    "surahNameArabic": "المطففين",
-    "SurahNameEnglish": "Al-Mutaffifin",
-    "SurahMeaning": "The Defrauding",
-    "Classification": "meccan",
-    "total_verses": 36
-  },
-  {
-    "id": 84,
-    "surahNameArabic": "الإنشقاق",
-    "SurahNameEnglish": "Al-Inshiqaq",
-    "SurahMeaning": "The Sundering",
-    "Classification": "meccan",
-    "total_verses": 25
-  },
-  {
-    "id": 85,
-    "surahNameArabic": "البروج",
-    "SurahNameEnglish": "Al-Buruj",
-    "SurahMeaning": "The Mansions of the Stars",
-    "Classification": "meccan",
-    "total_verses": 22
-  },
-  {
-    "id": 86,
-    "surahNameArabic": "الطارق",
-    "SurahNameEnglish": "At-Tariq",
-    "SurahMeaning": "The Nightcommer",
-    "Classification": "meccan",
-    "total_verses": 17
-  },
-  {
-    "id": 87,
-    "surahNameArabic": "الأعلى",
-    "SurahNameEnglish": "Al-A'la",
-    "SurahMeaning": "The Most High",
-    "Classification": "meccan",
-    "total_verses": 19
-  },
-  {
-    "id": 88,
-    "surahNameArabic": "الغاشية",
-    "SurahNameEnglish": "Al-Ghashiyah",
-    "SurahMeaning": "The Overwhelming",
-    "Classification": "meccan",
-    "total_verses": 26
-  },
-  {
-    "id": 89,
-    "surahNameArabic": "الفجر",
-    "SurahNameEnglish": "Al-Fajr",
-    "SurahMeaning": "The Dawn",
-    "Classification": "meccan",
-    "total_verses": 30
-  },
-  {
-    "id": 90,
-    "surahNameArabic": "البلد",
-    "SurahNameEnglish": "Al-Balad",
-    "SurahMeaning": "The City",
-    "Classification": "meccan",
-    "total_verses": 20
-  },
-  {
-    "id": 91,
-    "surahNameArabic": "الشمس",
-    "SurahNameEnglish": "Ash-Shams",
-    "SurahMeaning": "The Sun",
-    "Classification": "meccan",
-    "total_verses": 15
-  },
-  {
-    "id": 92,
-    "surahNameArabic": "الليل",
-    "SurahNameEnglish": "Al-Layl",
-    "SurahMeaning": "The Night",
-    "Classification": "meccan",
-    "total_verses": 21
-  },
-  {
-    "id": 93,
-    "surahNameArabic": "الضحى",
-    "SurahNameEnglish": "Ad-Duhaa",
-    "SurahMeaning": "The Morning Hours",
-    "Classification": "meccan",
-    "total_verses": 11
-  },
-  {
-    "id": 94,
-    "surahNameArabic": "الشرح",
-    "SurahNameEnglish": "Ash-Sharh",
-    "SurahMeaning": "The Relief",
-    "Classification": "meccan",
-    "total_verses": 8
-  },
-  {
-    "id": 95,
-    "surahNameArabic": "التين",
-    "SurahNameEnglish": "At-Tin",
-    "SurahMeaning": "The Fig",
-    "Classification": "meccan",
-    "total_verses": 8
-  },
-  {
-    "id": 96,
-    "surahNameArabic": "العلق",
-    "SurahNameEnglish": "Al-'Alaq",
-    "SurahMeaning": "The Clot",
-    "Classification": "meccan",
-    "total_verses": 19
-  },
-  {
-    "id": 97,
-    "surahNameArabic": "القدر",
-    "SurahNameEnglish": "Al-Qadr",
-    "SurahMeaning": "The Power",
-    "Classification": "meccan",
-    "total_verses": 5
-  },
-  {
-    "id": 98,
-    "surahNameArabic": "البينة",
-    "SurahNameEnglish": "Al-Bayyinah",
-    "SurahMeaning": "The Clear Proof",
-    "Classification": "medinan",
-    "total_verses": 8
-  },
-  {
-    "id": 99,
-    "surahNameArabic": "الزلزلة",
-    "SurahNameEnglish": "Az-Zalzalah",
-    "SurahMeaning": "The Earthquake",
-    "Classification": "medinan",
-    "total_verses": 8
-  },
-  {
-    "id": 100,
-    "surahNameArabic": "العاديات",
-    "SurahNameEnglish": "Al-'Adiyat",
-    "SurahMeaning": "The Courser",
-    "Classification": "meccan",
-    "total_verses": 11
-  },
-  {
-    "id": 101,
-    "surahNameArabic": "القارعة",
-    "SurahNameEnglish": "Al-Qari'ah",
-    "SurahMeaning": "The Calamity",
-    "Classification": "meccan",
-    "total_verses": 11
-  },
-  {
-    "id": 102,
-    "surahNameArabic": "التكاثر",
-    "SurahNameEnglish": "At-Takathur",
-    "SurahMeaning": "The Rivalry in world increase",
-    "Classification": "meccan",
-    "total_verses": 8
-  },
-  {
-    "id": 103,
-    "surahNameArabic": "العصر",
-    "SurahNameEnglish": "Al-'Asr",
-    "SurahMeaning": "The Declining Day",
-    "Classification": "meccan",
-    "total_verses": 3
-  },
-  {
-    "id": 104,
-    "surahNameArabic": "الهمزة",
-    "SurahNameEnglish": "Al-Humazah",
-    "SurahMeaning": "The Traducer",
-    "Classification": "meccan",
-    "total_verses": 9
-  },
-  {
-    "id": 105,
-    "surahNameArabic": "الفيل",
-    "SurahNameEnglish": "Al-Fil",
-    "SurahMeaning": "The Elephant",
-    "Classification": "meccan",
-    "total_verses": 5
-  },
-  {
-    "id": 106,
-    "surahNameArabic": "قريش",
-    "SurahNameEnglish": "Quraysh",
-    "SurahMeaning": "Quraysh",
-    "Classification": "meccan",
-    "total_verses": 4
-  },
-  {
-    "id": 107,
-    "surahNameArabic": "الماعون",
-    "SurahNameEnglish": "Al-Ma'un",
-    "SurahMeaning": "The Small kindnesses",
-    "Classification": "meccan",
-    "total_verses": 7
-  },
-  {
-    "id": 108,
-    "surahNameArabic": "الكوثر",
-    "SurahNameEnglish": "Al-Kawthar",
-    "SurahMeaning": "The Abundance",
-    "Classification": "meccan",
-    "total_verses": 3
-  },
-  {
-    "id": 109,
-    "surahNameArabic": "الكافرون",
-    "SurahNameEnglish": "Al-Kafirun",
-    "SurahMeaning": "The Disbelievers",
-    "Classification": "meccan",
-    "total_verses": 6
-  },
-  {
-    "id": 110,
-    "surahNameArabic": "النصر",
-    "SurahNameEnglish": "An-Nasr",
-    "SurahMeaning": "The Divine Support",
-    "Classification": "medinan",
-    "total_verses": 3
-  },
-  {
-    "id": 111,
-    "surahNameArabic": "المسد",
-    "SurahNameEnglish": "Al-Masad",
-    "SurahMeaning": "The Palm Fiber",
-    "Classification": "meccan",
-    "total_verses": 5
-  },
-  {
-    "id": 112,
-    "surahNameArabic": "الإخلاص",
-    "SurahNameEnglish": "Al-Ikhlas",
-    "SurahMeaning": "The Sincerity",
-    "Classification": "meccan",
-    "total_verses": 4
-  },
-  {
-    "id": 113,
-    "surahNameArabic": "الفلق",
-    "SurahNameEnglish": "Al-Falaq",
-    "SurahMeaning": "The Daybreak",
-    "Classification": "meccan",
-    "total_verses": 5
-  },
-  {
-    "id": 114,
-    "surahNameArabic": "الناس",
-    "SurahNameEnglish": "An-Nas",
-    "SurahMeaning": "Mankind",
-    "Classification": "meccan",
-    "total_verses": 6
-  }
+    {
+        "id": 1,
+        "surahNameArabic": "الفاتحة",
+        "SurahNameEnglish": "Al-Fatihah",
+        "SurahMeaning": "The Opener",
+        "Classification": "meccan",
+        "total_verses": 7
+    },
+    {
+        "id": 2,
+        "surahNameArabic": "البقرة",
+        "SurahNameEnglish": "Al-Baqarah",
+        "SurahMeaning": "The Cow",
+        "Classification": "medinan",
+        "total_verses": 286
+    },
+    {
+        "id": 3,
+        "surahNameArabic": "آل عمران",
+        "SurahNameEnglish": "Ali 'Imran",
+        "SurahMeaning": "Family of Imran",
+        "Classification": "medinan",
+        "total_verses": 200
+    },
+    {
+        "id": 4,
+        "surahNameArabic": "النساء",
+        "SurahNameEnglish": "An-Nisa",
+        "SurahMeaning": "The Women",
+        "Classification": "medinan",
+        "total_verses": 176
+    },
+    {
+        "id": 5,
+        "surahNameArabic": "المائدة",
+        "SurahNameEnglish": "Al-Ma'idah",
+        "SurahMeaning": "The Table Spread",
+        "Classification": "medinan",
+        "total_verses": 120
+    },
+    {
+        "id": 6,
+        "surahNameArabic": "الأنعام",
+        "SurahNameEnglish": "Al-An'am",
+        "SurahMeaning": "The Cattle",
+        "Classification": "meccan",
+        "total_verses": 165
+    },
+    {
+        "id": 7,
+        "surahNameArabic": "الأعراف",
+        "SurahNameEnglish": "Al-A'raf",
+        "SurahMeaning": "The Heights",
+        "Classification": "meccan",
+        "total_verses": 206
+    },
+    {
+        "id": 8,
+        "surahNameArabic": "الأنفال",
+        "SurahNameEnglish": "Al-Anfal",
+        "SurahMeaning": "The Spoils of War",
+        "Classification": "medinan",
+        "total_verses": 75
+    },
+    {
+        "id": 9,
+        "surahNameArabic": "التوبة",
+        "SurahNameEnglish": "At-Tawbah",
+        "SurahMeaning": "The Repentance",
+        "Classification": "medinan",
+        "total_verses": 129
+    },
+    {
+        "id": 10,
+        "surahNameArabic": "يونس",
+        "SurahNameEnglish": "Yunus",
+        "SurahMeaning": "Jonah",
+        "Classification": "meccan",
+        "total_verses": 109
+    },
+    {
+        "id": 11,
+        "surahNameArabic": "هود",
+        "SurahNameEnglish": "Hud",
+        "SurahMeaning": "Hud",
+        "Classification": "meccan",
+        "total_verses": 123
+    },
+    {
+        "id": 12,
+        "surahNameArabic": "يوسف",
+        "SurahNameEnglish": "Yusuf",
+        "SurahMeaning": "Joseph",
+        "Classification": "meccan",
+        "total_verses": 111
+    },
+    {
+        "id": 13,
+        "surahNameArabic": "الرعد",
+        "SurahNameEnglish": "Ar-Ra'd",
+        "SurahMeaning": "The Thunder",
+        "Classification": "medinan",
+        "total_verses": 43
+    },
+    {
+        "id": 14,
+        "surahNameArabic": "إبراهيم",
+        "SurahNameEnglish": "Ibrahim",
+        "SurahMeaning": "Abraham",
+        "Classification": "meccan",
+        "total_verses": 52
+    },
+    {
+        "id": 15,
+        "surahNameArabic": "الحجر",
+        "SurahNameEnglish": "Al-Hijr",
+        "SurahMeaning": "The Rocky Tract",
+        "Classification": "meccan",
+        "total_verses": 99
+    },
+    {
+        "id": 16,
+        "surahNameArabic": "النحل",
+        "SurahNameEnglish": "An-Nahl",
+        "SurahMeaning": "The Bee",
+        "Classification": "meccan",
+        "total_verses": 128
+    },
+    {
+        "id": 17,
+        "surahNameArabic": "الإسراء",
+        "SurahNameEnglish": "Al-Isra",
+        "SurahMeaning": "The Night Journey",
+        "Classification": "meccan",
+        "total_verses": 111
+    },
+    {
+        "id": 18,
+        "surahNameArabic": "الكهف",
+        "SurahNameEnglish": "Al-Kahf",
+        "SurahMeaning": "The Cave",
+        "Classification": "meccan",
+        "total_verses": 110
+    },
+    {
+        "id": 19,
+        "surahNameArabic": "مريم",
+        "SurahNameEnglish": "Maryam",
+        "SurahMeaning": "Mary",
+        "Classification": "meccan",
+        "total_verses": 98
+    },
+    {
+        "id": 20,
+        "surahNameArabic": "طه",
+        "SurahNameEnglish": "Taha",
+        "SurahMeaning": "Ta-Ha",
+        "Classification": "meccan",
+        "total_verses": 135
+    },
+    {
+        "id": 21,
+        "surahNameArabic": "الأنبياء",
+        "SurahNameEnglish": "Al-Anbya",
+        "SurahMeaning": "The Prophets",
+        "Classification": "meccan",
+        "total_verses": 112
+    },
+    {
+        "id": 22,
+        "surahNameArabic": "الحج",
+        "SurahNameEnglish": "Al-Hajj",
+        "SurahMeaning": "The Pilgrimage",
+        "Classification": "medinan",
+        "total_verses": 78
+    },
+    {
+        "id": 23,
+        "surahNameArabic": "المؤمنون",
+        "SurahNameEnglish": "Al-Mu'minun",
+        "SurahMeaning": "The Believers",
+        "Classification": "meccan",
+        "total_verses": 118
+    },
+    {
+        "id": 24,
+        "surahNameArabic": "النور",
+        "SurahNameEnglish": "An-Nur",
+        "SurahMeaning": "The Light",
+        "Classification": "medinan",
+        "total_verses": 64
+    },
+    {
+        "id": 25,
+        "surahNameArabic": "الفرقان",
+        "SurahNameEnglish": "Al-Furqan",
+        "SurahMeaning": "The Criterion",
+        "Classification": "meccan",
+        "total_verses": 77
+    },
+    {
+        "id": 26,
+        "surahNameArabic": "الشعراء",
+        "SurahNameEnglish": "Ash-Shu'ara",
+        "SurahMeaning": "The Poets",
+        "Classification": "meccan",
+        "total_verses": 227
+    },
+    {
+        "id": 27,
+        "surahNameArabic": "النمل",
+        "SurahNameEnglish": "An-Naml",
+        "SurahMeaning": "The Ant",
+        "Classification": "meccan",
+        "total_verses": 93
+    },
+    {
+        "id": 28,
+        "surahNameArabic": "القصص",
+        "SurahNameEnglish": "Al-Qasas",
+        "SurahMeaning": "The Stories",
+        "Classification": "meccan",
+        "total_verses": 88
+    },
+    {
+        "id": 29,
+        "surahNameArabic": "العنكبوت",
+        "SurahNameEnglish": "Al-'Ankabut",
+        "SurahMeaning": "The Spider",
+        "Classification": "meccan",
+        "total_verses": 69
+    },
+    {
+        "id": 30,
+        "surahNameArabic": "الروم",
+        "SurahNameEnglish": "Ar-Rum",
+        "SurahMeaning": "The Romans",
+        "Classification": "meccan",
+        "total_verses": 60
+    },
+    {
+        "id": 31,
+        "surahNameArabic": "لقمان",
+        "SurahNameEnglish": "Luqman",
+        "SurahMeaning": "Luqman",
+        "Classification": "meccan",
+        "total_verses": 34
+    },
+    {
+        "id": 32,
+        "surahNameArabic": "السجدة",
+        "SurahNameEnglish": "As-Sajdah",
+        "SurahMeaning": "The Prostration",
+        "Classification": "meccan",
+        "total_verses": 30
+    },
+    {
+        "id": 33,
+        "surahNameArabic": "الأحزاب",
+        "SurahNameEnglish": "Al-Ahzab",
+        "SurahMeaning": "The Combined Forces",
+        "Classification": "medinan",
+        "total_verses": 73
+    },
+    {
+        "id": 34,
+        "surahNameArabic": "سبإ",
+        "SurahNameEnglish": "Saba",
+        "SurahMeaning": "Sheba",
+        "Classification": "meccan",
+        "total_verses": 54
+    },
+    {
+        "id": 35,
+        "surahNameArabic": "فاطر",
+        "SurahNameEnglish": "Fatir",
+        "SurahMeaning": "Originator",
+        "Classification": "meccan",
+        "total_verses": 45
+    },
+    {
+        "id": 36,
+        "surahNameArabic": "يس",
+        "SurahNameEnglish": "Ya-Sin",
+        "SurahMeaning": "Ya Sin",
+        "Classification": "meccan",
+        "total_verses": 83
+    },
+    {
+        "id": 37,
+        "surahNameArabic": "الصافات",
+        "SurahNameEnglish": "As-Saffat",
+        "SurahMeaning": "Those who set the Ranks",
+        "Classification": "meccan",
+        "total_verses": 182
+    },
+    {
+        "id": 38,
+        "surahNameArabic": "ص",
+        "SurahNameEnglish": "Sad",
+        "SurahMeaning": "The Letter \"Saad\"",
+        "Classification": "meccan",
+        "total_verses": 88
+    },
+    {
+        "id": 39,
+        "surahNameArabic": "الزمر",
+        "SurahNameEnglish": "Az-Zumar",
+        "SurahMeaning": "The Troops",
+        "Classification": "meccan",
+        "total_verses": 75
+    },
+    {
+        "id": 40,
+        "surahNameArabic": "غافر",
+        "SurahNameEnglish": "Ghafir",
+        "SurahMeaning": "The Forgiver",
+        "Classification": "meccan",
+        "total_verses": 85
+    },
+    {
+        "id": 41,
+        "surahNameArabic": "فصلت",
+        "SurahNameEnglish": "Fussilat",
+        "SurahMeaning": "Explained in Detail",
+        "Classification": "meccan",
+        "total_verses": 54
+    },
+    {
+        "id": 42,
+        "surahNameArabic": "الشورى",
+        "SurahNameEnglish": "Ash-Shuraa",
+        "SurahMeaning": "The Consultation",
+        "Classification": "meccan",
+        "total_verses": 53
+    },
+    {
+        "id": 43,
+        "surahNameArabic": "الزخرف",
+        "SurahNameEnglish": "Az-Zukhruf",
+        "SurahMeaning": "The OrsurahNameArabicnts of Gold",
+        "Classification": "meccan",
+        "total_verses": 89
+    },
+    {
+        "id": 44,
+        "surahNameArabic": "الدخان",
+        "SurahNameEnglish": "Ad-Dukhan",
+        "SurahMeaning": "The Smoke",
+        "Classification": "meccan",
+        "total_verses": 59
+    },
+    {
+        "id": 45,
+        "surahNameArabic": "الجاثية",
+        "SurahNameEnglish": "Al-Jathiyah",
+        "SurahMeaning": "The Crouching",
+        "Classification": "meccan",
+        "total_verses": 37
+    },
+    {
+        "id": 46,
+        "surahNameArabic": "الأحقاف",
+        "SurahNameEnglish": "Al-Ahqaf",
+        "SurahMeaning": "The Wind-Curved Sandhills",
+        "Classification": "meccan",
+        "total_verses": 35
+    },
+    {
+        "id": 47,
+        "surahNameArabic": "محمد",
+        "SurahNameEnglish": "Muhammad",
+        "SurahMeaning": "Muhammad",
+        "Classification": "medinan",
+        "total_verses": 38
+    },
+    {
+        "id": 48,
+        "surahNameArabic": "الفتح",
+        "SurahNameEnglish": "Al-Fath",
+        "SurahMeaning": "The Victory",
+        "Classification": "medinan",
+        "total_verses": 29
+    },
+    {
+        "id": 49,
+        "surahNameArabic": "الحجرات",
+        "SurahNameEnglish": "Al-Hujurat",
+        "SurahMeaning": "The Rooms",
+        "Classification": "medinan",
+        "total_verses": 18
+    },
+    {
+        "id": 50,
+        "surahNameArabic": "ق",
+        "SurahNameEnglish": "Qaf",
+        "SurahMeaning": "The Letter \"Qaf\"",
+        "Classification": "meccan",
+        "total_verses": 45
+    },
+    {
+        "id": 51,
+        "surahNameArabic": "الذاريات",
+        "SurahNameEnglish": "Adh-Dhariyat",
+        "SurahMeaning": "The Winnowing Winds",
+        "Classification": "meccan",
+        "total_verses": 60
+    },
+    {
+        "id": 52,
+        "surahNameArabic": "الطور",
+        "SurahNameEnglish": "At-Tur",
+        "SurahMeaning": "The Mount",
+        "Classification": "meccan",
+        "total_verses": 49
+    },
+    {
+        "id": 53,
+        "surahNameArabic": "النجم",
+        "SurahNameEnglish": "An-Najm",
+        "SurahMeaning": "The Star",
+        "Classification": "meccan",
+        "total_verses": 62
+    },
+    {
+        "id": 54,
+        "surahNameArabic": "القمر",
+        "SurahNameEnglish": "Al-Qamar",
+        "SurahMeaning": "The Moon",
+        "Classification": "meccan",
+        "total_verses": 55
+    },
+    {
+        "id": 55,
+        "surahNameArabic": "الرحمن",
+        "SurahNameEnglish": "Ar-Rahman",
+        "SurahMeaning": "The Beneficent",
+        "Classification": "medinan",
+        "total_verses": 78
+    },
+    {
+        "id": 56,
+        "surahNameArabic": "الواقعة",
+        "SurahNameEnglish": "Al-Waqi'ah",
+        "SurahMeaning": "The Inevitable",
+        "Classification": "meccan",
+        "total_verses": 96
+    },
+    {
+        "id": 57,
+        "surahNameArabic": "الحديد",
+        "SurahNameEnglish": "Al-Hadid",
+        "SurahMeaning": "The Iron",
+        "Classification": "medinan",
+        "total_verses": 29
+    },
+    {
+        "id": 58,
+        "surahNameArabic": "المجادلة",
+        "SurahNameEnglish": "Al-Mujadila",
+        "SurahMeaning": "The Pleading Woman",
+        "Classification": "medinan",
+        "total_verses": 22
+    },
+    {
+        "id": 59,
+        "surahNameArabic": "الحشر",
+        "SurahNameEnglish": "Al-Hashr",
+        "SurahMeaning": "The Exile",
+        "Classification": "medinan",
+        "total_verses": 24
+    },
+    {
+        "id": 60,
+        "surahNameArabic": "الممتحنة",
+        "SurahNameEnglish": "Al-Mumtahanah",
+        "SurahMeaning": "She that is to be examined",
+        "Classification": "medinan",
+        "total_verses": 13
+    },
+    {
+        "id": 61,
+        "surahNameArabic": "الصف",
+        "SurahNameEnglish": "As-Saf",
+        "SurahMeaning": "The Ranks",
+        "Classification": "medinan",
+        "total_verses": 14
+    },
+    {
+        "id": 62,
+        "surahNameArabic": "الجمعة",
+        "SurahNameEnglish": "Al-Jumu'ah",
+        "SurahMeaning": "The Congregation, Friday",
+        "Classification": "medinan",
+        "total_verses": 11
+    },
+    {
+        "id": 63,
+        "surahNameArabic": "المنافقون",
+        "SurahNameEnglish": "Al-Munafiqun",
+        "SurahMeaning": "The Hypocrites",
+        "Classification": "medinan",
+        "total_verses": 11
+    },
+    {
+        "id": 64,
+        "surahNameArabic": "التغابن",
+        "SurahNameEnglish": "At-Taghabun",
+        "SurahMeaning": "The Mutual Disillusion",
+        "Classification": "medinan",
+        "total_verses": 18
+    },
+    {
+        "id": 65,
+        "surahNameArabic": "الطلاق",
+        "SurahNameEnglish": "At-Talaq",
+        "SurahMeaning": "The Divorce",
+        "Classification": "medinan",
+        "total_verses": 12
+    },
+    {
+        "id": 66,
+        "surahNameArabic": "التحريم",
+        "SurahNameEnglish": "At-Tahrim",
+        "SurahMeaning": "The Prohibition",
+        "Classification": "medinan",
+        "total_verses": 12
+    },
+    {
+        "id": 67,
+        "surahNameArabic": "الملك",
+        "SurahNameEnglish": "Al-Mulk",
+        "SurahMeaning": "The Sovereignty",
+        "Classification": "meccan",
+        "total_verses": 30
+    },
+    {
+        "id": 68,
+        "surahNameArabic": "القلم",
+        "SurahNameEnglish": "Al-Qalam",
+        "SurahMeaning": "The Pen",
+        "Classification": "meccan",
+        "total_verses": 52
+    },
+    {
+        "id": 69,
+        "surahNameArabic": "الحاقة",
+        "SurahNameEnglish": "Al-Haqqah",
+        "SurahMeaning": "The Reality",
+        "Classification": "meccan",
+        "total_verses": 52
+    },
+    {
+        "id": 70,
+        "surahNameArabic": "المعارج",
+        "SurahNameEnglish": "Al-Ma'arij",
+        "SurahMeaning": "The Ascending Stairways",
+        "Classification": "meccan",
+        "total_verses": 44
+    },
+    {
+        "id": 71,
+        "surahNameArabic": "نوح",
+        "SurahNameEnglish": "Nuh",
+        "SurahMeaning": "Noah",
+        "Classification": "meccan",
+        "total_verses": 28
+    },
+    {
+        "id": 72,
+        "surahNameArabic": "الجن",
+        "SurahNameEnglish": "Al-Jinn",
+        "SurahMeaning": "The Jinn",
+        "Classification": "meccan",
+        "total_verses": 28
+    },
+    {
+        "id": 73,
+        "surahNameArabic": "المزمل",
+        "SurahNameEnglish": "Al-Muzzammil",
+        "SurahMeaning": "The Enshrouded One",
+        "Classification": "meccan",
+        "total_verses": 20
+    },
+    {
+        "id": 74,
+        "surahNameArabic": "المدثر",
+        "SurahNameEnglish": "Al-Muddaththir",
+        "SurahMeaning": "The Cloaked One",
+        "Classification": "meccan",
+        "total_verses": 56
+    },
+    {
+        "id": 75,
+        "surahNameArabic": "القيامة",
+        "SurahNameEnglish": "Al-Qiyamah",
+        "SurahMeaning": "The Resurrection",
+        "Classification": "meccan",
+        "total_verses": 40
+    },
+    {
+        "id": 76,
+        "surahNameArabic": "الانسان",
+        "SurahNameEnglish": "Al-Insan",
+        "SurahMeaning": "The Man",
+        "Classification": "medinan",
+        "total_verses": 31
+    },
+    {
+        "id": 77,
+        "surahNameArabic": "المرسلات",
+        "SurahNameEnglish": "Al-Mursalat",
+        "SurahMeaning": "The Emissaries",
+        "Classification": "meccan",
+        "total_verses": 50
+    },
+    {
+        "id": 78,
+        "surahNameArabic": "النبإ",
+        "SurahNameEnglish": "An-Naba",
+        "SurahMeaning": "The Tidings",
+        "Classification": "meccan",
+        "total_verses": 40
+    },
+    {
+        "id": 79,
+        "surahNameArabic": "النازعات",
+        "SurahNameEnglish": "An-Nazi'at",
+        "SurahMeaning": "Those who drag forth",
+        "Classification": "meccan",
+        "total_verses": 46
+    },
+    {
+        "id": 80,
+        "surahNameArabic": "عبس",
+        "SurahNameEnglish": "'Abasa",
+        "SurahMeaning": "He Frowned",
+        "Classification": "meccan",
+        "total_verses": 42
+    },
+    {
+        "id": 81,
+        "surahNameArabic": "التكوير",
+        "SurahNameEnglish": "At-Takwir",
+        "SurahMeaning": "The Overthrowing",
+        "Classification": "meccan",
+        "total_verses": 29
+    },
+    {
+        "id": 82,
+        "surahNameArabic": "الإنفطار",
+        "SurahNameEnglish": "Al-Infitar",
+        "SurahMeaning": "The Cleaving",
+        "Classification": "meccan",
+        "total_verses": 19
+    },
+    {
+        "id": 83,
+        "surahNameArabic": "المطففين",
+        "SurahNameEnglish": "Al-Mutaffifin",
+        "SurahMeaning": "The Defrauding",
+        "Classification": "meccan",
+        "total_verses": 36
+    },
+    {
+        "id": 84,
+        "surahNameArabic": "الإنشقاق",
+        "SurahNameEnglish": "Al-Inshiqaq",
+        "SurahMeaning": "The Sundering",
+        "Classification": "meccan",
+        "total_verses": 25
+    },
+    {
+        "id": 85,
+        "surahNameArabic": "البروج",
+        "SurahNameEnglish": "Al-Buruj",
+        "SurahMeaning": "The Mansions of the Stars",
+        "Classification": "meccan",
+        "total_verses": 22
+    },
+    {
+        "id": 86,
+        "surahNameArabic": "الطارق",
+        "SurahNameEnglish": "At-Tariq",
+        "SurahMeaning": "The Nightcommer",
+        "Classification": "meccan",
+        "total_verses": 17
+    },
+    {
+        "id": 87,
+        "surahNameArabic": "الأعلى",
+        "SurahNameEnglish": "Al-A'la",
+        "SurahMeaning": "The Most High",
+        "Classification": "meccan",
+        "total_verses": 19
+    },
+    {
+        "id": 88,
+        "surahNameArabic": "الغاشية",
+        "SurahNameEnglish": "Al-Ghashiyah",
+        "SurahMeaning": "The Overwhelming",
+        "Classification": "meccan",
+        "total_verses": 26
+    },
+    {
+        "id": 89,
+        "surahNameArabic": "الفجر",
+        "SurahNameEnglish": "Al-Fajr",
+        "SurahMeaning": "The Dawn",
+        "Classification": "meccan",
+        "total_verses": 30
+    },
+    {
+        "id": 90,
+        "surahNameArabic": "البلد",
+        "SurahNameEnglish": "Al-Balad",
+        "SurahMeaning": "The City",
+        "Classification": "meccan",
+        "total_verses": 20
+    },
+    {
+        "id": 91,
+        "surahNameArabic": "الشمس",
+        "SurahNameEnglish": "Ash-Shams",
+        "SurahMeaning": "The Sun",
+        "Classification": "meccan",
+        "total_verses": 15
+    },
+    {
+        "id": 92,
+        "surahNameArabic": "الليل",
+        "SurahNameEnglish": "Al-Layl",
+        "SurahMeaning": "The Night",
+        "Classification": "meccan",
+        "total_verses": 21
+    },
+    {
+        "id": 93,
+        "surahNameArabic": "الضحى",
+        "SurahNameEnglish": "Ad-Duhaa",
+        "SurahMeaning": "The Morning Hours",
+        "Classification": "meccan",
+        "total_verses": 11
+    },
+    {
+        "id": 94,
+        "surahNameArabic": "الشرح",
+        "SurahNameEnglish": "Ash-Sharh",
+        "SurahMeaning": "The Relief",
+        "Classification": "meccan",
+        "total_verses": 8
+    },
+    {
+        "id": 95,
+        "surahNameArabic": "التين",
+        "SurahNameEnglish": "At-Tin",
+        "SurahMeaning": "The Fig",
+        "Classification": "meccan",
+        "total_verses": 8
+    },
+    {
+        "id": 96,
+        "surahNameArabic": "العلق",
+        "SurahNameEnglish": "Al-'Alaq",
+        "SurahMeaning": "The Clot",
+        "Classification": "meccan",
+        "total_verses": 19
+    },
+    {
+        "id": 97,
+        "surahNameArabic": "القدر",
+        "SurahNameEnglish": "Al-Qadr",
+        "SurahMeaning": "The Power",
+        "Classification": "meccan",
+        "total_verses": 5
+    },
+    {
+        "id": 98,
+        "surahNameArabic": "البينة",
+        "SurahNameEnglish": "Al-Bayyinah",
+        "SurahMeaning": "The Clear Proof",
+        "Classification": "medinan",
+        "total_verses": 8
+    },
+    {
+        "id": 99,
+        "surahNameArabic": "الزلزلة",
+        "SurahNameEnglish": "Az-Zalzalah",
+        "SurahMeaning": "The Earthquake",
+        "Classification": "medinan",
+        "total_verses": 8
+    },
+    {
+        "id": 100,
+        "surahNameArabic": "العاديات",
+        "SurahNameEnglish": "Al-'Adiyat",
+        "SurahMeaning": "The Courser",
+        "Classification": "meccan",
+        "total_verses": 11
+    },
+    {
+        "id": 101,
+        "surahNameArabic": "القارعة",
+        "SurahNameEnglish": "Al-Qari'ah",
+        "SurahMeaning": "The Calamity",
+        "Classification": "meccan",
+        "total_verses": 11
+    },
+    {
+        "id": 102,
+        "surahNameArabic": "التكاثر",
+        "SurahNameEnglish": "At-Takathur",
+        "SurahMeaning": "The Rivalry in world increase",
+        "Classification": "meccan",
+        "total_verses": 8
+    },
+    {
+        "id": 103,
+        "surahNameArabic": "العصر",
+        "SurahNameEnglish": "Al-'Asr",
+        "SurahMeaning": "The Declining Day",
+        "Classification": "meccan",
+        "total_verses": 3
+    },
+    {
+        "id": 104,
+        "surahNameArabic": "الهمزة",
+        "SurahNameEnglish": "Al-Humazah",
+        "SurahMeaning": "The Traducer",
+        "Classification": "meccan",
+        "total_verses": 9
+    },
+    {
+        "id": 105,
+        "surahNameArabic": "الفيل",
+        "SurahNameEnglish": "Al-Fil",
+        "SurahMeaning": "The Elephant",
+        "Classification": "meccan",
+        "total_verses": 5
+    },
+    {
+        "id": 106,
+        "surahNameArabic": "قريش",
+        "SurahNameEnglish": "Quraysh",
+        "SurahMeaning": "Quraysh",
+        "Classification": "meccan",
+        "total_verses": 4
+    },
+    {
+        "id": 107,
+        "surahNameArabic": "الماعون",
+        "SurahNameEnglish": "Al-Ma'un",
+        "SurahMeaning": "The Small kindnesses",
+        "Classification": "meccan",
+        "total_verses": 7
+    },
+    {
+        "id": 108,
+        "surahNameArabic": "الكوثر",
+        "SurahNameEnglish": "Al-Kawthar",
+        "SurahMeaning": "The Abundance",
+        "Classification": "meccan",
+        "total_verses": 3
+    },
+    {
+        "id": 109,
+        "surahNameArabic": "الكافرون",
+        "SurahNameEnglish": "Al-Kafirun",
+        "SurahMeaning": "The Disbelievers",
+        "Classification": "meccan",
+        "total_verses": 6
+    },
+    {
+        "id": 110,
+        "surahNameArabic": "النصر",
+        "SurahNameEnglish": "An-Nasr",
+        "SurahMeaning": "The Divine Support",
+        "Classification": "medinan",
+        "total_verses": 3
+    },
+    {
+        "id": 111,
+        "surahNameArabic": "المسد",
+        "SurahNameEnglish": "Al-Masad",
+        "SurahMeaning": "The Palm Fiber",
+        "Classification": "meccan",
+        "total_verses": 5
+    },
+    {
+        "id": 112,
+        "surahNameArabic": "الإخلاص",
+        "SurahNameEnglish": "Al-Ikhlas",
+        "SurahMeaning": "The Sincerity",
+        "Classification": "meccan",
+        "total_verses": 4
+    },
+    {
+        "id": 113,
+        "surahNameArabic": "الفلق",
+        "SurahNameEnglish": "Al-Falaq",
+        "SurahMeaning": "The Daybreak",
+        "Classification": "meccan",
+        "total_verses": 5
+    },
+    {
+        "id": 114,
+        "surahNameArabic": "الناس",
+        "SurahNameEnglish": "An-Nas",
+        "SurahMeaning": "Mankind",
+        "Classification": "meccan",
+        "total_verses": 6
+    }
 ]

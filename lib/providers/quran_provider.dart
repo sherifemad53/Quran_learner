@@ -13,8 +13,7 @@ class QuranProvider {
         (json.decode(response)).map((element) => SurahModel.fromJson(element)));
   }
 
-  Future<List<SurahModel>> getSearchedSurahModel(
-      String? surahNameArabic) async {
+  List<SurahModel> getSearchedSurahModel(String? surahNameArabic) {
     List<SurahModel> x = surahNameArabic == null
         ? _surahs
         : _surahs.where((element) {

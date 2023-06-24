@@ -20,16 +20,18 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
   model.User? user;
 
   final String arabicFont = 'quran';
-  final double arabicFontSize = 24;
+  final double arabicFontSize = 22;
   final double mushafFontSize = 40;
 
   String text = ' ';
 
-  SurahProvider s = SurahProvider();
+  SurahProvider surahProvider = SurahProvider();
   List<AyaModel>? ayas;
 
-  Future getAyas(String surahNameArabic, String surahNo) async {
-    ayas = await s.quranReadJson(surahNameArabic, surahNo);
+  void getAyas(String surahNameArabic, String surahNo) async {
+    await surahProvider.init();
+    ayas =
+        surahProvider.getSurahBySurahNameAndSurahNo(surahNameArabic, surahNo);
     setState(() {
       isDoneLoading = true;
     });
@@ -37,6 +39,8 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
 
   bool isPressed = false;
   bool isDoneLoading = false;
+  bool isMemoriztingMode = false;
+  bool showAya = false;
   int verseNumber = 1;
 
   @override
@@ -55,72 +59,98 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
         ? Scaffold(
             appBar: AppBar(
               title: Text(surahName),
+              actions: [
+                Switch.adaptive(
+                  value: isMemoriztingMode,
+                  onChanged: (value) => setState(() {
+                    isMemoriztingMode = value;
+                  }),
+                )
+              ],
             ),
             body: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.78,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const RetunBasmala(),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int i) {
-                          return InkWell(
-                            onTap: () {
-                              setState(() {
-                                verseNumber = i + 1;
-                                ayas![i].isPressed = !ayas![i].isPressed;
-                              });
-                            },
-                            child: Container(
-                              color: i % 2 != 0
-                                  ? const Color.fromARGB(255, 253, 251, 240)
-                                  : const Color.fromARGB(255, 253, 247, 230),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 12),
-                                      margin: const EdgeInsets.only(left: 20),
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(50))),
-                                      child: Text((i + 1).toString()),
-                                    ),
-                                    Visibility(
-                                      visible: ayas![i].isPressed,
-                                      child: Expanded(
-                                        child: Text(
-                                          // selectedSurah['OrignalArabicText'][i],
-                                          ayas![i].orignalArabicText,
-                                          textDirection: TextDirection.rtl,
-                                          style: TextStyle(
-                                            fontSize: arabicFontSize,
-                                            fontFamily: arabicFont,
-                                            color: const Color.fromARGB(
-                                                196, 0, 0, 0),
+                height: MediaQuery.of(context).size.height * 0.70,
+                child: GestureDetector(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const RetunBasmala(),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            if (isMemoriztingMode) {
+                              if (ayas![index].isMemorized) {
+                                ayas![index].isVisable = true;
+                              } else {
+                                ayas![index].isVisable = false;
+                              }
+                            } else {
+                              ayas![index].isVisable = true;
+                              ayas![index].isPressed = false;
+                            }
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  verseNumber = index + 1;
+                                  if (isMemoriztingMode) {
+                                    ayas![index].isPressed =
+                                        !ayas![index].isPressed;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                color: index % 2 != 0
+                                    ? const Color.fromARGB(255, 253, 251, 240)
+                                    : const Color.fromARGB(255, 253, 247, 230),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 12),
+                                        margin: const EdgeInsets.only(left: 20),
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.black),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(50))),
+                                        child: Text(ayas![index].ayahNo),
+                                      ),
+                                      Visibility(
+                                        visible: ayas![index].isPressed ||
+                                            ayas![index].isMemorized ||
+                                            ayas![index].isVisable,
+                                        child: Expanded(
+                                          child: Text(
+                                            // selectedSurah['OrignalArabicText'][i],
+                                            ayas![index].orignalArabicText,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                              fontSize: arabicFontSize,
+                                              fontFamily: arabicFont,
+                                              color: const Color.fromARGB(
+                                                  196, 0, 0, 0),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                  ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                        itemCount: ayas!.length,
-                      ),
-                    ],
+                            );
+                          },
+                          itemCount: ayas!.length,
+                        ),
+                      ],
+                    ),
                   ),
                 )),
             bottomSheet: Container(
-              height: MediaQuery.of(context).size.height * 0.25,
+              height: MediaQuery.of(context).size.height * 0.23,
               decoration: BoxDecoration(
                   color: Colors.amber[100],
                   borderRadius: const BorderRadius.only(
@@ -129,61 +159,91 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
               padding: const EdgeInsets.all(kdefualtPadding),
               width: double.infinity,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    flex: 3,
-                    child: FittedBox(
-                      child: text != null
-                          ? SingleChildScrollView(
-                              child: Html(
-                              data: text,
-                            ))
-                          : const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Verse no. $verseNumber",
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      )
-                    ],
-                  ),
+                  text != null
+                      ? SingleChildScrollView(
+                          child: Html(
+                          data: text,
+                        ))
+                      : const Center(
+                          child: CircularProgressIndicator(),
+                        ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Start Memorization"),
-                      IconButton(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              isMemoriztingMode
+                                  ? "Memorization Mode"
+                                  : "Recitaion Mode",
+                              style: Theme.of(context).textTheme.bodyMedium),
+                          Text(
+                            "Begin from Verse ($verseNumber)",
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                      TextButton.icon(
                         onPressed: () async {
                           //TODO Auto increament if the memorization is correct by return bool if the memoriztion is true else a string with the incorrent words
                           isPressed = !isPressed;
                           setState(() {});
-                          isPressed
-                              ? SpeechToText.instance
-                                  .startRecord("1", verseNumber.toString())
-                              : SpeechToText.instance
-                                  .stopRecord(
-                                      'https://omarelsayeed-quran-recitation-wav2vecdup.hf.space/run/predict',
-                                      user,
-                                      ayas![verseNumber - 1].orignalArabicText)
-                                  .then((value) {
-                                  text = value;
-                                  setState(() {});
-                                });
+                          if (isMemoriztingMode) {
+                            isPressed
+                                ? SpeechToText.instance.startRecord(
+                                    surahNo, ayas![verseNumber - 1].ayahNo)
+                                : SpeechToText.instance
+                                    .stopRecord(
+                                        'https://omarelsayeed-quran-recitation-google.hf.space/run/predict',
+                                        user,
+                                        ayas![verseNumber - 1].arabicText,
+                                        isMemoriztingMode)
+                                    .then((value) {
+                                    text = value;
+                                    setState(() {});
+                                    if (double.parse(text) >= 0.9) {
+                                      ayas![verseNumber - 1].isMemorized = true;
+                                      verseNumber += 1;
+                                    }
+                                  });
+                          } else {
+                            isPressed
+                                ? SpeechToText.instance.startRecord(
+                                    surahNo, ayas![verseNumber - 1].ayahNo)
+                                : SpeechToText.instance
+                                    .stopRecord(
+                                        'https://omarelsayeed-quran-recitation-wav2vecdup.hf.space/run/predict',
+                                        user,
+                                        ayas![verseNumber - 1]
+                                            .orignalArabicText,
+                                        false)
+                                    .then((value) {
+                                    text = value;
+                                    setState(() {});
+                                  });
+                          }
                         },
-                        icon: isPressed
-                            ? const Icon(Icons.stop_circle)
-                            : const Icon(Icons.mic),
-                      ),
+                        icon: Icon(isPressed ? Icons.stop : Icons.mic,
+                            color: Colors.black),
+                        label: Text(
+                          isPressed ? "Stop" : "Start",
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.all(8),
+                            backgroundColor:
+                                isPressed ? Colors.red : Colors.grey),
+                      )
                     ],
                   ),
                 ],
               ),
             ),
           )
-        : const Scaffold(body: CircularProgressIndicator());
+        : const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
 
@@ -194,14 +254,14 @@ class RetunBasmala extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(2),
         padding: const EdgeInsets.all(kdefualtPadding),
         child: Text(
           'بسم الله الرحمن الرحيم',
           style: Theme.of(context)
               .textTheme
               .headlineLarge!
-              .copyWith(fontFamily: 'me_quran', fontSize: 35),
+              .copyWith(fontFamily: 'me_quran', fontSize: 30),
           textDirection: TextDirection.rtl,
         ),
       ),
