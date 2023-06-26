@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/constants.dart';
+import '../../providers/user_provider.dart';
+import '../../models/user_model.dart' as model;
+
+import 'tajweed_data.dart';
+import 'speech_to_text.dart';
 
 class TajweedCorrectionScreen extends StatefulWidget {
   const TajweedCorrectionScreen({Key? key}) : super(key: key);
@@ -11,16 +17,20 @@ class TajweedCorrectionScreen extends StatefulWidget {
 }
 
 class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
-  List<String> arabicWords = ['التل', 'مائة', 'تواصل', 'جعل', 'منذ', 'طائر'];
-  String selectedWord = '';
-
   final isSelected = false;
   bool isRecording = false;
   bool isPressed = false;
 
+  String? selectedRule = tajweedRulesData[0]['type'];
+  String? selectedWord;
+  int? selectedRuleIndex = 0;
+
+  model.User? user;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -33,6 +43,34 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
               const CustomAppBar(),
               Card(
                 child: Container(
+                  padding: const EdgeInsets.all(10),
+                  child: DropdownButton(
+                      isExpanded: true,
+                      value: selectedRule,
+                      items: tajweedRulesData.map(
+                        (element) {
+                          return DropdownMenuItem(
+                            value: element['type'] as String,
+                            child: Center(
+                              child: Text(
+                                element['type'] as String,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (selectedValue) {
+                        setState(() {
+                          selectedRule = selectedValue as String;
+                          selectedRuleIndex = tajweedRulesData.indexWhere(
+                              (element) => element['type'] == selectedRule);
+                        });
+                      }),
+                ),
+              ),
+              Card(
+                child: Container(
                   height: size.height * 0.30,
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   child: ListView.builder(
@@ -40,29 +78,34 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          setState(() {});
+                          setState(() {
+                            selectedWord = tajweedRulesData[selectedRuleIndex!]
+                                ['words'][index];
+                          });
                         },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 3),
-                          child: ListTile(
-                            leading: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              child: Text(arabicWords[index]),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                tajweedRulesData[selectedRuleIndex!]['words']
+                                    [index],
+                                textAlign: TextAlign.right,
+                              ),
                             ),
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [],
-                            ),
-                          ),
+                            const Divider(
+                              thickness: 2,
+                            )
+                          ],
                         ),
                       );
                     },
-                    itemCount: arabicWords.length,
+                    itemCount:
+                        tajweedRulesData[selectedRuleIndex!]['words'].length,
                   ),
                 ),
               ),
-              //this container shows the wrong words and their correnction
               Container(
                 height: MediaQuery.of(context).size.height * 0.30,
                 width: double.infinity,
@@ -74,20 +117,47 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                   color: Color.fromARGB(255, 117, 179, 145),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                child: const Center(child: CircularProgressIndicator()),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Say the word below to check for selected tajweed rule",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    Text(
+                      selectedWord == null ? '' : selectedWord!,
+                      style: const TextStyle(fontSize: 30),
+                    ),
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          setState(() {
+                            isPressed = true;
+                          });
+
+                          await SpeechToText.instance
+                              .record(user, selectedRule!);
+
+                          setState(() {
+                            isPressed = false;
+                          });
+                        },
+                        icon: isPressed
+                            ? const Icon(Icons.stop)
+                            : const Icon(Icons.mic),
+                        label: isPressed
+                            ? const Text("Stop")
+                            : const Text("Start"),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                isPressed ? Colors.red : Colors.grey),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               //buttons to upload and edit
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed: () => setState(() => isPressed = !isPressed),
-                  icon: isPressed
-                      ? const Icon(Icons.stop)
-                      : const Icon(Icons.mic),
-                  label: isPressed ? const Text("Stop") : const Text("Start"),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: isPressed ? Colors.red : Colors.grey),
-                ),
-              )
             ],
           ),
         ),

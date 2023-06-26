@@ -107,12 +107,33 @@ flutter:
         #       - asset: fonts/TrajanPro_Bold.ttf
         #         weight: 700
     fonts:
-        - family: quran
+        # - family: quran
+        #   fonts:
+        #       - asset: assets/fonts/HafsSmart_08.ttf
+        # - family: me_quran
+        #   fonts:
+        #       - asset: assets/fonts/me_quran.ttf
+        - family: al_majeed_quranic
           fonts:
-              - asset: assets/fonts/HafsSmart_08.ttf
-        - family: me_quran
+              - asset: assets/fonts/al_majeed_quranic.ttf
+        - family: Al_Qalam_Quran
           fonts:
-              - asset: assets/fonts/me_quran.ttf
+              - asset: assets/fonts/Al_Qalam_Quran.ttf
+        - family: 110_Besmellah_Normal
+          fonts:
+              - asset: assets/fonts/110_Besmellah_Normal.ttf
+        - family: din1451alt
+          fonts:
+              - asset: assets/fonts/din1451alt.ttf
+        - family: Roboto
+          fonts:
+              - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+              - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+                weight: 700
+              - asset: assets/fonts/Roboto/Roboto-italic.ttf
+                style: italic
+                      
+              
 
           # For details regarding fonts from package dependencies,
           # see https://flutter.dev/custom-fonts/#from-packages

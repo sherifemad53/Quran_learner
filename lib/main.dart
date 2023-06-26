@@ -24,30 +24,14 @@ import 'common/constants.dart';
 import 'theme/app_theme.dart';
 import 'package:quranic_tool_box/navigator_key.dart';
 
-//TODO Use state management system to provide user for all widgets
-//IS firebase package enough for state management answer is no
-//TODO READ QURAN FROM JSON FOR BETTER VIEWING
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +86,6 @@ class _MyAppState extends State<MyApp> {
               const TajweedCorrectionScreen()
         },
       ),
-    ); //AuthScreen();
+    );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/senstense_similarity_model.dart';
 
-import '../../services/senstence_Similarity_api_handler.dart';
+import '../../services/senstence_similarity_api_handler.dart';
 import 'widgets/veruscard.dart';
 import '../../utils/utils.dart';
 

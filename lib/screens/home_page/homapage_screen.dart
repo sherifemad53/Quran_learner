@@ -166,6 +166,7 @@ class _HomePageState extends State<HomePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
+                                        textAlign: TextAlign.right,
                                         "سورة ${surahs[index].surahNameArabic}",
                                         style: Theme.of(context)
                                             .textTheme
@@ -191,6 +192,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ],
                                   ),
+                                  
                                 ),
                               ),
                             );

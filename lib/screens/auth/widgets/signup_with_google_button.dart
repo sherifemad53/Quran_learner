@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SignupWithGoogleButton extends StatelessWidget {
-  SignupWithGoogleButton({
+  const SignupWithGoogleButton({
     Key? key,
     required this.size,
     required this.submit,
   }) : super(key: key);
 
   final Size size;
-  Function submit;
+  final Function submit;
 
   @override
   Widget build(BuildContext context) {

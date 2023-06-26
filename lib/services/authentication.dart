@@ -6,7 +6,6 @@ import 'package:quranic_tool_box/navigator_key.dart';
 import 'authentication_error_handling.dart';
 import '../models/user_model.dart' as model;
 
-//TODO: more sign in options like google, facebook
 class Authentication {
   static final _auth = FirebaseAuth.instance;
   static final _firebaseFirestore = FirebaseFirestore.instance;
@@ -78,10 +77,6 @@ class Authentication {
           debugPrint(errorMsg);
           break;
       }
-      if (err.code == "user-not-found") {
-        errorMsg = "user not found";
-      }
-      debugPrint(err.toString());
     } on PlatformException catch (err) {
       var message = "An error occured please check your credentials";
       if (err.message != null) {
