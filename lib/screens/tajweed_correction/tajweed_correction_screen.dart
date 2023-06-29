@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/constants.dart';
+import '../../providers/user_provider.dart';
+import '../../models/user_model.dart' as model;
+
+import 'tajweed_data.dart';
+import 'tajweed_to_score.dart';
+import 'tajweed_to_score_model.dart';
 
 class TajweedCorrectionScreen extends StatefulWidget {
   const TajweedCorrectionScreen({Key? key}) : super(key: key);
@@ -11,16 +19,23 @@ class TajweedCorrectionScreen extends StatefulWidget {
 }
 
 class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
-  List<String> arabicWords = ['التل', 'مائة', 'تواصل', 'جعل', 'منذ', 'طائر'];
-  String selectedWord = '';
-
   final isSelected = false;
   bool isRecording = false;
   bool isPressed = false;
 
+  String? selectedRule = tajweedRulesData[0]['type'];
+  int? selectedRuleIndex = 0;
+  String? selectedWord;
+  String? selectedApi;
+
+  model.User? user;
+
+  TajweedToScoreModel? tajweedscore;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -33,38 +48,77 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
               const CustomAppBar(),
               Card(
                 child: Container(
-                  height: size.height * 0.30,
+                  padding: const EdgeInsets.all(10),
+                  child: DropdownButton(
+                      isExpanded: true,
+                      value: selectedRule,
+                      items: tajweedRulesData.map(
+                        (element) {
+                          return DropdownMenuItem(
+                            value: element['type'] as String,
+                            child: Center(
+                              child: Text(
+                                element['type'] as String,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (selectedValue) {
+                        setState(() {
+                          debugPrint(selectedValue);
+                          selectedRule = selectedValue as String;
+                          selectedRuleIndex = tajweedRulesData.indexWhere(
+                              (element) => element['type'] == selectedRule);
+                          selectedApi =
+                              tajweedRulesData[selectedRuleIndex!]['apilink'];
+                        });
+                      }),
+                ),
+              ),
+              Card(
+                child: Container(
+                  height: size.height * 0.25,
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          setState(() {});
+                          setState(() {
+                            selectedWord = tajweedRulesData[selectedRuleIndex!]
+                                ['words'][index];
+                          });
                         },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 3),
-                          child: ListTile(
-                            leading: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              child: Text(arabicWords[index]),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10))),
+                              padding: const EdgeInsets.all(9),
+                              margin: const EdgeInsets.all(5),
+                              child: Text(
+                                tajweedRulesData[selectedRuleIndex!]['words']
+                                    [index],
+                                textAlign: TextAlign.right,
+                              ),
                             ),
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [],
-                            ),
-                          ),
+                          ],
                         ),
                       );
                     },
-                    itemCount: arabicWords.length,
+                    itemCount:
+                        tajweedRulesData[selectedRuleIndex!]['words'].length,
                   ),
                 ),
               ),
-              //this container shows the wrong words and their correnction
               Container(
-                height: MediaQuery.of(context).size.height * 0.30,
+                height: MediaQuery.of(context).size.height * 0.20,
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(
                     vertical: kdefualtVerticalMargin),
@@ -74,20 +128,87 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                   color: Color.fromARGB(255, 117, 179, 145),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                child: const Center(child: CircularProgressIndicator()),
-              ),
-              //buttons to upload and edit
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed: () => setState(() => isPressed = !isPressed),
-                  icon: isPressed
-                      ? const Icon(Icons.stop)
-                      : const Icon(Icons.mic),
-                  label: isPressed ? const Text("Stop") : const Text("Start"),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: isPressed ? Colors.red : Colors.grey),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Say the word below to check for selected tajweed rule",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    Text(
+                      selectedWord == null ? '' : selectedWord!,
+                      style: const TextStyle(fontSize: 30),
+                    ),
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          setState(() {
+                            isPressed = true;
+                          });
+                          debugPrint(selectedApi);
+                          tajweedscore = await TajwedToScore.instance.record(
+                              selectedApi!, user, selectedRuleIndex.toString());
+
+                          setState(() {
+                            isPressed = false;
+                          });
+                        },
+                        icon: isPressed
+                            ? const Icon(Icons.stop)
+                            : const Icon(Icons.mic),
+                        label: isPressed
+                            ? const Text("Stop")
+                            : const Text("Start"),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                isPressed ? Colors.red : Colors.grey),
+                      ),
+                    ),
+                  ],
                 ),
-              )
+              ),
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.20,
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(
+                      vertical: kdefualtVerticalMargin),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: kdefualtHorizontalPadding),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[100],
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: tajweedscore != null
+                      ? ListView.builder(
+                          itemCount: tajweedscore!.data.length,
+                          itemBuilder: (context, index) => Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  tajweedscore!.data[index].label.toUpperCase(),
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                FAProgressBar(
+                                  animatedDuration:
+                                      const Duration(milliseconds: 1000),
+                                  maxValue: 100,
+                                  currentValue:
+                                      tajweedscore!.data[index].score * 100,
+                                  displayText: '%',
+                                  progressGradient: LinearGradient(
+                                    colors: [
+                                      kSecendoryColor.withOpacity(0.75),
+                                      kBackgroundColor.withOpacity(0.75),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : const Center(child: Text('sss'))),
             ],
           ),
         ),

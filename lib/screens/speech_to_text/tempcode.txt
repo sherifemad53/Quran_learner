@@ -70,8 +70,6 @@
   //   } else {
   //     if (await record.hasPermission()) {
   //       while (isPressed) {
-  //         //TODO Merge wav files
-  //         //TODO what if the internet is bad what the mirgin of error that this won't work
   //         //??Test the number of seconds that is best
   //         counter += 1;
   //         filename[index] = "$counter.wav";

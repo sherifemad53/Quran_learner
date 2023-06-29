@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 
 import '../../../common/constants.dart';
-import '../../../services/senstence_Similarity_api_handler.dart';
+import '../../../services/senstence_similarity_api_handler.dart';
 
 class VerusCard extends StatefulWidget {
   const VerusCard(

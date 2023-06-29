@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/aya_model.dart';
 import '/models/tafser_model.dart';
 import '../models/senstense_similarity_model.dart';
 
@@ -46,17 +45,3 @@ Future<String> tafserReadJson(
           (element) => (element.ayah == ayaNum && element.surah == surahNum))
       .tafseer;
 }
-
-// Future<dynamic> quranReadJson() async {
-//   Stopwatch stopwatch = Stopwatch()..start();
-//   final String response = await rootBundle.loadString('assets/quran.json');
-//   List<AyaModel> quran = List<AyaModel>.from(
-//       (json.decode(response)).map((element) => AyaModel.fromJson(element)));
-//   var x = quran.where((element) => element.surahNo == '1').forEach((element) {
-//     print(element);
-//   });
-
-//   //return tasfirText.where((element) => (element.surahNo == '1'));
-//   debugPrint('time elapsed transcripting ${stopwatch.elapsed.inMilliseconds}');
-//   stopwatch.stop();
-// }

@@ -5,11 +5,18 @@ class TTextTheme {
     displaySmall: TextStyle(fontSize: 20),
     displayMedium: TextStyle(fontSize: 20),
     displayLarge: TextStyle(fontSize: 20),
-    headlineSmall: TextStyle(fontSize: 21),
-    headlineMedium: TextStyle(fontSize: 25),
+    headlineSmall: TextStyle(
+      fontSize: 20,
+      fontFamily: 'Roboto',
+    ),
+    headlineMedium: TextStyle(
+      fontSize: 24,
+      fontFamily: 'Roboto',
+    ),
     headlineLarge: TextStyle(
-      fontSize: 30,
+      fontSize: 28,
       fontWeight: FontWeight.bold,
+      fontFamily: 'Roboto',
     ),
     bodySmall: TextStyle(fontSize: 16),
     bodyMedium: TextStyle(fontSize: 18),

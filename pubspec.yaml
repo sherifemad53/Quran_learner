@@ -36,6 +36,7 @@ dependencies:
     cupertino_icons: ^1.0.2
     google_fonts: ^4.0.3
     flutter_animation_progress_bar: ^2.3.1
+    settings_ui: ^2.0.2
     auto_size_text: ^3.0.0
     introduction_screen: ^3.0.2
 
@@ -58,6 +59,7 @@ dependencies:
     permission_handler: ^10.3.0
     path_provider: ^2.0.11
     flutter_html: ^2.2.1
+    shared_preferences: ^2.1.2
 
     # excel: ^2.0.0-null-safety-3
     # simple_s3: ^0.3.2
@@ -107,12 +109,32 @@ flutter:
         #       - asset: fonts/TrajanPro_Bold.ttf
         #         weight: 700
     fonts:
-        - family: quran
+        - family: al_majeed_quranic
           fonts:
-              - asset: assets/fonts/HafsSmart_08.ttf
-        - family: me_quran
+              - asset: assets/fonts/al_majeed_quranic.ttf
+        - family: Al_Qalam_Quran
           fonts:
-              - asset: assets/fonts/me_quran.ttf
+              - asset: assets/fonts/Al_Qalam_Quran.ttf
+        - family: 110_Besmellah_Normal
+          fonts:
+              - asset: assets/fonts/110_Besmellah_Normal.ttf
+        - family: din1451alt
+          fonts:
+              - asset: assets/fonts/din1451alt.ttf
+        - family: Roboto
+          fonts:
+              - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+              - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+                weight: 700
+              - asset: assets/fonts/Roboto/Roboto-italic.ttf
+                style: italic
+        - family: Belanosima
+          fonts:
+              - asset: assets/fonts/Belanosima/Belanosima-Regular.ttf
+              - asset: assets/fonts/Belanosima/Belanosima-Bold.ttf
+                weight: 800
+              - asset: assets/fonts/Belanosima/Belanosima-SemiBold.ttf
+                weight: 600
 
           # For details regarding fonts from package dependencies,
           # see https://flutter.dev/custom-fonts/#from-packages

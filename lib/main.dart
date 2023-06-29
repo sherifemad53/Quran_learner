@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:quranic_tool_box/providers/settings_ptovider.dart';
 
 import 'screens/ahadith/ahadith_screen.dart';
 import 'screens/sentence_similarity/sentence_similarity_screen.dart';
@@ -24,30 +25,14 @@ import 'common/constants.dart';
 import 'theme/app_theme.dart';
 import 'package:quranic_tool_box/navigator_key.dart';
 
-//TODO Use state management system to provide user for all widgets
-//IS firebase package enough for state management answer is no
-//TODO READ QURAN FROM JSON FOR BETTER VIEWING
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +40,9 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SettingsProvider(),
         ),
         StreamProvider(
           create: (_) => Connectivity().onConnectivityChanged,
@@ -102,6 +90,6 @@ class _MyAppState extends State<MyApp> {
               const TajweedCorrectionScreen()
         },
       ),
-    ); //AuthScreen();
+    );
   }
 }
