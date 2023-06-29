@@ -1,6 +1,7 @@
 List<Map<String, dynamic>> tajweedRulesData = [
   {
     'type': 'اخفاء النون و التنوين',
+    'apilink':'https://omarelsayeed-e5fa2-el-noon-tanween.hf.space/run/predict',
     'words': [
       'مَّنثُورًا',
       'مِّن صِيَامٍ',
@@ -37,6 +38,7 @@ List<Map<String, dynamic>> tajweedRulesData = [
   },
   {
     'type': 'ادغام النون و التنوين بالغنه',
+    'apilink':'https://omarelsayeed-ed8am-elnoon-weltanween-bel8onna.hf.space/run/predict',
     'words': [
       'إِن يَقُولُونَ',
       'يَوْمَئِذٍ يُوَفِّيهِمُ',
@@ -77,6 +79,7 @@ List<Map<String, dynamic>> tajweedRulesData = [
   },
   {
     'type': 'ادغام النون و التنوين بدون غنه',
+    'apilink':'https://omarelsayeed-ed8am-elnoon-weltanween-bedon8onna.hf.space/run/predict',
     'words': [
       'مِّن رَّبِّ',
       'لَرَءُوفٌ رَّحِيمٌ',
@@ -103,6 +106,7 @@ List<Map<String, dynamic>> tajweedRulesData = [
   },
   {
     'type': 'اقلاب النون و التنوين',
+    'apilink':'https://omarelsayeed-eqlab-elnoon-weltanween.hf.space/run/predict',
     'words': [
       'مِّن بَعْدِ',
       'أَنبِئْهُم',
@@ -117,6 +121,7 @@ List<Map<String, dynamic>> tajweedRulesData = [
   },
   {
     'type': 'النون و الميم المشددة',
+    'apilink':'https://omarelsayeed-noon-meem-moshadada.hf.space/run/predict',
     'words': [
       'الْمُزَّمِّلُ',
       'فِيهِنَّ',

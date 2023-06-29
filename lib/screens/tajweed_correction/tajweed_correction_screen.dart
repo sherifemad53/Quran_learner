@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/constants.dart';
@@ -6,7 +7,8 @@ import '../../providers/user_provider.dart';
 import '../../models/user_model.dart' as model;
 
 import 'tajweed_data.dart';
-import 'speech_to_text.dart';
+import 'tajweed_to_score.dart';
+import 'tajweed_to_score_model.dart';
 
 class TajweedCorrectionScreen extends StatefulWidget {
   const TajweedCorrectionScreen({Key? key}) : super(key: key);
@@ -22,10 +24,13 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
   bool isPressed = false;
 
   String? selectedRule = tajweedRulesData[0]['type'];
-  String? selectedWord;
   int? selectedRuleIndex = 0;
+  String? selectedWord;
+  String? selectedApi;
 
   model.User? user;
+
+  TajweedToScoreModel? tajweedscore;
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +67,19 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                       ).toList(),
                       onChanged: (selectedValue) {
                         setState(() {
+                          debugPrint(selectedValue);
                           selectedRule = selectedValue as String;
                           selectedRuleIndex = tajweedRulesData.indexWhere(
                               (element) => element['type'] == selectedRule);
+                          selectedApi =
+                              tajweedRulesData[selectedRuleIndex!]['apilink'];
                         });
                       }),
                 ),
               ),
               Card(
                 child: Container(
-                  height: size.height * 0.30,
+                  height: size.height * 0.25,
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -87,16 +95,19 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(10),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10))),
+                              padding: const EdgeInsets.all(9),
+                              margin: const EdgeInsets.all(5),
                               child: Text(
                                 tajweedRulesData[selectedRuleIndex!]['words']
                                     [index],
                                 textAlign: TextAlign.right,
                               ),
                             ),
-                            const Divider(
-                              thickness: 2,
-                            )
                           ],
                         ),
                       );
@@ -107,7 +118,7 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.30,
+                height: MediaQuery.of(context).size.height * 0.20,
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(
                     vertical: kdefualtVerticalMargin),
@@ -135,9 +146,9 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                           setState(() {
                             isPressed = true;
                           });
-
-                          await SpeechToText.instance
-                              .record(user, selectedRule!);
+                          debugPrint(selectedApi);
+                          tajweedscore = await TajwedToScore.instance.record(
+                              selectedApi!, user, selectedRuleIndex.toString());
 
                           setState(() {
                             isPressed = false;
@@ -157,7 +168,47 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                   ],
                 ),
               ),
-              //buttons to upload and edit
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.20,
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(
+                      vertical: kdefualtVerticalMargin),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: kdefualtHorizontalPadding),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[100],
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: tajweedscore != null
+                      ? ListView.builder(
+                          itemCount: tajweedscore!.data.length,
+                          itemBuilder: (context, index) => Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  tajweedscore!.data[index].label.toUpperCase(),
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                FAProgressBar(
+                                  animatedDuration:
+                                      const Duration(milliseconds: 1000),
+                                  maxValue: 100,
+                                  currentValue:
+                                      tajweedscore!.data[index].score * 100,
+                                  displayText: '%',
+                                  progressGradient: LinearGradient(
+                                    colors: [
+                                      kSecendoryColor.withOpacity(0.75),
+                                      kBackgroundColor.withOpacity(0.75),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : const Center(child: Text('sss'))),
             ],
           ),
         ),

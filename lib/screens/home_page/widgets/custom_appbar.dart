@@ -28,13 +28,8 @@ class CustomAppBar extends StatelessWidget {
                   width: 25,
                 ),
               ),
-              Text(
-                'Quranic Tool box',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
             ],
           ),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search))
         ],
       ),
     );

@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:quranic_tool_box/providers/settings_ptovider.dart';
 
 import 'screens/ahadith/ahadith_screen.dart';
 import 'screens/sentence_similarity/sentence_similarity_screen.dart';
@@ -39,6 +40,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SettingsProvider(),
         ),
         StreamProvider(
           create: (_) => Connectivity().onConnectivityChanged,

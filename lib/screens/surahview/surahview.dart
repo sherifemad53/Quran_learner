@@ -8,6 +8,7 @@ import '../../providers/user_provider.dart';
 import '../../common/constants.dart';
 import '../../models/user_model.dart' as model;
 
+import 'Surah_view_settings.dart';
 import 'speech_to_text.dart';
 
 class SurahViewScreen extends StatefulWidget {
@@ -47,6 +48,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
   bool isMemoriztingMode = false;
   bool showAya = false;
   int verseNumber = 1;
+  bool isScrolling = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,120 +72,154 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                   onChanged: (value) => setState(() {
                     isMemoriztingMode = value;
                   }),
-                )
+                ),
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) {
+                      return const SurahViewSettingsScreen();
+                    }),
+                  ),
+                ),
               ],
             ),
-            body: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.70,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const RetunBasmala(),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          if (isMemoriztingMode) {
-                            if (ayas![index].isMemorized) {
-                              ayas![index].isVisable = true;
-                            } else {
-                              ayas![index].isVisable = false;
-                            }
-                          } else {
+            // body: NestedScrollView(
+            //   floatHeaderSlivers: true,
+            //   headerSliverBuilder: (ctx, innerBoxIsScrolled) => [
+            //     SliverAppBar(
+            //       floating: true,
+            //       flexibleSpace: FlexibleSpaceBar(title: Text(surahName)),
+            //       actions: [
+            //         Switch.adaptive(
+            //           value: isMemoriztingMode,
+            //           onChanged: (value) => setState(() {
+            //             isMemoriztingMode = value;
+            //           }),
+            //         ),
+            //       ],
+            //     ),
+            //   ],
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                if (!isScrolling) const RetunBasmala(),
+                SizedBox(
+                  height: !isMemoriztingMode
+                      ? MediaQuery.of(context).size.height * 0.71
+                      : MediaQuery.of(context).size.height * 0.78,
+                  child: GestureDetector(
+                    onVerticalDragDown: (details) {
+                      setState(() {
+                        isScrolling = true;
+                      });
+                    },
+                    onVerticalDragStart: (details) => setState(() {
+                      isScrolling = true;
+                    }),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      // physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        if (isMemoriztingMode) {
+                          if (ayas![index].isMemorized) {
                             ayas![index].isVisable = true;
-                            ayas![index].isPressed = false;
+                          } else {
+                            ayas![index].isVisable = false;
                           }
-                          return InkWell(
-                            onTap: () {
-                              setState(() {
-                                verseNumber = index + 1;
-                                if (isMemoriztingMode) {
-                                  ayas![index].isPressed =
-                                      !ayas![index].isPressed;
-                                }
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5,
-                                                      horizontal: 12),
-                                              margin: const EdgeInsets.only(
-                                                  left: 20),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.black),
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(50))),
-                                              child: Text(ayas![index].ayahNo),
-                                            ),
-                                            Visibility(
-                                              visible: ayas![index].isPressed ||
-                                                  ayas![index].isMemorized ||
-                                                  ayas![index].isVisable,
-                                              child: Expanded(
-                                                child: Text(
-                                                  ayas![index]
-                                                      .orignalArabicText,
-                                                  textDirection:
-                                                      TextDirection.rtl,
-                                                  textAlign: TextAlign.right,
-                                                  style: TextStyle(
-                                                    fontSize: quranfontSize,
-                                                    fontFamily: quranfont,
-                                                    color: const Color.fromARGB(
-                                                        196, 0, 0, 0),
-                                                  ),
+                        } else {
+                          ayas![index].isVisable = true;
+                          ayas![index].isPressed = false;
+                        }
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              verseNumber = index + 1;
+                              if (isMemoriztingMode) {
+                                ayas![index].isPressed =
+                                    !ayas![index].isPressed;
+                              }
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 12),
+                                            margin:
+                                                const EdgeInsets.only(left: 20),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(50))),
+                                            child: Text(ayas![index].ayahNo),
+                                          ),
+                                          Visibility(
+                                            visible: ayas![index].isPressed ||
+                                                ayas![index].isMemorized ||
+                                                ayas![index].isVisable,
+                                            child: Expanded(
+                                              child: Text(
+                                                ayas![index].orignalArabicText,
+                                                textDirection:
+                                                    TextDirection.rtl,
+                                                textAlign: TextAlign.right,
+                                                style: TextStyle(
+                                                  fontSize: quranfontSize,
+                                                  fontFamily: quranfont,
+                                                  color: const Color.fromARGB(
+                                                      196, 0, 0, 0),
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            ayas![index].englishTranslation,
-                                            textDirection: TextDirection.ltr,
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: quranfont,
-                                              color: const Color.fromARGB(
-                                                  196, 0, 0, 0),
-                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Text(
+                                          ayas![index].englishTranslation,
+                                          textDirection: TextDirection.ltr,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: quranfont,
+                                            color: const Color.fromARGB(
+                                                196, 0, 0, 0),
                                           ),
                                         ),
-                                        const Divider(
-                                          color: Colors.black,
-                                          thickness: 1,
-                                        )
-                                      ],
-                                    ),
+                                      ),
+                                      const Divider(
+                                        color: Colors.black,
+                                        thickness: 1,
+                                      )
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                        itemCount: ayas!.length,
-                      ),
-                    ],
+                          ),
+                        );
+                      },
+                      itemCount: ayas!.length,
+                    ),
                   ),
-                )),
+                ),
+              ],
+            ),
+
             bottomSheet: Container(
               height: !isMemoriztingMode
                   ? MediaQuery.of(context).size.height * 0.19
@@ -290,11 +326,11 @@ class RetunBasmala extends StatelessWidget {
     return Center(
       child: Container(
         margin: const EdgeInsets.all(2),
-        padding: const EdgeInsets.all(kdefualtPadding),
+        padding: const EdgeInsets.all(5),
         child: const Text(
           'بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ',
           style: TextStyle(fontFamily: '110_Besmellah_Normal', fontSize: 30),
-          textDirection: TextDirection.rtl,
+          // textDirection: TextDirection.rtl,
         ),
       ),
     );

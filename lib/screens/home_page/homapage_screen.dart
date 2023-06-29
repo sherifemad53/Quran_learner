@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   User? user;
   bool _isloading = true;
   QuranProvider quranProvider = QuranProvider();
+
   List<SurahModel> surahs = [];
 
   void searchSurah(String a) async {
@@ -33,15 +34,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    getdata().whenComplete(() => {
+    super.initState();
+    init().whenComplete(() => {
           setState(() {
             _isloading = false;
           })
         });
-    super.initState();
   }
 
-  Future<void> getdata() async {
+  Future<void> init() async {
     //GET USER DATA
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
@@ -63,6 +64,9 @@ class _HomePageState extends State<HomePage> {
                 ConnectivityResult.mobile
         ? print('hello')
         : print('world');
+
+    // Provider.of<SettingsProvider>(context).setTheme(false);
+
     if (!_isloading) user = Provider.of<UserProvider>(context).getUser;
     return _isloading
         ? const Scaffold(
@@ -192,7 +196,6 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ],
                                   ),
-                                  
                                 ),
                               ),
                             );
