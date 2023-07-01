@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
-import 'tajweed_to_score_model.dart';
+import '../../models/tajweed_to_score_model.dart';
 
 import '../../models/user_model.dart' as model;
 
@@ -83,40 +83,57 @@ class TajwedToScore {
   }
 
   Random random = Random();
-  Future<TajweedToScoreModel?> record(
-      String? apiUrl, model.User? user, String tajweedRule) async {
-    PermissionStatus status = await Permission.microphone.request();
-    if (status != PermissionStatus.granted) {
-      throw RecordingPermissionException("Microphone permission not granted");
-    } else {
-      Stopwatch stopwatch = Stopwatch()..start();
-      int counter = 0;
-      await _record.openRecorder();
-      Directory directory = await getApplicationDocumentsDirectory();
-      counter = random.nextInt(0xffffffff);
-      filename = "${tajweedRule}_$counter.wav";
-      filepath = '${directory.path}/$filename';
-      //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
-
-      await _record.startRecorder(
-        numChannels: 1,
-        bitRate: 256000,
-        codec: Codec.pcm16WAV,
-        sampleRate: 16000,
-        toFile: filepath,
-      );
-
-      debugPrint(filepath);
-      await Future.delayed(const Duration(seconds: 5));
-
+  bool _isRecording = false;
+  Future<TajweedToScoreModel?> record(String? apiUrl, model.User? user,
+      String tajweedRule, bool isRecording) async {
+    _isRecording = isRecording;
+    if (!_isRecording) {
       await _record.stopRecorder();
       await _record.closeRecorder();
 
-      debugPrint('time elapsed recording ${stopwatch.elapsed.inMilliseconds}');
-      stopwatch.stop();
-
       await _upload(user, tajweedRule, filepath, filename);
       return await _tajwedToScore(apiUrl!, tajweedRule, filename, user);
+    } else {
+      PermissionStatus status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        throw RecordingPermissionException("Microphone permission not granted");
+      } else {
+        Stopwatch stopwatch = Stopwatch()..start();
+        int counter = 0;
+        await _record.openRecorder();
+        Directory directory = await getApplicationDocumentsDirectory();
+        counter = random.nextInt(0xffffffff);
+        filename = "${tajweedRule}_$counter.wav";
+        filepath = '${directory.path}/$filename';
+        //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
+
+        await _record.startRecorder(
+          numChannels: 1,
+          bitRate: 256000,
+          codec: Codec.pcm16WAV,
+          sampleRate: 16000,
+          toFile: filepath,
+        );
+
+        debugPrint(filepath);
+        return await Future.delayed(const Duration(seconds: 5))
+            .then((value) async {
+          if (_isRecording) {
+            print('hanaaaa');
+            await _record.stopRecorder();
+            await _record.closeRecorder();
+
+            debugPrint(
+                'time elapsed recording ${stopwatch.elapsed.inMilliseconds}');
+            stopwatch.stop();
+
+            await _upload(user, tajweedRule, filepath, filename);
+            return await _tajwedToScore(apiUrl!, tajweedRule, filename, user);
+          }
+          return null;
+        });
+      }
     }
+    // return null;
   }
 }

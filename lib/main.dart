@@ -5,9 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:quranic_tool_box/providers/settings_ptovider.dart';
+import 'package:quranic_tool_box/providers/settings_provider.dart';
 
 import 'screens/ahadith/ahadith_screen.dart';
+import 'screens/home_page/homapage_screen.dart';
 import 'screens/sentence_similarity/sentence_similarity_screen.dart';
 import 'screens/about_us/aboutus_screen.dart';
 import 'screens/auth/login_screen.dart';
@@ -15,7 +16,6 @@ import 'screens/auth/signup_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/speech_to_text/stt.dart';
 import 'screens/welcome/welcome_screen.dart';
-import 'screens/home_page/homapage_screen.dart';
 import 'screens/surahview/surahview.dart';
 import 'screens/tajweed_correction/tajweed_correction_screen.dart';
 

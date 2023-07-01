@@ -160,7 +160,9 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                                                 const EdgeInsets.only(left: 20),
                                             decoration: BoxDecoration(
                                                 border: Border.all(
-                                                    color: Colors.black),
+                                                    color: isDark
+                                                        ? Colors.white
+                                                        : Colors.black),
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                         Radius.circular(50))),
@@ -179,8 +181,10 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                                                 style: TextStyle(
                                                   fontSize: quranfontSize,
                                                   fontFamily: quranfont,
-                                                  color: const Color.fromARGB(
-                                                      196, 0, 0, 0),
+                                                  color: isDark
+                                                      ? Colors.white
+                                                      : const Color.fromARGB(
+                                                          196, 0, 0, 0),
                                                 ),
                                               ),
                                             ),
@@ -196,8 +200,10 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontFamily: quranfont,
-                                            color: const Color.fromARGB(
-                                                196, 0, 0, 0),
+                                            color: isDark
+                                                ? Colors.white54
+                                                : const Color.fromARGB(
+                                                    196, 0, 0, 0),
                                           ),
                                         ),
                                       ),
@@ -225,7 +231,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                   ? MediaQuery.of(context).size.height * 0.19
                   : MediaQuery.of(context).size.height * 0.12,
               decoration: BoxDecoration(
-                  color: Colors.amber[100],
+                  color: isDark ? Colors.blueGrey : Colors.amber[100],
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),

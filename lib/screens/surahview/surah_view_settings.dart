@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../../providers/settings_ptovider.dart';
+import '../../providers/settings_provider.dart';
 
 class SurahViewSettingsScreen extends StatefulWidget {
   const SurahViewSettingsScreen({super.key});
