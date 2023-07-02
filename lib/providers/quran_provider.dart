@@ -19,22 +19,20 @@ class QuranProvider {
         (json.decode(response)).map((element) => JuzModel.fromJson(element)));
   }
 
-  List<JuzModel> getSearchedJuzModel(String? JuzNameArabic) {
-    List<JuzModel> x = JuzNameArabic == null
+  List<JuzModel> getSearchedJuzModel(String? juzNameArabic) {
+    return juzNameArabic == null
         ? _juzs
         : _juzs.where((element) {
-            return element.juzNameArabic.contains(JuzNameArabic);
+            return element.juzNameArabic.contains(juzNameArabic);
           }).toList();
-    return x;
   }
 
   List<SurahModel> getSearchedSurahModel(String? surahNameArabic) {
-    List<SurahModel> x = surahNameArabic == null
+    return surahNameArabic == null
         ? _surahs
         : _surahs.where((element) {
             return element.surahNameArabic!.contains(surahNameArabic);
           }).toList();
-    return x;
   }
 
   List<SurahModel> getSurahModel() {

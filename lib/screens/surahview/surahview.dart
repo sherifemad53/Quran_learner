@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:quranic_tool_box/models/aya_model.dart';
+import 'package:quranic_tool_box/providers/settings_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/surah_provider.dart';
 import '../../providers/user_provider.dart';
@@ -28,11 +30,16 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
 
   SurahProvider surahProvider = SurahProvider();
   List<AyaModel>? ayas;
+  SettingsProvider? settingsProvider;
 
   void getAyas(String surahNameArabic, String surahNo) async {
     await surahProvider.init();
     ayas =
         surahProvider.getSurahBySurahNameAndSurahNo(surahNameArabic, surahNo);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    print(prefs.getString('SurahViewMode'));
     setState(() {
       isDoneLoading = true;
     });
@@ -49,14 +56,25 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
   bool showAya = false;
   int verseNumber = 1;
   bool isScrolling = false;
+  bool? _isEnglishTransEnabled = false;
 
   @override
   Widget build(BuildContext context) {
     user = Provider.of<UserProvider>(context).getUser;
+    settingsProvider = Provider.of<SettingsProvider>(context);
     final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
     final args = ModalRoute.of(context)!.settings.arguments as Map;
     String surahName = args['SurahNameArabic'];
     String surahNo = args['SurahNo'];
+    _isEnglishTransEnabled = settingsProvider!.getIsEnglishTransEnabled;
+
+    if (settingsProvider!.getSurahViewMode == 'Recitation') {
+      isMemoriztingMode = false;
+    } else {
+      isMemoriztingMode = true;
+    }
+
+    // print(isMemoriztingMode);
 
     if (!isDoneLoading) {
       getAyas(surahName, surahNo);
@@ -67,12 +85,12 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
             appBar: AppBar(
               title: Text(surahName),
               actions: [
-                Switch.adaptive(
-                  value: isMemoriztingMode,
-                  onChanged: (value) => setState(() {
-                    isMemoriztingMode = value;
-                  }),
-                ),
+                // Switch.adaptive(
+                //   value: isMemoriztingMode,
+                //   onChanged: (value) => setState(() {
+                //     isMemoriztingMode = value;
+                //   }),
+                // ),
                 IconButton(
                   icon: const Icon(Icons.settings),
                   onPressed: () => Navigator.of(context).push(
@@ -83,22 +101,6 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                 ),
               ],
             ),
-            // body: NestedScrollView(
-            //   floatHeaderSlivers: true,
-            //   headerSliverBuilder: (ctx, innerBoxIsScrolled) => [
-            //     SliverAppBar(
-            //       floating: true,
-            //       flexibleSpace: FlexibleSpaceBar(title: Text(surahName)),
-            //       actions: [
-            //         Switch.adaptive(
-            //           value: isMemoriztingMode,
-            //           onChanged: (value) => setState(() {
-            //             isMemoriztingMode = value;
-            //           }),
-            //         ),
-            //       ],
-            //     ),
-            //   ],
             body: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -106,7 +108,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                 SizedBox(
                   height: !isMemoriztingMode
                       ? MediaQuery.of(context).size.height * 0.71
-                      : MediaQuery.of(context).size.height * 0.78,
+                      : MediaQuery.of(context).size.height * 0.77,
                   child: GestureDetector(
                     onVerticalDragDown: (details) {
                       setState(() {
@@ -191,22 +193,24 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                                           ),
                                         ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Text(
-                                          ayas![index].englishTranslation,
-                                          textDirection: TextDirection.ltr,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: quranfont,
-                                            color: isDark
-                                                ? Colors.white54
-                                                : const Color.fromARGB(
-                                                    196, 0, 0, 0),
+                                      if (_isEnglishTransEnabled != null)
+                                        if (_isEnglishTransEnabled == true)
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Text(
+                                              ayas![index].englishTranslation,
+                                              textDirection: TextDirection.ltr,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: quranfont,
+                                                color: isDark
+                                                    ? Colors.white54
+                                                    : const Color.fromARGB(
+                                                        196, 0, 0, 0),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
                                       const Divider(
                                         color: Colors.black,
                                         thickness: 1,
@@ -225,10 +229,9 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                 ),
               ],
             ),
-
             bottomSheet: Container(
               height: !isMemoriztingMode
-                  ? MediaQuery.of(context).size.height * 0.19
+                  ? MediaQuery.of(context).size.height * 0.20
                   : MediaQuery.of(context).size.height * 0.12,
               decoration: BoxDecoration(
                   color: isDark ? Colors.blueGrey : Colors.amber[100],
@@ -241,11 +244,14 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (!isMemoriztingMode)
-                    text.isEmpty
-                        ? SingleChildScrollView(
-                            child: Html(
-                            data: text,
-                          ))
+                    text.isNotEmpty
+                        ? SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.07,
+                            child: SingleChildScrollView(
+                                child: Html(
+                              data: text,
+                            )),
+                          )
                         : const SizedBox(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

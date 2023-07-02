@@ -70,8 +70,6 @@ class _HomePageState extends State<HomePage> {
         ? print('hello')
         : print('world');
 
-    // Provider.of<SettingsProvider>(context).setTheme(false);
-
     if (!_isloading) user = Provider.of<UserProvider>(context).getUser;
 
     return _isloading
@@ -109,7 +107,8 @@ class _HomePageState extends State<HomePage> {
                                     Theme.of(context).textTheme.headlineLarge,
                               ),
                             ],
-                          ),                          IconButton(
+                          ),
+                          IconButton(
                             onPressed: () {
                               Navigator.of(context)
                                   .pushNamed(AppRoutes.profile);

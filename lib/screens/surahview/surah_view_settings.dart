@@ -12,11 +12,28 @@ class SurahViewSettingsScreen extends StatefulWidget {
       _SurahViewSettingsScreenState();
 }
 
-class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen> {
-  SettingsProvider settingsProvider = SettingsProvider();
+class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
+    with TickerProviderStateMixin {
+  TabController? tabController;
 
   @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    tabController!.dispose();
+  }
+
+  bool _isEnglishTransEnabled = false;
+
+  SettingsProvider? settingsProvider;
+  @override
   Widget build(BuildContext context) {
+    settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -25,27 +42,48 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen> {
       )),
       body: SettingsList(
         sections: [
+          CustomSettingsSection(
+            child: TabBar(
+                onTap: (value) {
+                  if (value == 0) {
+                    settingsProvider!.updateSurahViewMode('Recitation');
+                  } else if (value == 1) {
+                    settingsProvider!.updateSurahViewMode('Memorization');
+                  }
+                },
+                controller: tabController,
+                padding: const EdgeInsets.all(5),
+                labelPadding: const EdgeInsets.all(5),
+                tabs: const [
+                  Text('Recitation'),
+                  Text('Memorization'),
+                ]),
+          ),
           SettingsSection(
-            title: const Text('Common'),
+            title: const Text('Recitation section'),
             tiles: [
-              SettingsTile.navigation(
-                leading: const Icon(Icons.language),
-                title: const Text('Language'),
-                value: const Text('English'),
-              ),
               SettingsTile.switchTile(
                 onToggle: (value) {
+                  settingsProvider!.updateIsEnglishViewEnableed(value);
                   setState(() {
-                    Provider.of<SettingsProvider>(context, listen: false)
-                        .updateTheme(value);
+                    _isEnglishTransEnabled = value;
                   });
                 },
-                initialValue: false,
+                initialValue: settingsProvider!.getIsEnglishTransEnabled,
                 leading: const Icon(Icons.format_paint),
-                title: const Text('Enable custom theme'),
+                title: const Text('Enable English Translation'),
               ),
             ],
           ),
+          SettingsSection(
+            title: const Text('Recitation section'),
+            tiles: [
+              SettingsTile.switchTile(
+                  initialValue: false,
+                  onToggle: (value) {},
+                  title: const Text('Enable custom theme'))
+            ],
+          )
         ],
       ),
     );

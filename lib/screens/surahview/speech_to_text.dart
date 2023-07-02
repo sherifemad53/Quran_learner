@@ -79,9 +79,12 @@ class SpeechToText {
   String _checkReading(String arabicAyatext, bool isMemorizationMode) {
     String temp = '';
     recitedText = _swapShaddaPosition(recitedText);
-    temp = isMemorizationMode
-        ? StringSimilarity.similarity(arabicAyatext, recitedText).toString()
-        : StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
+    if (isMemorizationMode) {
+      temp = StringSimilarity.similarity(arabicAyatext, recitedText).toString();
+    } else {
+      temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
+    }
+
     // if (arabicAyatext.length + 5 >= recitedText.length) {
     //   temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
     // } else if (arabicAyatext.length + 5 < recitedText.length) {
@@ -146,7 +149,7 @@ class SpeechToText {
       //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
       await _recordnew.startRecorder(
         numChannels: 1,
-        bitRate: 192000,
+        bitRate: 256000,
         codec: Codec.pcm16WAV,
         sampleRate: 16000,
         toFile: filepath,
