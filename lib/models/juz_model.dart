@@ -1,38 +1,33 @@
 // To parse this JSON data, do
 //
-//     final JuzModel = JuzModelFromJson(jsonString);
+//     final juzModel = juzModelFromJson(jsonString);
 
 import 'dart:convert';
 
-JuzModel juzModelFromJson(String str) =>
-    JuzModel.fromJson(json.decode(str));
+List<JuzModel> juzModelFromJson(String str) => List<JuzModel>.from(json.decode(str).map((x) => JuzModel.fromJson(x)));
 
-String juzModelToJson(JuzModel data) => json.encode(data.toJson());
+String juzModelToJson(List<JuzModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class JuzModel {
-  int? id;
-  String? juzNameArabic;
-  String? juzNameEnglish;
-  String? totalVerses;
+    int juz;
+    String juzNameArabic;
+    String juzNameEnglish;
 
-  JuzModel({
-    required this.id,
-    required this.juzNameArabic,
-    required this.juzNameEnglish,
-    required this.totalVerses,
-  });
+    JuzModel({
+        required this.juz,
+        required this.juzNameArabic,
+        required this.juzNameEnglish,
+    });
 
-  factory JuzModel.fromJson(Map<String, dynamic> json) => JuzModel(
-        id: json["id"],
-        juzNameArabic: json["juzNameArabic"],
-        juzNameEnglish: json["juzNameEnglish"],
-        totalVerses: json["total_verses"].toString(),
-      );
+    factory JuzModel.fromJson(Map<String, dynamic> json) => JuzModel(
+        juz: json["Juz"],
+        juzNameArabic: json["JuzNameArabic"],
+        juzNameEnglish: json["JuzNameEnglish"],
+    );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "juzNameArabic": juzNameArabic,
-        "juzNameEnglish": juzNameEnglish,
-        "total_verses": totalVerses,
-      };
+    Map<String, dynamic> toJson() => {
+        "Juz": juz,
+        "JuzNameArabic": juzNameArabic,
+        "JuzNameEnglish": juzNameEnglish,
+    };
 }

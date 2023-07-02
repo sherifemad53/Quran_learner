@@ -8,8 +8,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 
-import 'string_similarity.dart';
-import 'decode_stt.dart';
+import '../../utils/string_similarity.dart';
+import '../../models/speech_to_text_model.dart';
 
 import '../../models/user_model.dart' as model;
 
@@ -24,8 +24,6 @@ class SpeechToText {
   // final _record = Record();
   final _recordnew = FlutterSoundRecorder();
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
-
-
 
   Future<void> _speechToText(
       String apiUrl, String? filename, model.User? user) async {
@@ -46,9 +44,10 @@ class SpeechToText {
       );
       try {
         if (response.statusCode == 200) {
-          recitedText = decodeSttFromJson(utf8.decode(response.bodyBytes))
-              .data!
-              .elementAt(0);
+          recitedText =
+              speechToTextModelFromJson(utf8.decode(response.bodyBytes))
+                  .data!
+                  .elementAt(0);
           debugPrint(recitedText);
         } else if (response.statusCode >= 400 && response.statusCode <= 499) {
           debugPrint(response.body);
@@ -77,10 +76,15 @@ class SpeechToText {
     return modifiedInput;
   }
 
-  String _checkReading(String arabicAyatext,bool isMemorizationMode) {
+  String _checkReading(String arabicAyatext, bool isMemorizationMode) {
     String temp = '';
     recitedText = _swapShaddaPosition(recitedText);
-    temp = isMemorizationMode ? StringSimilarity.similarity(arabicAyatext, recitedText).toString() : StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
+    if (isMemorizationMode) {
+      temp = StringSimilarity.similarity(arabicAyatext, recitedText).toString();
+    } else {
+      temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
+    }
+
     // if (arabicAyatext.length + 5 >= recitedText.length) {
     //   temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
     // } else if (arabicAyatext.length + 5 < recitedText.length) {
@@ -123,13 +127,14 @@ class SpeechToText {
     }
   }
 
-  Future<String> stopRecord(
-      String apiUrl, model.User? user, String arabicSurahText,bool isMemorizationMode) async {
+  Future<String> stopRecord(String apiUrl, model.User? user,
+      String arabicSurahText, bool isMemorizationMode) async {
     await _recordnew.stopRecorder();
     _recordnew.closeRecorder();
     return (await _upload(user, filepath, filename)
         .then((value) async => await _speechToText(apiUrl, filename, user))
-        .then((value) => recitedText = _checkReading(arabicSurahText,isMemorizationMode)));
+        .then((value) =>
+            recitedText = _checkReading(arabicSurahText, isMemorizationMode)));
   }
 
   void startRecord(String surahNo, String ayaNo) async {
@@ -144,9 +149,9 @@ class SpeechToText {
       //bitrate = 16 per sample 16k  so  16 * 16k / 1000 kbs
       await _recordnew.startRecorder(
         numChannels: 1,
-        bitRate: 192000,
+        bitRate: 256000,
         codec: Codec.pcm16WAV,
-        sampleRate: 20000,
+        sampleRate: 16000,
         toFile: filepath,
       );
       debugPrint(filepath);

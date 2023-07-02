@@ -1,17 +1,19 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quranic_tool_box/models/surah_model.dart';
-import 'package:quranic_tool_box/providers/quran_provider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
-import '/app_routes.dart';
-import '/common/constants.dart';
-import '/providers/user_provider.dart';
+import '../../models/surah_model.dart';
+import '../../models/juz_model.dart';
+import '../../models/user_model.dart';
+
+import '../../providers/quran_provider.dart';
+import '../../providers/user_provider.dart';
+
+import '../../app_routes.dart';
+import '../../common/constants.dart';
 
 import 'widgets/custom_nav_drawer.dart';
 import 'widgets/custom_appbar.dart';
-import '/data/quran_list.dart';
-import '../../models/user_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -21,16 +23,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> searchablequranlist = quranList;
   User? user;
   bool _isloading = true;
   QuranProvider quranProvider = QuranProvider();
 
   List<SurahModel> surahs = [];
-
+  List<JuzModel> juzs = [];
   void searchSurah(String a) async {
     surahs = quranProvider.getSearchedSurahModel(a);
   }
+
+  List<String> tabs = ['Surah', 'Juz', 'Page', 'hhhh'];
 
   @override
   void initState() {
@@ -51,11 +54,13 @@ class _HomePageState extends State<HomePage> {
     //GET SURAH MODEL DATA
     await quranProvider.init();
     surahs = quranProvider.getSurahModel();
+    juzs = quranProvider.getJuzModel();
 
     await Future.delayed(const Duration(milliseconds: 200));
   }
 
   Size? size;
+  int current = 0;
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -65,20 +70,20 @@ class _HomePageState extends State<HomePage> {
         ? print('hello')
         : print('world');
 
-    // Provider.of<SettingsProvider>(context).setTheme(false);
-
     if (!_isloading) user = Provider.of<UserProvider>(context).getUser;
+
     return _isloading
         ? const Scaffold(
             body: Center(child: CircularProgressIndicator.adaptive()),
           )
         : Scaffold(
             drawer: const CustomNavigationDrawer(),
-            body: SafeArea(
-              child: SingleChildScrollView(
+            body: SizedBox(
+              height: size!.height,
+              child: SafeArea(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CustomAppBar(),
                     Container(
@@ -109,7 +114,9 @@ class _HomePageState extends State<HomePage> {
                                   .pushNamed(AppRoutes.profile);
                             },
                             icon: Image.asset(
-                              'assets/icons/male_profile_icon.png',
+                              user!.gender == 'male'
+                                  ? 'assets/icons/male_icon.png'
+                                  : 'assets/icons/female_icon.png',
                               width: 45,
                             ),
                           ),
@@ -137,12 +144,14 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Container(
-                      height: size!.height * 0.6,
+                      height: size!.height * 0.58,
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Card(
                         elevation: 3,
                         child: ListView.builder(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return InkWell(

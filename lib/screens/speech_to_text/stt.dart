@@ -14,7 +14,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'components/quran_list.dart';
-import '../surahview/string_similarity.dart';
+import '../../utils/string_similarity.dart';
 import 'components/decode_stt.dart';
 
 import '../../providers/user_provider.dart';

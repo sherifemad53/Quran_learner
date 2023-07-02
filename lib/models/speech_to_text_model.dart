@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-DecodeStt decodeSttFromJson(String str) => DecodeStt.fromJson(json.decode(str));
+SpeechToTextModel speechToTextModelFromJson(String str) => SpeechToTextModel.fromJson(json.decode(str));
 
-String decodeSttToJson(DecodeStt data) => json.encode(data.toJson());
+String speechToTextModelToJson(SpeechToTextModel data) => json.encode(data.toJson());
 
-class DecodeStt {
-  DecodeStt({
+class SpeechToTextModel {
+  SpeechToTextModel({
     this.data,
     this.isGenerating,
     this.duration,
@@ -17,7 +17,7 @@ class DecodeStt {
   double? duration;
   double? averageDuration;
 
-  factory DecodeStt.fromJson(Map<String, dynamic> json) => DecodeStt(
+  factory SpeechToTextModel.fromJson(Map<String, dynamic> json) => SpeechToTextModel(
         data: List<String>.from(json["data"].map((x) => x)),
         isGenerating: json["is_generating"],
         duration: json["duration"].toDouble(),

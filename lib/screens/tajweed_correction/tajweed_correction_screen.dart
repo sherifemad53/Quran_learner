@@ -6,9 +6,9 @@ import '../../common/constants.dart';
 import '../../providers/user_provider.dart';
 import '../../models/user_model.dart' as model;
 
-import 'tajweed_data.dart';
+import '../../data/tajweed_data.dart';
 import 'tajweed_to_score.dart';
-import 'tajweed_to_score_model.dart';
+import '../../models/tajweed_to_score_model.dart';
 
 class TajweedCorrectionScreen extends StatefulWidget {
   const TajweedCorrectionScreen({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
   String? selectedRule = tajweedRulesData[0]['type'];
   int? selectedRuleIndex = 0;
   String? selectedWord;
-  String? selectedApi;
+  String? selectedApi = tajweedRulesData[0]['apilink'];
 
   model.User? user;
 
@@ -144,11 +144,17 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           setState(() {
-                            isPressed = true;
+                            isPressed = !isPressed;
+                            isRecording = !isRecording;
                           });
-                          debugPrint(selectedApi);
-                          tajweedscore = await TajwedToScore.instance.record(
-                              selectedApi!, user, selectedRuleIndex.toString());
+
+                          tajweedscore = await TajwedToScore.instance
+                              .record(selectedApi!, user,
+                                  selectedRuleIndex.toString(), isRecording)
+                              .whenComplete(() {
+                            isPressed = false;
+                            isRecording = false;
+                          });
 
                           setState(() {
                             isPressed = false;
@@ -208,7 +214,8 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                             ),
                           ),
                         )
-                      : const Center(child: Text('sss'))),
+                      : const Center(
+                          child: CircularProgressIndicator.adaptive())),
             ],
           ),
         ),
