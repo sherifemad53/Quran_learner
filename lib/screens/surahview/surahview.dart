@@ -8,7 +8,7 @@ import '../../providers/user_provider.dart';
 import '../../common/constants.dart';
 import '../../models/user_model.dart' as model;
 
-import 'Surah_view_settings.dart';
+import 'surah_view_settings.dart';
 import 'speech_to_text.dart';
 
 class SurahViewScreen extends StatefulWidget {
