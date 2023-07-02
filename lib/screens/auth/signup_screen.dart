@@ -59,12 +59,13 @@ class _SignupScreenState extends State<SignupScreen> {
       _formkey.currentState!.save();
 
       Authentication.createUser(
-          _nameTextEditingController.text.trim(),
-          _userNameTextEditingController.text.trim(),
-          _userEmailTextEditingController.text.trim(),
-          _userPasswordTextEditingController.text.trim(),
-          ugender,
-          _userBirthdayDate);
+              _nameTextEditingController.text.trim(),
+              _userNameTextEditingController.text.trim(),
+              _userEmailTextEditingController.text.trim(),
+              _userPasswordTextEditingController.text.trim(),
+              ugender,
+              _userBirthdayDate)
+          .then((value) => Navigator.of(context).pop());
     }
   }
 
@@ -89,132 +90,135 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            const WelcomeTitle(),
-            Container(
-              //padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.all(10),
-              child: Form(
-                key: _formkey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    FormTextField(
-                        key: const ValueKey('name'),
-                        labeltext: "Name",
-                        validator: FormValidator.nameValidator,
-                        textEditingController: _nameTextEditingController,
-                        isObscuretext: false),
-                    FormTextField(
-                        key: const ValueKey('username'),
-                        labeltext: "User Name",
-                        validator: FormValidator.usernameValidator,
-                        textEditingController: _userNameTextEditingController,
-                        isObscuretext: false),
-                    FormTextField(
-                        key: const ValueKey('email'),
-                        labeltext: 'Email Address',
-                        validator: FormValidator.emailValidator,
-                        textEditingController: _userEmailTextEditingController,
-                        isObscuretext: false),
-                    FormTextField(
-                        key: const ValueKey('password'),
-                        labeltext: 'Password',
-                        validator: FormValidator.passwordValidator,
-                        textEditingController:
-                            _userPasswordTextEditingController,
-                        isObscuretext: true),
-                    // passwordtestfield
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "Gender: ",
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        Expanded(
-                          child: RadioListTile<Gender>(
-                            contentPadding: const EdgeInsets.all(0),
-                            value: Gender.male,
-                            groupValue: _userGender,
-                            onChanged: (value) {
-                              _userGender = value as Gender;
-                              setState(() {});
-                            },
-                            title: const Text('Male'),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const WelcomeTitle(),
+              Container(
+                //padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
+                child: Form(
+                  key: _formkey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FormTextField(
+                          key: const ValueKey('name'),
+                          labeltext: "Name",
+                          validator: FormValidator.nameValidator,
+                          textEditingController: _nameTextEditingController,
+                          isObscuretext: false),
+                      FormTextField(
+                          key: const ValueKey('username'),
+                          labeltext: "User Name",
+                          validator: FormValidator.usernameValidator,
+                          textEditingController: _userNameTextEditingController,
+                          isObscuretext: false),
+                      FormTextField(
+                          key: const ValueKey('email'),
+                          labeltext: 'Email Address',
+                          validator: FormValidator.emailValidator,
+                          textEditingController:
+                              _userEmailTextEditingController,
+                          isObscuretext: false),
+                      FormTextField(
+                          key: const ValueKey('password'),
+                          labeltext: 'Password',
+                          validator: FormValidator.passwordValidator,
+                          textEditingController:
+                              _userPasswordTextEditingController,
+                          isObscuretext: true),
+                      // passwordtestfield
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "Gender: ",
+                            style: Theme.of(context).textTheme.headlineMedium,
                           ),
-                        ),
-                        Expanded(
-                          child: RadioListTile<Gender>(
-                            contentPadding: const EdgeInsets.all(0),
-                            value: Gender.female,
-                            groupValue: _userGender,
-                            onChanged: (value) {
-                              _userGender = value as Gender;
-                              setState(() {});
-                            },
-                            title: const Text('Female'),
+                          Expanded(
+                            child: RadioListTile<Gender>(
+                              contentPadding: const EdgeInsets.all(0),
+                              value: Gender.male,
+                              groupValue: _userGender,
+                              onChanged: (value) {
+                                _userGender = value as Gender;
+                                setState(() {});
+                              },
+                              title: const Text('Male'),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          'Birthday:',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        const SizedBox(
-                          width: 20.0,
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              elevation: 1),
-                          onPressed: () => _selectDate(context),
-                          child: _isSelectedDate
-                              ? Text(
-                                  '${_userBirthdayDate.month.toString()}/${_userBirthdayDate.year.toString()}')
-                              : const Text('Select date'),
-                        ),
-                        const SizedBox(
-                          width: 20.0,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                  ],
+                          Expanded(
+                            child: RadioListTile<Gender>(
+                              contentPadding: const EdgeInsets.all(0),
+                              value: Gender.female,
+                              groupValue: _userGender,
+                              onChanged: (value) {
+                                _userGender = value as Gender;
+                                setState(() {});
+                              },
+                              title: const Text('Female'),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Birthday:',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                          const SizedBox(
+                            width: 20.0,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                elevation: 1),
+                            onPressed: () => _selectDate(context),
+                            child: _isSelectedDate
+                                ? Text(
+                                    '${_userBirthdayDate.month.toString()}/${_userBirthdayDate.year.toString()}')
+                                : const Text('Select date'),
+                          ),
+                          const SizedBox(
+                            width: 20.0,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            CustomElevatedButton(
-              label: "Sign Up",
-              size: size,
-              submit: _submit,
-            ),
-            // const SizedBox(
-            //   height: 7,
-            // ),
-            // const Text(
-            //   'OR',
-            //   style: TextStyle(
-            //     fontSize: 25,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
-            // const SizedBox(height: 7),
-            // SignupWithGoogleButton(
-            //   size: size,
-            //   submit: _submit,
-            // ),
-          ],
+              CustomElevatedButton(
+                label: "Sign Up",
+                size: size,
+                submit: _submit,
+              ),
+              // const SizedBox(
+              //   height: 7,
+              // ),
+              // const Text(
+              //   'OR',
+              //   style: TextStyle(
+              //     fontSize: 25,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+              // const SizedBox(height: 7),
+              // SignupWithGoogleButton(
+              //   size: size,
+              //   submit: _submit,
+              // ),
+            ],
+          ),
         ),
       ),
     );
