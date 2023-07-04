@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/surah_provider.dart';
 import '../../providers/user_provider.dart';
-import '../../common/constants.dart';
 import '../../models/user_model.dart' as model;
 
 import 'surah_view_settings.dart';
@@ -23,8 +22,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
   model.User? user;
 
   final String quranfont = 'al_majeed_quranic';
-  final double quranfontSize = 24;
-  final double mushafFontSize = 40;
+  double? quranfontSize = 24;
 
   String text = ' ';
 
@@ -62,6 +60,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
   Widget build(BuildContext context) {
     user = Provider.of<UserProvider>(context).getUser;
     settingsProvider = Provider.of<SettingsProvider>(context);
+    quranfontSize = Provider.of<SettingsProvider>(context).getSurahViewFontSize;
     final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
     final args = ModalRoute.of(context)!.settings.arguments as Map;
     String surahName = args['SurahNameArabic'];
@@ -74,7 +73,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
       isMemoriztingMode = true;
     }
 
-    // print(isMemoriztingMode);
+    print("isMemoriztion = $isMemoriztingMode");
 
     if (!isDoneLoading) {
       getAyas(surahName, surahNo);
@@ -107,7 +106,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                 if (!isScrolling) const RetunBasmala(),
                 SizedBox(
                   height: !isMemoriztingMode
-                      ? MediaQuery.of(context).size.height * 0.71
+                      ? MediaQuery.of(context).size.height * 0.70
                       : MediaQuery.of(context).size.height * 0.77,
                   child: GestureDetector(
                     onVerticalDragDown: (details) {
@@ -231,22 +230,23 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
             ),
             bottomSheet: Container(
               height: !isMemoriztingMode
-                  ? MediaQuery.of(context).size.height * 0.20
+                  ? MediaQuery.of(context).size.height * 0.21
                   : MediaQuery.of(context).size.height * 0.12,
               decoration: BoxDecoration(
                   color: isDark ? Colors.blueGrey : Colors.amber[100],
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
-              padding: const EdgeInsets.all(kdefualtPadding),
+              padding: const EdgeInsets.all(7),
               width: double.infinity,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   if (!isMemoriztingMode)
                     text.isNotEmpty
                         ? SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.07,
+                            height: MediaQuery.of(context).size.height * 0.09,
+                            width: double.infinity,
                             child: SingleChildScrollView(
                                 child: Html(
                               data: text,
@@ -254,21 +254,25 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                           )
                         : const SizedBox(),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              isMemoriztingMode
-                                  ? "Memorization Mode"
-                                  : "Recitaion Mode",
-                              style: Theme.of(context).textTheme.bodyMedium),
-                          Text(
-                            "Begin from Verse ($verseNumber)",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                isMemoriztingMode
+                                    ? "Memorization Mode"
+                                    : "Recitaion Mode",
+                                style: Theme.of(context).textTheme.bodySmall),
+                            Text(
+                              "Begin from Verse ($verseNumber)",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
                       ),
                       TextButton.icon(
                         onPressed: () async {
@@ -316,7 +320,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             backgroundColor:
                                 isPressed ? Colors.red : Colors.grey),
                       )

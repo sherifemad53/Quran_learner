@@ -28,12 +28,26 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
     tabController!.dispose();
   }
 
+  List<String> tabs = ['Recitaion', 'Memorization'];
+
   bool _isEnglishTransEnabled = false;
 
   SettingsProvider? settingsProvider;
+  int current = 0;
+  Size? size;
+  double? _currentSliderValue = 24;
   @override
   Widget build(BuildContext context) {
     settingsProvider = Provider.of<SettingsProvider>(context);
+    _currentSliderValue =
+        Provider.of<SettingsProvider>(context).getSurahViewFontSize;
+    if (Provider.of<SettingsProvider>(context).getSurahViewMode ==
+        'Recitation') {
+      current = 0;
+    } else {
+      current = 1;
+    }
+    size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -43,21 +57,52 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
       body: SettingsList(
         sections: [
           CustomSettingsSection(
-            child: TabBar(
-                onTap: (value) {
-                  if (value == 0) {
-                    settingsProvider!.updateSurahViewMode('Recitation');
-                  } else if (value == 1) {
-                    settingsProvider!.updateSurahViewMode('Memorization');
-                  }
-                },
-                controller: tabController,
-                padding: const EdgeInsets.all(5),
-                labelPadding: const EdgeInsets.all(5),
-                tabs: const [
-                  Text('Recitation'),
-                  Text('Memorization'),
-                ]),
+            child: Center(
+              child: SizedBox(
+                height: size!.height * 0.1,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(15),
+                  itemCount: tabs.length,
+                  scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () {
+                      if (index == 0) {
+                        settingsProvider!.updateSurahViewMode('Recitation');
+                      } else {
+                        settingsProvider!.updateSurahViewMode('Memorization');
+                      }
+                      setState(() {});
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.all(7),
+                      padding: const EdgeInsets.all(7),
+                      width: size!.width * 0.4,
+                      height: size!.height * 0.1,
+                      decoration: BoxDecoration(
+                        color:
+                            current == index ? Colors.white70 : Colors.white54,
+                        borderRadius: current == index
+                            ? BorderRadius.circular(15)
+                            : BorderRadius.circular(10),
+                        border: current == index
+                            ? Border.all(color: Colors.orange, width: 2)
+                            : null,
+                      ),
+                      child: Center(
+                        child: FittedBox(
+                          child: Text(tabs[index],
+                              style:
+                                  Theme.of(context).textTheme.headlineMedium),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
           SettingsSection(
             title: const Text('Recitation section'),
@@ -75,14 +120,33 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
               ),
             ],
           ),
-          SettingsSection(
-            title: const Text('Recitation section'),
-            tiles: [
-              SettingsTile.switchTile(
-                  initialValue: false,
-                  onToggle: (value) {},
-                  title: const Text('Enable custom theme'))
-            ],
+          CustomSettingsSection(
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Surah View Font Size",
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  Slider(
+                    value: _currentSliderValue!,
+                    max: 42,
+                    divisions: 9,
+                    min: 24,
+                    
+                    label: _currentSliderValue!.round().toString(),
+                    onChanged: (double value) {
+                      settingsProvider!.updateSurahViewFontSize(value);
+                      setState(() {
+                        _currentSliderValue = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
           )
         ],
       ),

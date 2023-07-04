@@ -2,7 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsProvider extends ChangeNotifier {
-  Future<void> init() async {}
+  SettingsProvider() {
+    init();
+  }
+
+  void init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _isDark = prefs.getBool('AppTheme');
+    _isEnglishTransEnabled = prefs.getBool('EnglishView');
+    _surahViewMode = prefs.getString('SurahViewMode');
+    _surahViewFontSize = prefs.getDouble('FontSize');
+  }
 
   bool? _isDark = false;
   bool? get getTheme => _isDark;
@@ -12,6 +22,17 @@ class SettingsProvider extends ChangeNotifier {
 
   bool? _isEnglishTransEnabled = false;
   bool? get getIsEnglishTransEnabled => _isEnglishTransEnabled;
+
+  double? _surahViewFontSize = 26;
+  double? get getSurahViewFontSize => _surahViewFontSize;
+
+  void updateSurahViewFontSize(double fontSize) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('FontSize', fontSize);
+
+    _surahViewFontSize = prefs.getDouble('FontSize');
+    notifyListeners();
+  }
 
   void updateTheme(bool isDark) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

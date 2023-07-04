@@ -80,17 +80,22 @@ class StringSimilarity {
   }
 
   static int _levenshtein(String a, String b) {
+    // Convert the strings to uppercase for case-insensitive comparison
     a = a.toUpperCase();
     b = b.toUpperCase();
 
+    // Get the lengths of the two strings
     int sa = a.length;
     int sb = b.length;
+
     int i, j, cost, min1, min2, min3;
     int levenshtein;
 
+    // Create a matrix to store the intermediate values
     List<List<int>> d =
         List.generate(sa + 1, (int i) => List.filled(sb + 1, 0));
 
+    // Handle empty strings
     if (a.isEmpty) {
       levenshtein = b.length;
       return (levenshtein);
@@ -99,12 +104,16 @@ class StringSimilarity {
       levenshtein = a.length;
       return (levenshtein);
     }
+
+    // Initialize the first row and column of the matrix
     for (i = 0; i <= sa; i++) {
       d[i][0] = i;
     }
     for (j = 0; j <= sb; j++) {
       d[0][j] = j;
     }
+
+    // Calculate the Levenshtein distance
     for (i = 1; i <= a.length; i++) {
       for (j = 1; j <= b.length; j++) {
         if (a[i - 1] == b[j - 1]) {
@@ -120,6 +129,8 @@ class StringSimilarity {
         d[i][j] = _min(min1, _min(min2, min3));
       }
     }
+
+    // The final value in the bottom-right cell represents the Levenshtein distance
     levenshtein = d[a.length][b.length];
     return (levenshtein);
   }

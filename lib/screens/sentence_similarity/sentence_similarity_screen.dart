@@ -31,8 +31,6 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      //TODO: 1- add a filter for choosing the Aya quran
-      //TODO: 2- remember the searched data
       body: Container(
         margin: const EdgeInsets.all(5),
         padding: const EdgeInsets.symmetric(horizontal: 5),
