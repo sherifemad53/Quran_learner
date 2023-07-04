@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quranic_tool_box/app_routes.dart';
 
 import '/services/authentication.dart';
 import '/providers/user_provider.dart';
@@ -13,10 +14,14 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
+      backgroundColor: Colors.brown.shade100,
       appBar: AppBar(
-        title: Text(
+        backgroundColor: const Color.fromARGB(255, 126, 102, 82),
+        title: const Text(
           'Profile',
-          style: Theme.of(context).textTheme.headlineLarge,
+          style: TextStyle(
+              color: Color.fromARGB(255, 255, 255, 255),
+              fontSize: 25), //Theme.of(context).textTheme.headlineLarge,
         ),
       ),
       body: Column(
@@ -37,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              user.name.toUpperCase(),
+                              user.name.toUpperCase(), //USER NAME DISPALY
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             //Email
@@ -50,6 +55,13 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       //edit profile button
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey.shade100,
+                            elevation: 10,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            foregroundColor:
+                                const Color.fromARGB(255, 0, 0, 0)),
                         child: const Text('Edit Profile'),
                         onPressed: () {},
                       ),
@@ -63,35 +75,80 @@ class ProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ListTile(
-                        leading: const Icon(Icons.settings),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                        leading:
+                            const Icon(Icons.settings, color: Colors.black),
+                        trailing: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey.shade100,
+                                elevation: 10,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 15),
+                                foregroundColor:
+                                    const Color.fromARGB(255, 0, 0, 0)),
+                            child: const Icon(Icons.arrow_forward_ios,
+                                color: Colors.black),
+                            onPressed: () {}),
                         title: Text(
                           'Settings',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                       ListTile(
-                        leading: const Icon(Icons.settings),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                        leading:
+                            const Icon(Icons.settings, color: Colors.black),
+                        trailing: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey.shade100,
+                                elevation: 10,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 15),
+                                foregroundColor:
+                                    const Color.fromARGB(255, 0, 0, 0)),
+                            child: const Icon(Icons.arrow_forward_ios,
+                                color: Colors.black),
+                            onPressed: () {}),
                         title: Text(
                           'Settings',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                       ListTile(
-                        leading: const Icon(Icons.settings),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                        leading:
+                            const Icon(Icons.bookmark, color: Colors.black),
+                        trailing: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey.shade100,
+                                elevation: 10,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 15),
+                                foregroundColor:
+                                    const Color.fromARGB(255, 0, 0, 0)),
+                            child: const Icon(Icons.arrow_forward_ios,
+                                color: Colors.black),
+                            onPressed: () {}),
                         title: Text(
-                          'Terms and Conditons',
+                          'Terms & Conditons',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                       ListTile(
-                        leading: const Icon(Icons.settings),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                        leading: const Icon(Icons.info, color: Colors.black),
                         title: Text(
                           'About us',
                           style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        trailing: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey.shade100,
+                              elevation: 10,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 15),
+                              foregroundColor:
+                                  const Color.fromARGB(255, 0, 0, 0)),
+                          child: const Icon(Icons.arrow_forward_ios,
+                              color: Colors.black),
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(AppRoutes.aboutUs),
                         ),
                       ),
                     ],
@@ -99,6 +156,12 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey.shade100,
+                      elevation: 10,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      foregroundColor: const Color.fromARGB(255, 0, 0, 0)),
                   label: const Text('Logout'),
                   icon: const Icon(Icons.logout),
                   onPressed: () {

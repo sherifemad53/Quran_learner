@@ -11,72 +11,76 @@ class WelcomeScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+        backgroundColor: Colors.brown.shade100,
         body: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Hero(
-          tag: 'welcome_image',
-          child: Image(
-            image: const AssetImage(kWelcomeImagePath),
-            width: size.width,
-            height: size.height * 0.5,
-            alignment: Alignment.center,
-          ),
-        ),
-        kSizedBox,
-        Padding(
-          padding: const EdgeInsets.all(kdefualtPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Text(
-                kAppTitle,
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              Text(
-                kWelcomeSubtitle,
-                style: Theme.of(context).textTheme.bodySmall,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(
-              width: size.width * 0.9,
-              child: ElevatedButton(
-                onPressed: () =>
-                    Navigator.of(context).pushNamed(AppRoutes.signup),
-                style: ElevatedButton.styleFrom(
-                    elevation: 1,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 30),
-                    foregroundColor: Colors.black),
-                child: Text(kSignup.toUpperCase()),
+            Hero(
+              tag: 'welcome_image',
+              child: Image(
+                image: const AssetImage(kWelcomeImagePath),
+                width: size.width,
+                height: size.height * 0.5,
+                alignment: Alignment.center,
               ),
             ),
-            SizedBox(
-              width: size.width * 0.9,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                    //foregroundColor: Colors.blueGrey,
-                    splashFactory: NoSplash.splashFactory),
-                onPressed: () =>
-                    Navigator.of(context).pushNamed(AppRoutes.login),
-                child: Text.rich(TextSpan(children: [
-                  TextSpan(
-                      text: kAlreadyHaveAccount,
-                      style: Theme.of(context).textTheme.bodySmall),
-                  TextSpan(text: kLogin.toUpperCase()),
-                ])),
+            kSizedBox,
+            Padding(
+              padding: const EdgeInsets.all(kdefualtPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    kAppTitle,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                  Text(
+                    kWelcomeSubtitle,
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
+            ),
+            Column(
+              children: [
+                SizedBox(
+                  width: size.width * 0.9,
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.signup),
+                    style: ElevatedButton.styleFrom(
+                        elevation: 3,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 30),
+                        foregroundColor: const Color.fromARGB(255, 0, 0, 0)),
+                    child: Text(kSignup.toUpperCase()),
+                  ),
+                ),
+                SizedBox(
+                  width: size.width * 0.9,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                        foregroundColor: const Color.fromARGB(255, 33, 168, 44),
+                        splashFactory: NoSplash.splashFactory),
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.login),
+                    child: Text.rich(TextSpan(children: [
+                      TextSpan(
+                          text: kAlreadyHaveAccount,
+                          style: Theme.of(context).textTheme.bodySmall),
+                      TextSpan(
+                          text: kLogin.toUpperCase(),
+                          style: const TextStyle(
+                              decoration: TextDecoration.underline)),
+                    ])),
+                  ),
+                ),
+              ],
             ),
           ],
-        ),
-      ],
-    ));
+        ));
   }
 }

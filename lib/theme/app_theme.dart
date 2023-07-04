@@ -5,9 +5,12 @@ import '/theme/widget_themes/text_theme.dart';
 class TAppTheme {
   static ThemeData lightTheme = ThemeData(
     //TODO ADD ALL THEMEDATA ARGUMENTS
+    //colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber),
+
     brightness: Brightness.light,
     primarySwatch: Colors.grey,
-    appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
+    appBarTheme: const AppBarTheme(
+        color: Color.fromARGB(255, 255, 255, 255), elevation: 0),
     useMaterial3: true,
     //backgroundColor: kBackgroundColor,
     // bottomNavigationBarTheme:
