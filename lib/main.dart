@@ -14,7 +14,6 @@ import 'screens/about_us/aboutus_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/profile/profile_screen.dart';
-import 'screens/speech_to_text/stt.dart';
 import 'screens/welcome/welcome_screen.dart';
 import 'screens/surahview/surahview.dart';
 import 'screens/tajweed_correction/tajweed_correction_screen.dart';
@@ -85,7 +84,6 @@ class MyApp extends StatelessWidget {
           AppRoutes.login: (context) => const LoginScreen(),
           AppRoutes.ayatMotshbha: (context) => const SentenceSimilarityScreen(),
           AppRoutes.ahadithMotshbha: (context) => const AhadithScreen(),
-          AppRoutes.recitation: (context) => const SpeechToTextScreen(),
           AppRoutes.tajweedCorrection: (context) =>
               const TajweedCorrectionScreen()
         },

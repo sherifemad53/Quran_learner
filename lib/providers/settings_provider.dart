@@ -8,10 +8,15 @@ class SettingsProvider extends ChangeNotifier {
 
   void init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _isDark = prefs.getBool('AppTheme');
+
     _isEnglishTransEnabled = prefs.getBool('EnglishView');
+    _isEnglishTransEnabled ??= false;
+
     _surahViewMode = prefs.getString('SurahViewMode');
+    _surahViewMode ??= 'Recitation';
+
     _surahViewFontSize = prefs.getDouble('FontSize');
+    _surahViewFontSize ??= 24;
   }
 
   bool? _isDark = false;

@@ -11,9 +11,7 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-          right: kdefualtRightPadding,
-          left: kdefualtLeftPadding,
-          top: kdefualtTopPadding),
+          right: 20, left: kdefualtLeftPadding, top: kdefualtTopPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

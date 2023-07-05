@@ -36,6 +36,6 @@ const double kdefualtTopPadding = 5;
 const double kdefualtBottomPadding = 5;
 
 //Margin sizing
-const double kdefualtMargin = 10;
+const double kdefualtMargin = 5;
 const double kdefualtHorizontalMargin = 10;
-const double kdefualtVerticalMargin = 10;
+const double kdefualtVerticalMargin = 5;

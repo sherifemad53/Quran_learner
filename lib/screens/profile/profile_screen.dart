@@ -19,98 +19,147 @@ class ProfileScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineLarge,
         ),
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(kdefualtPadding),
-            margin: const EdgeInsets.all(kdefualtMargin),
-            child: Column(
+      body: Container(
+        padding: const EdgeInsets.all(kdefualtPadding),
+        margin: const EdgeInsets.all(kdefualtMargin),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //Name
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.2,
+                Container(
+                  padding: const EdgeInsets.all(8),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          children: [
-                            Text(
-                              user.name.toUpperCase(),
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                            //Email
-                            Text(
-                              user.email,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          ],
+                      Image(
+                        image: AssetImage(
+                          user.gender == 'male'
+                              ? 'assets/icons/male_icon.png'
+                              : 'assets/icons/female_icon.png',
                         ),
+                        width: 90,
                       ),
-                      //edit profile button
-                      ElevatedButton(
-                        child: const Text('Edit Profile'),
-                        onPressed: () {},
+                      Text(
+                        user.name.toUpperCase(),
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      //Email
+                      Text(
+                        user.email,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
-                ),
-
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.settings),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        title: Text(
-                          'Settings',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.settings),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        title: Text(
-                          'Settings',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.settings),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        title: Text(
-                          'Terms and Conditons',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.settings),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        title: Text(
-                          'About us',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                ElevatedButton.icon(
-                  label: const Text('Logout'),
-                  icon: const Icon(Icons.logout),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Authentication.signOut();
-                  },
                 ),
               ],
             ),
-          ),
-        ],
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    child: ListTile(
+                      leading: const Icon(Icons.info_outline),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      title: Text(
+                        'Introduction',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: ListTile(
+                      leading: const Icon(Icons.bug_report_outlined),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      title: Text(
+                        'Bug Report',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: ListTile(
+                      leading: const Icon(Icons.help_outline_outlined),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      title: Text(
+                        'Help Guide',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: ListTile(
+                      leading: const Icon(Icons.gavel),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      title: Text(
+                        'Terms and Conditons',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: ListTile(
+                      leading: const Icon(Icons.group),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                      title: Text(
+                        'About us',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ElevatedButton.icon(
+              label: const Text('Logout'),
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                showAlertDialog(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+showAlertDialog(BuildContext context) {
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: const Text("Cancel"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+  Widget continueButton = TextButton(
+    child: const Text("Continue"),
+    onPressed: () {
+      Navigator.of(context).pop();
+      Authentication.signOut();
+    },
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text("Confirmation"),
+    content: const Text("Are you sure you wnat to logout"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

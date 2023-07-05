@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../navigator_key.dart';
 import '../../utils/string_similarity.dart';
 import '../../models/speech_to_text_model.dart';
 
@@ -93,12 +94,17 @@ class SpeechToText {
   String _checkReading(String arabicAyatext, bool isMemorizationMode) {
     String temp = '';
     int threshold = 5;
-    print(arabicAyatext);
     if (isMemorizationMode) {
       if (arabicAyatext.length + threshold >= recitedText.length) {
         temp =
             StringSimilarity.similarity(arabicAyatext, recitedText).toString();
       } else {
+        ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
+          SnackBar(
+            content: const Text('Not corrent Please try again'),
+            backgroundColor: Theme.of(navigatorKey.currentContext!).errorColor,
+          ),
+        );
         temp = (0.0).toString();
       }
     } else {
@@ -106,25 +112,8 @@ class SpeechToText {
       temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
     }
 
-    // if (arabicAyatext.length + 5 >= recitedText.length) {
-    //   temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);
-    // } else if (arabicAyatext.length + 5 < recitedText.length) {
-    //   temp = 'Please say it again as it is wrong';
-    // } else if(isMemorizationMode) {
-
-    // }
-    // try {
-    // } on RangeError {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: const Text(
-    //           'You haven\'t completed recitation  please start again'),
-    //       backgroundColor: Theme.of(context).errorColor,
-    //     ),
-    //   );
-    // } catch (err) {
-    //   debugPrint('Error occured');
-    // }
+    debugPrint("orignal arabic text: $arabicAyatext");
+    debugPrint("transcripted text: $recitedText");
     return temp;
   }
 

@@ -118,7 +118,7 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.20,
+                height: MediaQuery.of(context).size.height * 0.21,
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(
                     vertical: kdefualtVerticalMargin),
@@ -134,11 +134,11 @@ class _TajweedCorrectionScreenState extends State<TajweedCorrectionScreen> {
                     Text(
                       "Say the word below to check for selected tajweed rule",
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     Text(
                       selectedWord == null ? '' : selectedWord!,
-                      style: const TextStyle(fontSize: 30),
+                      style: const TextStyle(fontSize: 28),
                     ),
                     Center(
                       child: ElevatedButton.icon(

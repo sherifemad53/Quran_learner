@@ -135,7 +135,6 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
                     max: 42,
                     divisions: 9,
                     min: 24,
-                    
                     label: _currentSliderValue!.round().toString(),
                     onChanged: (double value) {
                       settingsProvider!.updateSurahViewFontSize(value);

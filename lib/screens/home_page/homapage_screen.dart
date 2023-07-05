@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../models/surah_model.dart';
 import '../../models/juz_model.dart';
@@ -25,24 +24,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   User? user;
   bool _isloading = true;
+  //Providers the surahs,juzs
   QuranProvider quranProvider = QuranProvider();
 
   List<SurahModel> surahs = [];
   List<JuzModel> juzs = [];
-  void searchSurah(String a) async {
-    surahs = quranProvider.getSearchedSurahModel(a);
-  }
-
-  List<String> tabs = ['Surah', 'Juz', 'Page', 'hhhh'];
 
   @override
   void initState() {
     super.initState();
-    init().whenComplete(() => {
-          setState(() {
-            _isloading = false;
-          })
-        });
+    //when the init function finishes it sets the isloading to false
+    init().whenComplete(() => setState(() {
+          _isloading = false;
+        }));
   }
 
   Future<void> init() async {
@@ -56,39 +50,35 @@ class _HomePageState extends State<HomePage> {
     surahs = quranProvider.getSurahModel();
     juzs = quranProvider.getJuzModel();
 
+    //Simple delay to illustrate loading
     await Future.delayed(const Duration(milliseconds: 200));
   }
 
+  void searchSurah(String a) async {
+    surahs = quranProvider.getSearchedSurahModel(a);
+  }
+
   Size? size;
-  int current = 0;
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    Provider.of<ConnectivityResult>(context) == ConnectivityResult.wifi ||
-            Provider.of<ConnectivityResult>(context) ==
-                ConnectivityResult.mobile
-        ? print('hello')
-        : print('world');
-
     if (!_isloading) user = Provider.of<UserProvider>(context).getUser;
-
     return _isloading
         ? const Scaffold(
             body: Center(child: CircularProgressIndicator.adaptive()),
           )
         : Scaffold(
             drawer: const CustomNavigationDrawer(),
-            body: SizedBox(
-              height: size!.height,
-              child: SafeArea(
+            body: SafeArea(
+              child: SizedBox(
+                height: size!.height,
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CustomAppBar(),
                     Container(
-                      margin: const EdgeInsets.all(kdefualtMargin),
-                      padding: const EdgeInsets.only(left: kdefualtLeftPadding),
+                      // margin: const EdgeInsets.all(kdefualtMargin),
+                      padding: const EdgeInsets.only(left: kdefualtPadding),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -130,6 +120,8 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: kdefualtHorizontalPadding),
                       child: TextField(
+                        // controller: _searchTextEditingController,
+
                         textDirection: TextDirection.rtl,
                         onChanged: (value) => setState(() {
                           searchSurah(value);
@@ -144,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Container(
-                      height: size!.height * 0.58,
+                      height: size!.height * 0.62,
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Card(
@@ -217,20 +209,16 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+            resizeToAvoidBottomInset: false,
             drawerEnableOpenDragGesture: true,
             bottomNavigationBar: BottomAppBar(
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  IconButton(
-                      icon: const Icon(Icons.home),
-                      onPressed: () async {
-                        //
-                      }),
+                  IconButton(icon: const Icon(Icons.home), onPressed: () {}),
+                  IconButton(icon: const Icon(Icons.mic), onPressed: () {}),
                   IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-                  IconButton(
-                      icon: const Icon(Icons.read_more), onPressed: () {}),
                 ],
               ),
             ),

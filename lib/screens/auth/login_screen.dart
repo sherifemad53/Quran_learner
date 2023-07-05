@@ -92,19 +92,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   size: size,
                   submit: _submit,
                 ),
-                // const SizedBox(height: 7),
-                // const Text(
-                //   'OR',
-                //   style: TextStyle(
-                //     fontSize: 25,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                // ),
-                // const SizedBox(height: 7),
-                // SignupWithGoogleButton(
-                //   size: size,
-                //   submit: _submit,
-                // ),
               ],
             ),
           )
