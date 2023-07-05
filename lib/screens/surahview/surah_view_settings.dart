@@ -59,7 +59,7 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
           CustomSettingsSection(
             child: Center(
               child: SizedBox(
-                height: size!.height * 0.1,
+                height: size!.height * 0.15,
                 child: ListView.builder(
                   shrinkWrap: true,
                   padding: const EdgeInsets.all(15),
@@ -88,7 +88,8 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
                             ? BorderRadius.circular(15)
                             : BorderRadius.circular(10),
                         border: current == index
-                            ? Border.all(color: Colors.orange, width: 2)
+                            ? Border.all(
+                                color: Theme.of(context).primaryColor, width: 2)
                             : null,
                       ),
                       child: Center(
@@ -105,7 +106,8 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
             ),
           ),
           SettingsSection(
-            title: const Text('Recitation section'),
+            title: Text('Recitation section',
+                style: Theme.of(context).textTheme.headlineMedium),
             tiles: [
               SettingsTile.switchTile(
                 onToggle: (value) {
@@ -115,7 +117,7 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
                   });
                 },
                 initialValue: settingsProvider!.getIsEnglishTransEnabled,
-                leading: const Icon(Icons.format_paint),
+                leading: const Icon(Icons.translate),
                 title: const Text('Enable English Translation'),
               ),
             ],
@@ -126,9 +128,12 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Surah View Font Size",
-                    style: Theme.of(context).textTheme.headlineMedium,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Text(
+                      "Surah View Font Size",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ),
                   Slider(
                     value: _currentSliderValue!,

@@ -60,10 +60,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Size? size;
+  double? appbarheight;
+  double? nameBarHeight;
+  double? searchBarHeight;
+
+  double? surahNamesCardHeight;
+  double? bottomNavBarHeight;
 
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+    appbarheight = size!.height * 0.06;
+    nameBarHeight = size!.height * 0.10;
+    searchBarHeight = size!.height * 0.09;
+    surahNamesCardHeight = size!.height * 0.05;
+    bottomNavBarHeight = size!.height * 0.05;
     if (!_isloading) user = Provider.of<UserProvider>(context).getUser;
     return _isloading
         ? const Scaffold(
@@ -72,132 +83,126 @@ class _HomePageState extends State<HomePage> {
         : Scaffold(
             drawer: const CustomNavigationDrawer(),
             body: SafeArea(
-              child: SizedBox(
-                height: size!.height * 0.95,
-                child: Column(
-                  children: [
-                    const CustomAppBar(),
-                    Container(
-                      // margin: const EdgeInsets.all(kdefualtMargin),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: kdefualtPadding),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Hello,',
-                                style:
-                                    Theme.of(context).textTheme.headlineMedium,
-                              ),
-                              Text(
-                                user!.name.toUpperCase(),
-                                style:
-                                    Theme.of(context).textTheme.headlineLarge,
-                              ),
-                            ],
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(AppRoutes.profile);
-                            },
-                            icon: Image.asset(
-                              user!.gender == 'male'
-                                  ? 'assets/icons/male_icon.png'
-                                  : 'assets/icons/female_icon.png',
-                              width: 45,
+              child: Column(
+                children: [
+                  SizedBox(height: appbarheight, child: const CustomAppBar()),
+                  Container(
+                    height: nameBarHeight,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: kdefualtPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hello,',
+                              style: Theme.of(context).textTheme.headlineMedium,
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: kdefualtHorizontalMargin,
-                          vertical: kdefualtVerticalMargin),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: kdefualtHorizontalPadding),
-                      child: TextField(
-                        textDirection: TextDirection.rtl,
-                        onChanged: (value) => setState(() {
-                          searchSurah(value);
-                        }),
-                        decoration: const InputDecoration(
-                            hintTextDirection: TextDirection.ltr,
-                            hintText: "Enter Surah Name",
-                            prefixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)))),
-                      ),
-                    ),
-                    Container(
-                      height: size!.height * 0.64,
-                      margin: const EdgeInsets.symmetric(vertical: 15),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Card(
-                        elevation: 3,
-                        child: ListView.builder(
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 3),
-                              child: ListTile(
-                                leading: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  child: Text(surahs[index].id.toString()),
-                                ),
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      textAlign: TextAlign.right,
-                                      "سورة ${surahs[index].surahNameArabic}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          surahs[index].surahNameEnglish!,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                        Text(
-                                          '${surahs[index].totalVerses} verses',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                onTap: () => Navigator.of(context)
-                                    .pushNamed(AppRoutes.surahView, arguments: {
-                                  'SurahNameArabic':
-                                      surahs[index].surahNameArabic,
-                                  'SurahNo': surahs[index].id.toString(),
-                                }),
-                              ),
-                            );
-                          },
-                          itemCount: surahs.length,
+                            Text(
+                              user!.name.toUpperCase(),
+                              style: Theme.of(context).textTheme.headlineLarge,
+                            ),
+                          ],
                         ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(AppRoutes.profile);
+                          },
+                          icon: Image.asset(
+                            user!.gender == 'male'
+                                ? 'assets/icons/male_icon.png'
+                                : 'assets/icons/female_icon.png',
+                            width: 45,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: searchBarHeight,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: kdefualtHorizontalMargin,
+                        vertical: kdefualtVerticalMargin),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kdefualtHorizontalPadding),
+                    child: TextField(
+                      textDirection: TextDirection.rtl,
+                      onChanged: (value) => setState(() {
+                        searchSurah(value);
+                      }),
+                      decoration: const InputDecoration(
+                          hintTextDirection: TextDirection.ltr,
+                          hintText: "Enter Surah Name",
+                          prefixIcon: Icon(Icons.search),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)))),
+                    ),
+                  ),
+                  Container(
+                    height: size!.height * 0.63,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Card(
+                      elevation: 3,
+                      child: ListView.builder(
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 3),
+                            child: ListTile(
+                              leading: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                child: Text(surahs[index].id.toString()),
+                              ),
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    textAlign: TextAlign.right,
+                                    "سورة ${surahs[index].surahNameArabic}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        surahs[index].surahNameEnglish!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
+                                      Text(
+                                        '${surahs[index].totalVerses} verses',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(AppRoutes.surahView, arguments: {
+                                'SurahNameArabic':
+                                    surahs[index].surahNameArabic,
+                                'SurahNo': surahs[index].id.toString(),
+                              }),
+                            ),
+                          );
+                        },
+                        itemCount: surahs.length,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             resizeToAvoidBottomInset: false,

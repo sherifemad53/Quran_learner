@@ -35,59 +35,44 @@ class _SentenceSimilarityScreenState extends State<SentenceSimilarityScreen> {
         margin: const EdgeInsets.all(5),
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Card(
+              elevation: 2,
               child: Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(10),
                 height: MediaQuery.of(context).size.height * 0.10,
-                child: Column(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            child: TextField(
-                              textAlign: TextAlign.right,
-                              controller: myController,
-                              decoration: const InputDecoration(
-                                enabledBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                // hintText: 'Enter text',
-                              ),
-                              keyboardType: TextInputType.text,
-                              onSubmitted: (value) {
-                                if (Utils.isProbablyArabic(value)) {
-                                  setState(() {
-                                    // _qarunVersetext = value;
-                                    similarityData =
-                                        similarVerseModelhApi(value);
-                                    //_isloaded = true;
-                                    // similarityData = tpgetData(_qarunVersetext);
-                                  });
-                                }
-                              },
-                              onTap: () {},
-                              scrollPhysics:
-                                  const NeverScrollableScrollPhysics(),
-                            ),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                myController.clear();
-                              },
-                              icon: const Icon(Icons.clear))
-                        ],
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: TextField(
+                        textDirection: TextDirection.rtl,
+                        controller: myController,
+                        decoration: const InputDecoration(
+                            enabledBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            hintTextDirection: TextDirection.ltr,
+                            hintText: 'Enter Query',
+                            prefixIcon: Icon(Icons.search)),
+                        keyboardType: TextInputType.text,
+                        onSubmitted: (value) {
+                          if (Utils.isProbablyArabic(value)) {
+                            setState(() {
+                              similarityData = similarVerseModelhApi(value);
+                            });
+                          }
+                        },
                       ),
                     ),
+                    IconButton(
+                        onPressed: () => myController.clear(),
+                        icon: const Icon(Icons.clear))
                   ],
                 ),
               ),

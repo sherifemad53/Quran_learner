@@ -32,14 +32,13 @@ class _AhadithScreenState extends State<AhadithScreen> {
       body: Container(
         margin: const EdgeInsets.all(5),
         padding: const EdgeInsets.symmetric(horizontal: 5),
-        height: size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Card(
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 // height: MediaQuery.of(context).size.height * 0.10,
                 child: Column(
                   children: [
@@ -90,81 +89,77 @@ class _AhadithScreenState extends State<AhadithScreen> {
               ),
             ),
             //const SizedBox.shrink(),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.75,
-              child: SingleChildScrollView(
-                child: FutureBuilder(
-                    future: similarAhadithList,
-                    builder: (context, snapshot) {
-                      //_isSearching = false;
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Center(
-                              child: CircularProgressIndicator.adaptive()),
-                        );
-                      } else if (snapshot.hasError) {
-                        return const Card(child: Text('An error Occured'));
-                      } else if (snapshot.data == null) {
-                        return const Center(
-                          child: Text(""),
-                        );
-                      } else {
-                        return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            keyboardDismissBehavior:
-                                ScrollViewKeyboardDismissBehavior.onDrag,
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              //_isloaded = false;
-                              return Card(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Text(
-                                        snapshot.data!
-                                            .elementAt(index)
-                                            .similarSentence,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
+            FutureBuilder(
+                future: similarAhadithList,
+                builder: (context, snapshot) {
+                  //_isSearching = false;
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child:
+                          Center(child: CircularProgressIndicator.adaptive()),
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Card(child: Text('An error Occured'));
+                  } else if (snapshot.data == null) {
+                    return const Center(
+                      child: Text(""),
+                    );
+                  } else {
+                    return SizedBox(
+                      height: size.height * 0.7,
+                      child: ListView.builder(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            //_isloaded = false;
+                            return Card(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Text(
+                                      snapshot.data!
+                                          .elementAt(index)
+                                          .similarSentence,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    //fit: FlexFit.tight,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.75,
+                                    //color: Colors.red,
+                                    child: FAProgressBar(
+                                      animatedDuration:
+                                          const Duration(milliseconds: 1000),
+                                      maxValue: 100,
+                                      currentValue: snapshot.data!
+                                              .elementAt(index)
+                                              .similarityScore *
+                                          100,
+                                      displayText: '%',
+                                      progressGradient: LinearGradient(
+                                        colors: [
+                                          kSecendoryColor.withOpacity(0.75),
+                                          kBackgroundColor.withOpacity(0.75),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      //fit: FlexFit.tight,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.75,
-                                      //color: Colors.red,
-                                      child: FAProgressBar(
-                                        animatedDuration:
-                                            const Duration(milliseconds: 1000),
-                                        maxValue: 100,
-                                        currentValue: snapshot.data!
-                                                .elementAt(index)
-                                                .similarityScore *
-                                            100,
-                                        displayText: '%',
-                                        progressGradient: LinearGradient(
-                                          colors: [
-                                            kSecendoryColor.withOpacity(0.75),
-                                            kBackgroundColor.withOpacity(0.75),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
-                              );
-                            });
-                      }
-                    }),
-              ),
-            )
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  )
+                                ],
+                              ),
+                            );
+                          }),
+                    );
+                  }
+                })
           ],
         ),
       ),
