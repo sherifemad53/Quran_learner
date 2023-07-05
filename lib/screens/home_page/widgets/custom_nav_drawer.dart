@@ -50,16 +50,6 @@ class CustomNavigationDrawer extends StatelessWidget {
               Navigator.of(context).pushNamed(AppRoutes.ayatMotshbha);
             },
           ),
-          // ListTile(
-          //   leading: const Icon(Icons.book),
-          //   title: Text(
-          //     'Recitation',
-          //     style: Theme.of(context).textTheme.bodyMedium,
-          //   ),
-          //   onTap: () {
-          //     Navigator.of(context).pushNamed(AppRoutes.recitation);
-          //   },
-          // ),
           ListTile(
             leading: const Icon(Icons.search),
             title: Text(

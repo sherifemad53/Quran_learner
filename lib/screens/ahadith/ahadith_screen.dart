@@ -20,6 +20,7 @@ class _AhadithScreenState extends State<AhadithScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size? size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -31,6 +32,7 @@ class _AhadithScreenState extends State<AhadithScreen> {
       body: Container(
         margin: const EdgeInsets.all(5),
         padding: const EdgeInsets.symmetric(horizontal: 5),
+        height: size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[

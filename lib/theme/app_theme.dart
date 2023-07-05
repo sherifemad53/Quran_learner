@@ -6,9 +6,10 @@ class TAppTheme {
   static ThemeData lightTheme = ThemeData(
     //TODO ADD ALL THEMEDATA ARGUMENTS
     brightness: Brightness.light,
-    primarySwatch: Colors.grey,
+    primarySwatch: Colors.brown,
     appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
     useMaterial3: true,
+    backgroundColor: Color.fromARGB(255, 187, 185, 169),
     //backgroundColor: kBackgroundColor,
     // bottomNavigationBarTheme:
     //     const BottomNavigationBarThemeData(backgroundColor: Colors.white12),

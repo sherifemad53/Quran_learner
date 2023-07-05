@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quranic_tool_box/screens/ayat_ahadith_semantic_search/ayat_ahadith_semantic_search.dart';
 
 import '../../models/surah_model.dart';
 import '../../models/juz_model.dart';
@@ -72,13 +73,14 @@ class _HomePageState extends State<HomePage> {
             drawer: const CustomNavigationDrawer(),
             body: SafeArea(
               child: SizedBox(
-                height: size!.height,
+                height: size!.height * 0.95,
                 child: Column(
                   children: [
                     const CustomAppBar(),
                     Container(
                       // margin: const EdgeInsets.all(kdefualtMargin),
-                      padding: const EdgeInsets.only(left: kdefualtPadding),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: kdefualtPadding),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -90,7 +92,6 @@ class _HomePageState extends State<HomePage> {
                                 style:
                                     Theme.of(context).textTheme.headlineMedium,
                               ),
-                              const SizedBox(height: 3),
                               Text(
                                 user!.name.toUpperCase(),
                                 style:
@@ -120,8 +121,6 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: kdefualtHorizontalPadding),
                       child: TextField(
-                        // controller: _searchTextEditingController,
-
                         textDirection: TextDirection.rtl,
                         onChanged: (value) => setState(() {
                           searchSurah(value);
@@ -136,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Container(
-                      height: size!.height * 0.62,
+                      height: size!.height * 0.64,
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Card(
@@ -146,58 +145,50 @@ class _HomePageState extends State<HomePage> {
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            return InkWell(
-                              enableFeedback: true,
-                              canRequestFocus: true,
-                              key: ValueKey(index),
-                              onTap: () {
-                                Navigator.of(context)
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 3),
+                              child: ListTile(
+                                leading: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  child: Text(surahs[index].id.toString()),
+                                ),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      textAlign: TextAlign.right,
+                                      "سورة ${surahs[index].surahNameArabic}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          surahs[index].surahNameEnglish!,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                        Text(
+                                          '${surahs[index].totalVerses} verses',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                onTap: () => Navigator.of(context)
                                     .pushNamed(AppRoutes.surahView, arguments: {
                                   'SurahNameArabic':
                                       surahs[index].surahNameArabic,
                                   'SurahNo': surahs[index].id.toString(),
-                                });
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(vertical: 3),
-                                child: ListTile(
-                                  leading: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    child: Text(surahs[index].id.toString()),
-                                  ),
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        textAlign: TextAlign.right,
-                                        "سورة ${surahs[index].surahNameArabic}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            surahs[index].surahNameEnglish!,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall,
-                                          ),
-                                          Text(
-                                            '${surahs[index].totalVerses} verses',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                }),
                               ),
                             );
                           },
@@ -211,15 +202,24 @@ class _HomePageState extends State<HomePage> {
             ),
             resizeToAvoidBottomInset: false,
             drawerEnableOpenDragGesture: true,
-            bottomNavigationBar: BottomAppBar(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(icon: const Icon(Icons.home), onPressed: () {}),
-                  IconButton(icon: const Icon(Icons.mic), onPressed: () {}),
-                  IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-                ],
+            bottomNavigationBar: SizedBox(
+              height: size!.height * 0.05,
+              child: BottomAppBar(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(icon: const Icon(Icons.home), onPressed: () {}),
+                    IconButton(icon: const Icon(Icons.mic), onPressed: () {}),
+                    IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) =>
+                                  const AyaAhdithSemanticSearchScreen()));
+                        }),
+                  ],
+                ),
               ),
             ),
           );

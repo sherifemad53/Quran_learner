@@ -59,61 +59,47 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () {},
-                    child: ListTile(
-                      leading: const Icon(Icons.info_outline),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      title: Text(
-                        'Introduction',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+                  ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    title: Text(
+                      'Introduction',
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                  ),
-                  InkWell(
                     onTap: () {},
-                    child: ListTile(
+                  ),
+                  ListTile(
                       leading: const Icon(Icons.bug_report_outlined),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       title: Text(
                         'Bug Report',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: ListTile(
+                      onTap: () {}),
+                  ListTile(
                       leading: const Icon(Icons.help_outline_outlined),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       title: Text(
                         'Help Guide',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: ListTile(
+                      onTap: () {}),
+                  ListTile(
                       leading: const Icon(Icons.gavel),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       title: Text(
                         'Terms and Conditons',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: ListTile(
+                      onTap: () {}),
+                  ListTile(
                       leading: const Icon(Icons.group),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       title: Text(
                         'About us',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                    ),
-                  ),
+                      onTap: () {}),
                 ],
               ),
             ),
