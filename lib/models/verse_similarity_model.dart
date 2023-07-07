@@ -1,16 +1,16 @@
-//     final SenstenceSimilarityModel = SenstenceSimilarityModelFromJson(jsonString);
+//     final VersesSimilarityModel = VersesSimilarityModelFromJson(jsonString);
 
 import 'dart:convert';
 
-List<SenstenceSimilarityModel> senstenceSimilarityModelFromJson(String str) =>
-    List<SenstenceSimilarityModel>.from(
-        json.decode(str).map((x) => SenstenceSimilarityModel.fromJson(x)));
+List<VersesSimilarityModel> versesSimilarityModelFromJson(String str) =>
+    List<VersesSimilarityModel>.from(
+        json.decode(str).map((x) => VersesSimilarityModel.fromJson(x)));
 
-String senstenceSimilarityModelToJson(List<SenstenceSimilarityModel> data) =>
+String versesSimilarityModelToJson(List<VersesSimilarityModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class SenstenceSimilarityModel {
-  SenstenceSimilarityModel({
+class VersesSimilarityModel {
+  VersesSimilarityModel({
     required this.similarSentence,
     required this.similarityScore,
     required this.surahName,
@@ -24,8 +24,8 @@ class SenstenceSimilarityModel {
   final int ayahNo;
   final int surahNumber;
 
-  factory SenstenceSimilarityModel.fromJson(Map<String, dynamic> json) =>
-      SenstenceSimilarityModel(
+  factory VersesSimilarityModel.fromJson(Map<String, dynamic> json) =>
+      VersesSimilarityModel(
         similarSentence: json["similar_sentence"],
         similarityScore: json["similarity_score"]?.toDouble(),
         surahName: json["surahName"],

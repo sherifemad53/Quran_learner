@@ -34,7 +34,6 @@ dependencies:
         sdk: flutter
 
     cupertino_icons: ^1.0.2
-    google_fonts: ^4.0.3
     flutter_animation_progress_bar: ^2.3.1
     settings_ui: ^2.0.2
     auto_size_text: ^3.0.0

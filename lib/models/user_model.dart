@@ -38,7 +38,6 @@ class User {
   static User fromSpan(DocumentSnapshot snap) {
     var snapshot = (snap.data()) as Map<String, dynamic>;
 
-    //FIXME Why snapshot['birthdate'] is timestamp should we convert all to timestamp?
     return User(
       uid: snapshot['uid'],
       name: snapshot['name'],

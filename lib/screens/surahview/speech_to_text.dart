@@ -91,22 +91,27 @@ class SpeechToText {
     return modifiedInput;
   }
 
+  void _showToast(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Not corrent Please try again'),
+        backgroundColor: Theme.of(context).errorColor,
+      ),
+    );
+  }
+
   String _checkReading(String arabicAyatext, bool isMemorizationMode) {
     String temp = '';
     int threshold = 5;
     if (isMemorizationMode) {
-      if (arabicAyatext.length + threshold >= recitedText.length) {
+      if (arabicAyatext.length > recitedText.length) {
+        _showToast(navigatorKey.currentContext!);
+        temp = (0.0).toString();
+      } else if (arabicAyatext.length <= recitedText.length) {
         temp =
             StringSimilarity.similarity(arabicAyatext, recitedText).toString();
-      } else {
-        ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-          SnackBar(
-            content: const Text('Not corrent Please try again'),
-            backgroundColor: Theme.of(navigatorKey.currentContext!).errorColor,
-          ),
-        );
-        temp = (0.0).toString();
-      }
+        debugPrint(temp);
+      } else {}
     } else {
       recitedText = _swapShaddaPosition(recitedText);
       temp = StringSimilarity.needlemanWunsch(arabicAyatext, recitedText);

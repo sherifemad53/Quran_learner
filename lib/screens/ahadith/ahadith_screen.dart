@@ -19,6 +19,12 @@ class _AhadithScreenState extends State<AhadithScreen> {
   Future<List<AhadithModel>>? similarAhadithList;
 
   @override
+  void dispose() {
+    super.dispose();
+    FocusNode().unfocus();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size? size = MediaQuery.of(context).size;
     return Scaffold(
@@ -34,81 +40,59 @@ class _AhadithScreenState extends State<AhadithScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
+          children: [
             Card(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                // height: MediaQuery.of(context).size.height * 0.10,
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            child: TextField(
-                              textAlign: TextAlign.right,
-                              controller: myController,
-                              decoration: const InputDecoration(
-                                enabledBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                // hintText: 'Enter text',
-                              ),
-                              keyboardType: TextInputType.text,
-                              onSubmitted: (value) {
-                                if (Utils.isProbablyArabic(value)) {
-                                  setState(() {
-                                    similarAhadithList =
-                                        similarAhadithApi(value);
-                                  });
-                                }
-                              },
-                              onTap: () {},
-                              scrollPhysics:
-                                  const NeverScrollableScrollPhysics(),
-                            ),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                myController.clear();
-                              },
-                              icon: const Icon(Icons.clear))
-                        ],
-                      ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      minLines: 1,
+                      maxLines: 6,
+                      textDirection: TextDirection.rtl,
+                      controller: myController,
+                      decoration: const InputDecoration(
+                          enabledBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          hintTextDirection: TextDirection.ltr,
+                          hintText: 'Enter Query',
+                          prefixIcon: Icon(Icons.search)),
+                      keyboardType: TextInputType.text,
+                      onSubmitted: (value) {
+                        if (Utils.isProbablyArabic(value)) {
+                          setState(() {
+                            similarAhadithList = similarAhadithApi(value);
+                          });
+                        }
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                      onPressed: () => myController.clear(),
+                      icon: const Icon(Icons.clear))
+                ],
               ),
             ),
-            //const SizedBox.shrink(),
-            FutureBuilder(
-                future: similarAhadithList,
-                builder: (context, snapshot) {
-                  //_isSearching = false;
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child:
-                          Center(child: CircularProgressIndicator.adaptive()),
-                    );
-                  } else if (snapshot.hasError) {
-                    return const Card(child: Text('An error Occured'));
-                  } else if (snapshot.data == null) {
-                    return const Center(
-                      child: Text(""),
-                    );
-                  } else {
-                    return SizedBox(
-                      height: size.height * 0.7,
-                      child: ListView.builder(
+            Expanded(
+              child: FutureBuilder(
+                  future: similarAhadithList,
+                  builder: (context, snapshot) {
+                    //_isSearching = false;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child:
+                            Center(child: CircularProgressIndicator.adaptive()),
+                      );
+                    } else if (snapshot.hasError) {
+                      return const Card(child: Text('An error Occured'));
+                    } else if (snapshot.data == null) {
+                      return const Center(
+                        child: Text(""),
+                      );
+                    } else {
+                      return ListView.builder(
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           shrinkWrap: true,
@@ -156,10 +140,10 @@ class _AhadithScreenState extends State<AhadithScreen> {
                                 ],
                               ),
                             );
-                          }),
-                    );
-                  }
-                })
+                          });
+                    }
+                  }),
+            )
           ],
         ),
       ),

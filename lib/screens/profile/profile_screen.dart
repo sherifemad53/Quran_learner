@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quranic_tool_box/app_routes.dart';
+import 'package:quranic_tool_box/screens/help_guide/help_guide.dart';
 
 import '/services/authentication.dart';
 import '/providers/user_provider.dart';
@@ -82,15 +84,11 @@ class ProfileScreen extends StatelessWidget {
                         'Help Guide',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      onTap: () {}),
-                  ListTile(
-                      leading: const Icon(Icons.gavel),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      title: Text(
-                        'Terms and Conditons',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HelpGuide(),
+                        ));
+                      }),
                   ListTile(
                       leading: const Icon(Icons.group),
                       trailing: const Icon(Icons.arrow_forward_ios),
@@ -98,7 +96,9 @@ class ProfileScreen extends StatelessWidget {
                         'About us',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      onTap: () {}),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(AppRoutes.aboutUs);
+                      }),
                 ],
               ),
             ),

@@ -30,15 +30,16 @@ class _VerusCardState extends State<VerusCard> {
   bool isPressed = false;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            isPressed = !isPressed;
-            // tasferStr = await
-          });
-        },
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: Card(
         child: ListTile(
+          onTap: () {
+            setState(() {
+              isPressed = !isPressed;
+              // tasferStr = await
+            });
+          },
           title: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [

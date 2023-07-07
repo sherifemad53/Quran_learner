@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import '/theme/widget_themes/text_theme.dart';
 
-//TODO ELBAILY TASK CHOOSE COLORS AND CUSTIMZIE THE APPLICATION
 class TAppTheme {
   static ThemeData lightTheme = ThemeData(
-    //TODO ADD ALL THEMEDATA ARGUMENTS
     brightness: Brightness.light,
     primarySwatch: Colors.brown,
     appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
     useMaterial3: true,
-    backgroundColor: Color.fromARGB(255, 187, 185, 169),
+    backgroundColor: const Color.fromARGB(255, 187, 185, 169),
     //backgroundColor: kBackgroundColor,
     // bottomNavigationBarTheme:
     //     const BottomNavigationBarThemeData(backgroundColor: Colors.white12),
@@ -19,7 +17,6 @@ class TAppTheme {
   );
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    //TODO ELBAILY TASK CHOOSE COLORS AND CUSTIMZIE THE APPLICATION
     primarySwatch: Colors.blueGrey,
     //primaryColor: Colors.black12,
     // appBarTheme: const AppBarTheme(color: Colors.purple, elevation: 0),

@@ -119,7 +119,6 @@ class TajwedToScore {
         return await Future.delayed(const Duration(seconds: 5))
             .then((value) async {
           if (_isRecording) {
-            print('hanaaaa');
             await _record.stopRecorder();
             await _record.closeRecorder();
 

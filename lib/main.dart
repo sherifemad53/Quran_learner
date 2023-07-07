@@ -9,8 +9,8 @@ import 'package:quranic_tool_box/providers/settings_provider.dart';
 
 import 'screens/ahadith/ahadith_screen.dart';
 import 'screens/home_page/homapage_screen.dart';
-import 'screens/sentence_similarity/sentence_similarity_screen.dart';
-import 'screens/about_us/aboutus_screen.dart';
+import 'screens/sentence_similarity/verse_similarity_screen.dart';
+import 'screens/about_us/about_us.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/signup_screen.dart';
 import 'screens/profile/profile_screen.dart';
@@ -22,7 +22,7 @@ import 'app_routes.dart';
 import 'providers/user_provider.dart';
 import 'common/constants.dart';
 import 'theme/app_theme.dart';
-import 'package:quranic_tool_box/navigator_key.dart';
+import 'navigator_key.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
           AppRoutes.surahView: (context) => const SurahViewScreen(),
           AppRoutes.signup: (context) => const SignupScreen(),
           AppRoutes.login: (context) => const LoginScreen(),
-          AppRoutes.ayatMotshbha: (context) => const SentenceSimilarityScreen(),
+          AppRoutes.ayatMotshbha: (context) => const VerseSimilarityScreen(),
           AppRoutes.ahadithMotshbha: (context) => const AhadithScreen(),
           AppRoutes.tajweedCorrection: (context) =>
               const TajweedCorrectionScreen()

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quranic_tool_box/screens/ayat_ahadith_semantic_search/ayat_ahadith_semantic_search.dart';
+import 'package:quranic_tool_box/screens/verses_ahadith_semantic_search/verses_ahadith_semantic_search.dart';
 
 import '../../models/surah_model.dart';
 import '../../models/juz_model.dart';
@@ -12,8 +12,8 @@ import '../../providers/user_provider.dart';
 import '../../app_routes.dart';
 import '../../common/constants.dart';
 
-import 'widgets/custom_nav_drawer.dart';
 import 'widgets/custom_appbar.dart';
+import 'widgets/custom_nav_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -72,8 +72,8 @@ class _HomePageState extends State<HomePage> {
     size = MediaQuery.of(context).size;
     appbarheight = size!.height * 0.06;
     nameBarHeight = size!.height * 0.10;
-    searchBarHeight = size!.height * 0.09;
-    surahNamesCardHeight = size!.height * 0.05;
+    searchBarHeight = size!.height * 0.085;
+    surahNamesCardHeight = size!.height * 0.63;
     bottomNavBarHeight = size!.height * 0.05;
     if (!_isloading) user = Provider.of<UserProvider>(context).getUser;
     return _isloading
@@ -141,20 +141,18 @@ class _HomePageState extends State<HomePage> {
                                   BorderRadius.all(Radius.circular(20)))),
                     ),
                   ),
-                  Container(
-                    height: size!.height * 0.63,
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Card(
-                      elevation: 3,
-                      child: ListView.builder(
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 3),
-                            child: ListTile(
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Card(
+                        elevation: 3,
+                        child: ListView.builder(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return ListTile(
                               leading: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
@@ -195,10 +193,10 @@ class _HomePageState extends State<HomePage> {
                                     surahs[index].surahNameArabic,
                                 'SurahNo': surahs[index].id.toString(),
                               }),
-                            ),
-                          );
-                        },
-                        itemCount: surahs.length,
+                            );
+                          },
+                          itemCount: surahs.length,
+                        ),
                       ),
                     ),
                   ),

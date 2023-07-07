@@ -63,6 +63,8 @@ class StringSimilarity {
       }
     }
 
+    print('needleman output before highlight:$alignedRefText');
+
     String highlightedRefText = "";
     for (int i = 0; i < alignedRefText.length; i++) {
       if (alignedRefText[i] == alignedRecitedText[i]) {

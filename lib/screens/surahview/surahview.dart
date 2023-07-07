@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
@@ -32,20 +34,25 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
 
   void getAyas(String surahNameArabic, String surahNo) async {
     await surahProvider.init();
-    ayas =
-        surahProvider.getSurahBySurahNameAndSurahNo(surahNameArabic, surahNo);
+    ayas = await surahProvider.getSurahBySurahNameAndSurahNo(
+        surahNameArabic, surahNo);
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // for (var element in ayas!) {
+    //   print(element.isMemorized);
+    // }
 
-    print(prefs.getString('SurahViewMode'));
     setState(() {
       isDoneLoading = true;
     });
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(
+        surahName!, ayas!.map((e) => jsonEncode(e.toJson())).toList());
   }
 
   bool isPressed = false;
@@ -56,6 +63,9 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
   bool isScrolling = false;
   bool? _isEnglishTransEnabled = false;
 
+  String? surahName;
+  String? surahNo;
+
   @override
   Widget build(BuildContext context) {
     user = Provider.of<UserProvider>(context).getUser;
@@ -63,8 +73,8 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
     quranfontSize = Provider.of<SettingsProvider>(context).getSurahViewFontSize;
     final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
     final args = ModalRoute.of(context)!.settings.arguments as Map;
-    String surahName = args['SurahNameArabic'];
-    String surahNo = args['SurahNo'];
+    surahName = args['SurahNameArabic'];
+    surahNo = args['SurahNo'];
     _isEnglishTransEnabled = settingsProvider!.getIsEnglishTransEnabled;
 
     if (settingsProvider!.getSurahViewMode == 'Recitation') {
@@ -73,23 +83,15 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
       isMemoriztingMode = true;
     }
 
-    print("isMemoriztion = $isMemoriztingMode");
-
     if (!isDoneLoading) {
-      getAyas(surahName, surahNo);
+      getAyas(surahName!, surahNo!);
     }
 
     return isDoneLoading
         ? Scaffold(
             appBar: AppBar(
-              title: Text(surahName),
+              title: Text(surahName!),
               actions: [
-                // Switch.adaptive(
-                //   value: isMemoriztingMode,
-                //   onChanged: (value) => setState(() {
-                //     isMemoriztingMode = value;
-                //   }),
-                // ),
                 IconButton(
                   icon: const Icon(Icons.settings),
                   onPressed: () => Navigator.of(context).push(
@@ -114,15 +116,11 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                         isScrolling = true;
                       });
                     },
-                    onVerticalDragStart: (details) => setState(() {
-                      isScrolling = true;
-                    }),
                     child: ListView.builder(
                       shrinkWrap: true,
-                      // physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
                         if (isMemoriztingMode) {
-                          if (ayas![index].isMemorized) {
+                          if (ayas![index].isMemorized!) {
                             ayas![index].isVisable = true;
                           } else {
                             ayas![index].isVisable = false;
@@ -171,7 +169,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                                           ),
                                           Visibility(
                                             visible: ayas![index].isPressed ||
-                                                ayas![index].isMemorized ||
+                                                ayas![index].isMemorized! ||
                                                 ayas![index].isVisable,
                                             child: Expanded(
                                               child: Text(
@@ -228,105 +226,110 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                 ),
               ],
             ),
-            bottomSheet: Container(
-              height: !isMemoriztingMode
-                  ? MediaQuery.of(context).size.height * 0.21
-                  : MediaQuery.of(context).size.height * 0.12,
-              decoration: BoxDecoration(
-                  color: isDark ? Colors.blueGrey : Colors.amber[100],
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
-              padding: const EdgeInsets.all(7),
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  if (!isMemoriztingMode)
-                    text.isNotEmpty
-                        ? SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.09,
-                            width: double.infinity,
-                            child: SingleChildScrollView(
-                                child: Html(
-                              data: text,
-                            )),
-                          )
-                        : const SizedBox(),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                                isMemoriztingMode
-                                    ? "Memorization Mode"
-                                    : "Recitaion Mode",
-                                style: Theme.of(context).textTheme.bodySmall),
-                            Text(
-                              "Begin from Verse ($verseNumber)",
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
+            bottomSheet: GestureDetector(
+              onDoubleTap: () => print('s'),
+              child: Container(
+                height: !isMemoriztingMode
+                    ? MediaQuery.of(context).size.height * 0.21
+                    : MediaQuery.of(context).size.height * 0.12,
+                decoration: BoxDecoration(
+                    color: isDark ? Colors.blueGrey : Colors.amber[100],
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
+                padding: const EdgeInsets.all(7),
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    if (!isMemoriztingMode)
+                      text.isNotEmpty
+                          ? SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.09,
+                              width: double.infinity,
+                              child: SingleChildScrollView(
+                                  child: Html(
+                                data: text,
+                              )),
+                            )
+                          : const SizedBox(),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  isMemoriztingMode
+                                      ? "Memorization Mode"
+                                      : "Recitaion Mode",
+                                  style: Theme.of(context).textTheme.bodySmall),
+                              Text(
+                                "Begin from Verse ($verseNumber)",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () async {
-                          isPressed = !isPressed;
-                          setState(() {});
-                          if (isMemoriztingMode) {
-                            isPressed
-                                ? SpeechToText.instance.startRecord(
-                                    surahNo, ayas![verseNumber - 1].ayahNo)
-                                : SpeechToText.instance
-                                    .stopRecord(
-                                        'https://omarelsayeed-quran-recitation-google.hf.space/run/predict',
-                                        user,
-                                        ayas![verseNumber - 1].arabicText,
-                                        isMemoriztingMode)
-                                    .then((value) {
-                                    text = value;
-                                    setState(() {});
-                                    if (double.parse(text) >= 0.9) {
-                                      ayas![verseNumber - 1].isMemorized = true;
-                                      verseNumber += 1;
-                                    }
-                                  });
-                          } else {
-                            isPressed
-                                ? SpeechToText.instance.startRecord(
-                                    surahNo, ayas![verseNumber - 1].ayahNo)
-                                : SpeechToText.instance
-                                    .stopRecord(
-                                        'https://omarelsayeed-quran-recitation-wav2vecdup.hf.space/run/predict',
-                                        user,
-                                        ayas![verseNumber - 1]
-                                            .orignalArabicText,
-                                        false)
-                                    .then((value) {
-                                    text = value;
-                                    setState(() {});
-                                  });
-                          }
-                        },
-                        icon: Icon(isPressed ? Icons.stop : Icons.mic,
-                            color: Colors.black),
-                        label: Text(
-                          isPressed ? "Stop" : "Start",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            backgroundColor:
-                                isPressed ? Colors.red : Colors.grey),
-                      )
-                    ],
-                  ),
-                ],
+                        TextButton.icon(
+                          onPressed: () async {
+                            isPressed = !isPressed;
+                            setState(() {});
+                            if (isMemoriztingMode) {
+                              isPressed
+                                  ? SpeechToText.instance.startRecord(
+                                      surahNo!, ayas![verseNumber - 1].ayahNo)
+                                  : SpeechToText.instance
+                                      .stopRecord(
+                                          'https://omarelsayeed-quran-recitation-google.hf.space/run/predict',
+                                          user,
+                                          ayas![verseNumber - 1].arabicText,
+                                          isMemoriztingMode)
+                                      .then((value) {
+                                      text = value;
+                                      setState(() {});
+                                      if (double.parse(text) >= 0.9) {
+                                        ayas![verseNumber - 1].isMemorized =
+                                            true;
+                                        verseNumber += 1;
+                                      }
+                                    });
+                            } else {
+                              isPressed
+                                  ? SpeechToText.instance.startRecord(
+                                      surahNo!, ayas![verseNumber - 1].ayahNo)
+                                  : SpeechToText.instance
+                                      .stopRecord(
+                                          'https://omarelsayeed-quran-recitation-wav2vecdup.hf.space/run/predict',
+                                          user,
+                                          ayas![verseNumber - 1]
+                                              .orignalArabicText,
+                                          false)
+                                      .then((value) {
+                                      text = value;
+                                      setState(() {});
+                                    });
+                            }
+                          },
+                          icon: Icon(isPressed ? Icons.stop : Icons.mic,
+                              color: Colors.black),
+                          label: Text(
+                            isPressed ? "Stop" : "Start",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 9),
+                              backgroundColor:
+                                  isPressed ? Colors.red : Colors.grey),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           )

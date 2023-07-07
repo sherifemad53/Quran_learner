@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import '/models/tafser_model.dart';
-import '../models/senstense_similarity_model.dart';
+import '../models/verse_similarity_model.dart';
 
-Future<List<SenstenceSimilarityModel>> similarVerseModelhApi(text) async {
+Future<List<VersesSimilarityModel>> similarVerseModelhApi(text) async {
   // Define the API endpoint URL
   var uri = Uri.parse('https://omarelsayeed-test.hf.space/api/predict');
 
@@ -30,8 +30,8 @@ Future<List<SenstenceSimilarityModel>> similarVerseModelhApi(text) async {
       // Parse the response and convert the data into a list of SenstenceSimilarityModel objects
       var x = (((json.decode(utf8.decode(post.bodyBytes))['data']) as List)
               .elementAt(0) as List)
-          .map((element) => SenstenceSimilarityModel.fromJson(
-              element as Map<String, dynamic>));
+          .map((element) =>
+              VersesSimilarityModel.fromJson(element as Map<String, dynamic>));
 
       return x.toList();
     } else if (post.statusCode >= 400 && post.statusCode <= 499) {
