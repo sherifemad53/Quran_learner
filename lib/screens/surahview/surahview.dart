@@ -233,7 +233,9 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                     ? MediaQuery.of(context).size.height * 0.21
                     : MediaQuery.of(context).size.height * 0.12,
                 decoration: BoxDecoration(
-                    color: isDark ? Colors.blueGrey : Colors.amber[100],
+                    color: isDark
+                        ? Colors.blueGrey
+                        : const Color.fromARGB(255, 211, 207, 198),
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20))),

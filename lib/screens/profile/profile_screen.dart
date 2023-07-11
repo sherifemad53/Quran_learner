@@ -129,6 +129,7 @@ showAlertDialog(BuildContext context) {
     onPressed: () {
       Navigator.of(context).pop();
       Authentication.signOut();
+      Navigator.of(context).pop();
     },
   );
   // set up the AlertDialog

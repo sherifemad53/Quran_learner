@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:quranic_tool_box/navigator_key.dart';
+import 'package:quranic_tool_box/common/navigator_key.dart';
 import 'authentication_error_handling.dart';
 import '../models/user_model.dart' as model;
 

@@ -8,7 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../navigator_key.dart';
+import '../../common/navigator_key.dart';
 import '../../utils/string_similarity.dart';
 import '../../models/speech_to_text_model.dart';
 

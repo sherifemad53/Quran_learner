@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quranic_tool_box/navigator_key.dart';
+import 'package:quranic_tool_box/common/navigator_key.dart';
 
 void showError(String errorMessage) {
   showDialog(

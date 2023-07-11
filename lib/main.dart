@@ -22,7 +22,7 @@ import 'app_routes.dart';
 import 'providers/user_provider.dart';
 import 'common/constants.dart';
 import 'theme/app_theme.dart';
-import 'navigator_key.dart';
+import 'common/navigator_key.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
