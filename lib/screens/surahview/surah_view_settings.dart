@@ -30,8 +30,6 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
 
   List<String> tabs = ['Recitaion', 'Memorization'];
 
-  bool _isEnglishTransEnabled = false;
-
   SettingsProvider? settingsProvider;
   int current = 0;
   Size? size;
@@ -113,7 +111,7 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
                 onToggle: (value) {
                   settingsProvider!.updateIsEnglishViewEnableed(value);
                   setState(() {
-                    _isEnglishTransEnabled = value;
+                    // _isEnglishTransEnabled = value;
                   });
                 },
                 initialValue: settingsProvider!.getIsEnglishTransEnabled,

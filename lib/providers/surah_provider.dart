@@ -27,6 +27,7 @@ class SurahProvider {
   Future<List<AyaModel>> getSurahBySurahNameAndSurahNo(
       String surahNameArabic, String surahNo) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    
     List<String>? temp = prefs.getStringList(surahNameArabic);
     if (temp == null) {
       return ayas!

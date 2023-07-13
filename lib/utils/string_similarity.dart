@@ -71,14 +71,14 @@ class StringSimilarity {
         highlightedRefText += alignedRefText[i];
       } else if (alignedRecitedText[i] == "-") {
         highlightedRefText +=
-            "<span style='color: red;'>${alignedRefText[i]}</span>";
+            '<span style="color: red;">${alignedRefText[i]}</span>';
       } else {
         highlightedRefText +=
-            "<span style='color: orange;'>${alignedRefText[i]}</span>";
+            '<span style="color: orange;">${alignedRefText[i]}</span>';
       }
     }
 
-    return "<p>$highlightedRefText</p>";
+    return "<p style='font-size:26px; text-align:right'>$highlightedRefText</p>";
   }
 
   static int _levenshtein(String a, String b) {

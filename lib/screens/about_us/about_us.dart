@@ -15,23 +15,24 @@ class AboutUsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(kdefualtPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
               ContactCard(
                   name: 'Sherif Emad',
                   title: 'App development',
                   email: 'sherifemad53@gmail.com'),
               ContactCard(
-                  name: 'Sherif Emad',
-                  title: 'App development',
-                  email: 'sherifemad53@gmail.com'),
+                  name: 'Omar ElSayed',
+                  title: 'Machine learing part',
+                  email: 'OmarElSayed@gmail.com'),
               ContactCard(
-                  name: 'Sherif Emad',
+                  name: 'Ali el shimmy',
                   title: 'App development',
-                  email: 'sherifemad53@gmail.com'),
+                  email: 'ALiElShimmy@gmail.com'),
               ContactCard(
-                  name: 'Sherif Emad',
-                  title: 'App development',
-                  email: 'sherifemad53@gmail.com'),
+                  name: 'Mohamed Ali ',
+                  title: 'UI design',
+                  email: 'mohamedali@gmail.com'),
             ],
           ),
         ));
