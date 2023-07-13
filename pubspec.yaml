@@ -132,6 +132,12 @@ flutter:
                 weight: 800
               - asset: assets/fonts/Belanosima/Belanosima-SemiBold.ttf
                 weight: 600
+        - family: QuranFont1
+          fonts:
+              - asset: assets/fonts/QuranFont1.ttf
+        - family: QuranFont2
+          fonts:
+              - asset: assets/fonts/QuranFont2.ttf
 
           # For details regarding fonts from package dependencies,
           # see https://flutter.dev/custom-fonts/#from-packages

@@ -23,7 +23,7 @@ class SurahViewScreen extends StatefulWidget {
 class _SurahViewScreenState extends State<SurahViewScreen> {
   model.User? user;
 
-  final String quranfont = 'Al_Qalam_Quran';
+  final String quranfont = 'QuranFont2';
   double? quranfontSize = 24;
 
   String text = ' ';
@@ -91,7 +91,10 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
     return isDoneLoading
         ? Scaffold(
             appBar: AppBar(
-              title: Text(surahName!),
+              title: Text(
+                surahName!,
+                style: TextStyle(fontFamily: quranfont, fontSize: 24),
+              ),
               actions: [
                 Row(
                   children: [
@@ -113,10 +116,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if (!isScrolling) const RetunBasmala(),
-                SizedBox(
-                  height: !isMemoriztingMode
-                      ? MediaQuery.of(context).size.height * 0.70
-                      : MediaQuery.of(context).size.height * 0.77,
+                Expanded(
                   child: GestureDetector(
                     onVerticalDragDown: (details) {
                       setState(() {
@@ -147,7 +147,7 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                             });
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(5.0),
                             child: Row(
                               children: [
                                 Expanded(
@@ -205,14 +205,9 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                                             child: Text(
                                               ayas![index].englishTranslation,
                                               textDirection: TextDirection.ltr,
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontFamily: quranfont,
-                                                color: isDark
-                                                    ? Colors.white54
-                                                    : const Color.fromARGB(
-                                                        196, 0, 0, 0),
-                                              ),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
                                             ),
                                           ),
                                       const Divider(
@@ -231,116 +226,122 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                     ),
                   ),
                 ),
-              ],
-            ),
-            bottomSheet: Container(
-              height: !isMemoriztingMode
-                  ? MediaQuery.of(context).size.height * 0.21
-                  : MediaQuery.of(context).size.height * 0.12,
-              decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.blueGrey
-                      : const Color.fromARGB(255, 211, 207, 198),
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
-              padding: const EdgeInsets.all(7),
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  if (!isMemoriztingMode)
-                    text.isNotEmpty
-                        ? Expanded(
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: SingleChildScrollView(
-                                  child: Html(
-                                data: text,
-                              )),
-                            ),
-                          )
-                        : const SizedBox(),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Container(
+                  height: !isMemoriztingMode
+                      ? MediaQuery.of(context).size.height * 0.22
+                      : MediaQuery.of(context).size.height * 0.12,
+                  decoration: BoxDecoration(
+                      color: isDark
+                          ? Colors.blueGrey
+                          : const Color.fromARGB(255, 211, 207, 198),
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20))),
+                  padding: const EdgeInsets.all(7),
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                                isMemoriztingMode
-                                    ? "Memorization Mode"
-                                    : "Recitaion Mode",
-                                style: Theme.of(context).textTheme.bodySmall),
-                            Text(
-                              "Begin from Verse ($verseNumber)",
-                              style: Theme.of(context).textTheme.bodySmall,
+                      if (!isMemoriztingMode)
+                        text.isNotEmpty
+                            ? Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: SingleChildScrollView(
+                                        child: Html(data: text)),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    isMemoriztingMode
+                                        ? "Memorization Mode"
+                                        : "Recitaion Mode",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall),
+                                Text(
+                                  "Begin from Verse ($verseNumber)",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () async {
-                          isPressed = !isPressed;
-                          setState(() {});
-                          isPressed
-                              ? SpeechToText.instance
-                                  .startRecord(ayas![verseNumber - 1])
-                              : SpeechToText.instance
-                                  .stopRecord(user, ayas![verseNumber - 1],
-                                      isMemoriztingMode)
-                                  .then((value) {
-                                  setState(() {});
-                                  if (isMemoriztingMode) {
-                                    if (double.parse(value) >= 0.9) {
-                                      ayas![verseNumber - 1].isMemorized = true;
-                                      if (ayas!.length > verseNumber) {
-                                        double temp = 0;
-                                        for (var element in ayas!) {
-                                          if (element.isMemorized == true) {
-                                            temp += 1;
+                          ),
+                          TextButton.icon(
+                            onPressed: () async {
+                              isPressed = !isPressed;
+                              setState(() {});
+                              isPressed
+                                  ? SpeechToText.instance
+                                      .startRecord(ayas![verseNumber - 1])
+                                  : SpeechToText.instance
+                                      .stopRecord(user, ayas![verseNumber - 1],
+                                          isMemoriztingMode)
+                                      .then((value) {
+                                      setState(() {});
+                                      if (isMemoriztingMode) {
+                                        if (double.parse(value) >= 0.9) {
+                                          ayas![verseNumber - 1].isMemorized =
+                                              true;
+                                          if (ayas!.length > verseNumber) {
+                                            double temp = 0;
+                                            for (var element in ayas!) {
+                                              if (element.isMemorized == true) {
+                                                temp += 1;
+                                              }
+                                            }
+                                            memorizationPercentage =
+                                                ((temp / ayas!.length) * 100)
+                                                    .toStringAsFixed(2);
+
+                                            verseNumber += 1;
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                duration: Duration(seconds: 2),
+                                                content: Text(
+                                                    'Congradulations You have memorized the Surah'),
+                                                backgroundColor: Colors.green,
+                                              ),
+                                            );
                                           }
                                         }
-                                        memorizationPercentage =
-                                            ((temp / ayas!.length) * 100)
-                                                .toStringAsFixed(2);
-
-                                        verseNumber += 1;
                                       } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            duration: Duration(seconds: 2),
-                                            content: Text(
-                                                'Congradulations You have memorized the Surah'),
-                                            backgroundColor: Colors.green,
-                                          ),
-                                        );
+                                        text = value;
                                       }
-                                    }
-                                  } else {
-                                    text = value;
-                                  }
-                                });
-                        },
-                        icon: Icon(isPressed ? Icons.stop : Icons.mic,
-                            color: Colors.black),
-                        label: Text(
-                          isPressed ? "Stop" : "Start",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 9),
-                            backgroundColor:
-                                isPressed ? Colors.red : Colors.grey),
-                      )
+                                    });
+                            },
+                            icon: Icon(isPressed ? Icons.stop : Icons.mic,
+                                color: Colors.black),
+                            label: Text(
+                              isPressed ? "Stop" : "Start",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 9),
+                                backgroundColor:
+                                    isPressed ? Colors.red : Colors.grey),
+                          )
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           )
         : const Scaffold(body: Center(child: CircularProgressIndicator()));

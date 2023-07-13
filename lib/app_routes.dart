@@ -11,4 +11,5 @@ class AppRoutes {
   static const String ahadithMotshbha = '/ahadithMotshbha';
   static const String recitation = '/recitation';
   static const String tajweedCorrection = '/tajweedCorrection';
+  static const String AyaAhdithSemanticSearch = '/AyaAhdithSemanticSearch';
 }

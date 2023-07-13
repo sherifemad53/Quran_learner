@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quranic_tool_box/screens/verses_ahadith_semantic_search/verses_ahadith_semantic_search.dart';
 
 import '../../models/surah_model.dart';
 import '../../models/juz_model.dart';
@@ -213,13 +212,17 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(icon: const Icon(Icons.home), onPressed: () {}),
-                    IconButton(icon: const Icon(Icons.mic), onPressed: () {}),
+                    IconButton(
+                        icon: const Icon(Icons.mic),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.tajweedCorrection);
+                        }),
                     IconButton(
                         icon: const Icon(Icons.search),
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) =>
-                                  const AyaAhdithSemanticSearchScreen()));
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.AyaAhdithSemanticSearch);
                         }),
                   ],
                 ),

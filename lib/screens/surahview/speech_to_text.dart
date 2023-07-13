@@ -117,9 +117,9 @@ class SpeechToText {
       // .replaceAll('  ', ' ')
       // .trim();
       recitedText = recitedText.trim();
-      print('recited text = $recitedText');
-      print(recitedText.length);
-      print(t.length);
+      // print('recited text = $recitedText');
+      // print(recitedText.length);
+      // print(t.length);
       if (t.length < recitedText.length) {
         _showError('Not correct please try again', Colors.red);
         temp = (0.0).toString();

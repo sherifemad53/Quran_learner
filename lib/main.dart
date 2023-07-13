@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:quranic_tool_box/providers/settings_provider.dart';
+import 'package:quranic_tool_box/screens/verses_ahadith_semantic_search/verses_ahadith_semantic_search.dart';
 
 import 'screens/ahadith/ahadith_screen.dart';
 import 'screens/home_page/homapage_screen.dart';
@@ -85,7 +86,9 @@ class MyApp extends StatelessWidget {
           AppRoutes.ayatMotshbha: (context) => const VerseSimilarityScreen(),
           AppRoutes.ahadithMotshbha: (context) => const AhadithScreen(),
           AppRoutes.tajweedCorrection: (context) =>
-              const TajweedCorrectionScreen()
+              const TajweedCorrectionScreen(),
+          AppRoutes.AyaAhdithSemanticSearch: (context) =>
+              const AyaAhdithSemanticSearchScreen(),
         },
       ),
     );
