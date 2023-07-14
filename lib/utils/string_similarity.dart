@@ -78,7 +78,7 @@ class StringSimilarity {
       }
     }
 
-    return "<p style='font-size:24px; text-align:right'>$highlightedRefText</p>";
+    return "<p style='font-size:20px; text-align:right; direction: rtl; padding: 0px 10px 0px 10px;'>$highlightedRefText</p>";
   }
 
   static int _levenshtein(String a, String b) {

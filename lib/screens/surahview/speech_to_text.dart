@@ -94,7 +94,12 @@ class SpeechToText {
     );
   }
 
+  //similarityScore
+  //htmlString
+  //List of wrong word in red color
   String _checkReading(AyaModel ayaModel, bool isMemorizationMode) {
+    Map<String, dynamic> readingData = {};
+    List<Map<String, dynamic>> listOfColoredWords;
     String temp = (0.0).toString();
     if (isMemorizationMode) {
       if (ayaModel.arabicText == 'الم' && recitedText == 'الف لام ميم') {
@@ -102,20 +107,27 @@ class SpeechToText {
       } else if (ayaModel.arabicText == 'المص' &&
           recitedText == 'الف لام ميم صاد') {
         return (1.0).toString();
+      } else if (recitedText.contains('الف لام راء')) {
+        recitedText = recitedText.replaceAll('الف لام راء', 'الر');
+      } else if (recitedText.contains('الف لام ميم راء')) {
+        recitedText = recitedText.replaceAll('الف لام ميم راء', 'المر');
+      } else if (ayaModel.arabicText == 'يس' && recitedText == 'ياسين') {
+        return (1.0).toString();
       }
+      // else if (ayaModel.arabicText == 'حم' && recitedText == 'حامين') {
+      //   return (1.0).toString();
+      // }
+      //عٓسٓقٓ
+      //كهيعص
+      //طسم
+      //ص والقران ذي الذكر
+      //قٓ ۚ وَٱلْقُرْءَانِ ٱلْمَجِيدِ
+      //نٓ ۚ وَٱلْقَلَمِ وَمَا يَسْطُرُونَ
+
+      //else if()
+
       double simScore = 0.0;
       String t = ayaModel.arabicText;
-      // final arabicPattern = RegExp(r'[^\u0627-\u064As]');
-      // t = t
-      //     .replaceAll('أ', 'ا')
-      //     .replaceAll('إ', 'ا')
-      //     .replaceAll('آ', 'ا')
-      //     .replaceAll(' ۖ', '')
-      //     .replaceAll('\u064B', '')
-      //     .replaceAll('ۤ', '')
-      // .replaceAll(arabicPattern, '')
-      // .replaceAll('  ', ' ')
-      // .trim();
       recitedText = recitedText.trim();
       // print('recited text = $recitedText');
       // print(recitedText.length);
@@ -156,11 +168,20 @@ class SpeechToText {
         _showError('Not correct please try again', Colors.red);
       }
     } else {
+      //similarityScore
+      //htmlString
+      //List of wrong word in red color
       recitedText = _swapShaddaPosition(recitedText);
+
+      var u = StringSimilarity.similarity(
+          ayaModel.orignalArabicText.trim(), recitedText.trim());
+      print(u);
+
       temp = StringSimilarity.needlemanWunsch(
           ayaModel.orignalArabicText.trim(), recitedText.trim());
       debugPrint("orignal arabic text: ${ayaModel.orignalArabicText}");
     }
+
     debugPrint("transcripted text: $recitedText");
     return temp;
   }
