@@ -281,57 +281,83 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                                 ],
                               ),
                             ),
-                            TextButton.icon(
-                              onPressed: () async {
-                                isPressed = !isPressed;
-                                setState(() {});
-                                isPressed
-                                    ? SpeechToText.instance
-                                        .startRecord(ayas![verseNumber - 1])
-                                    : SpeechToText.instance
-                                        .stopRecord(
-                                            user,
-                                            ayas![verseNumber - 1],
-                                            isMemoriztingMode)
-                                        .then((value) {
-                                        if (isMemoriztingMode) {
-                                          if (double.parse(value) >= 0.9) {
-                                            ayas![verseNumber - 1].isMemorized =
-                                                true;
-                                            calculateMemorization();
-                                            if (ayas!.length > verseNumber) {
-                                              verseNumber += 1;
+                            Row(
+                              children: [
+                                if (isMemoriztingMode)
+                                  IconButton(
+                                    onPressed: () {
+                                      for (var element in ayas!) {
+                                        element.isMemorized = false;
+                                      }
+                                      verseNumber = 1;
+                                      calculateMemorization();
+                                      setState(() {});
+                                    },
+                                    icon: const Icon(Icons.restart_alt_rounded),
+                                    style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 9),
+                                        backgroundColor: Colors.grey),
+                                  ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                TextButton.icon(
+                                  onPressed: () async {
+                                    isPressed = !isPressed;
+                                    setState(() {});
+                                    isPressed
+                                        ? SpeechToText.instance
+                                            .startRecord(ayas![verseNumber - 1])
+                                        : SpeechToText.instance
+                                            .stopRecord(
+                                                user,
+                                                ayas![verseNumber - 1],
+                                                isMemoriztingMode)
+                                            .then((value) {
+                                            if (isMemoriztingMode) {
+                                              if (double.parse(value) >= 0.9) {
+                                                ayas![verseNumber - 1]
+                                                    .isMemorized = true;
+                                                calculateMemorization();
+                                                if (ayas!.length >
+                                                    verseNumber) {
+                                                  verseNumber += 1;
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      duration:
+                                                          Duration(seconds: 2),
+                                                      content: Text(
+                                                          'Congradulations You have memorized the Surah'),
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                    ),
+                                                  );
+                                                }
+                                              }
                                             } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  duration:
-                                                      Duration(seconds: 2),
-                                                  content: Text(
-                                                      'Congradulations You have memorized the Surah'),
-                                                  backgroundColor: Colors.green,
-                                                ),
-                                              );
+                                              text = value;
+                                              isViewMoreInfo = true;
                                             }
-                                          }
-                                        } else {
-                                          text = value;
-                                          isViewMoreInfo = true;
-                                        }
-                                        setState(() {});
-                                      });
-                              },
-                              icon: Icon(isPressed ? Icons.stop : Icons.mic,
-                                  color: Colors.black),
-                              label: Text(
-                                isPressed ? "Stop" : "Start",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 9),
-                                  backgroundColor:
-                                      isPressed ? Colors.red : Colors.grey),
+                                            setState(() {});
+                                          });
+                                  },
+                                  icon: Icon(isPressed ? Icons.stop : Icons.mic,
+                                      color: Colors.black),
+                                  label: Text(
+                                    isPressed ? "Stop" : "Start",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 9),
+                                      backgroundColor:
+                                          isPressed ? Colors.red : Colors.grey),
+                                ),
+                              ],
                             )
                           ],
                         ),
