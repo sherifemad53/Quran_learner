@@ -13,27 +13,61 @@ class AboutUsScreen extends StatelessWidget {
         body: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(kdefualtPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              ContactCard(
-                  name: 'Sherif Emad',
-                  title: 'App development',
-                  email: 'sherifemad53@gmail.com'),
-              ContactCard(
-                  name: 'Omar ElSayed',
-                  title: 'Machine learing part',
-                  email: 'OmarElSayed@gmail.com'),
-              ContactCard(
-                  name: 'Ali el shimmy',
-                  title: 'App development',
-                  email: 'ALiElShimmy@gmail.com'),
-              ContactCard(
-                  name: 'Mohamed Ali ',
-                  title: 'UI design',
-                  email: 'mohamedali@gmail.com'),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Brief',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "This is a graduation Project is submitted to Computer and Systems Engineering Department  Helwan university in Partial fulfillment of the requirements for bachelor's degree of Computer and Systems Engineering",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Card(
+                  child: Column(
+                    children: [
+                      Text(
+                        "By:",
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      const ContactCard(
+                          name: 'Sherif Emad',
+                          title: 'App development',
+                          email: 'sherifemad53@gmail.com'),
+                      const ContactCard(
+                          name: 'Omar ElSayed',
+                          title: 'Machine learing part',
+                          email: 'OmarElSayed@gmail.com'),
+                      const ContactCard(
+                          name: 'Ali ElShimy',
+                          title: 'App development',
+                          email: 'alielshimy2000@gmail.com'),
+                      const ContactCard(
+                          name: 'Mohamed Ali ',
+                          title: 'UI design',
+                          email: 'mohamedali@gmail.com'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -54,7 +88,7 @@ class ContactCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(5),
+      margin: const EdgeInsets.all(10),
       child: Column(
         children: [
           Text(
@@ -63,7 +97,7 @@ class ContactCard extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Text(
-            'Worded on: $title',
+            'Working on: $title',
             style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),

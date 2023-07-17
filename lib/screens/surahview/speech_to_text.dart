@@ -129,6 +129,18 @@ class SpeechToText {
       double simScore = 0.0;
       String t = ayaModel.arabicText;
       recitedText = recitedText.trim();
+
+      // final arabicPattern = RegExp(r'[^\u0627-\u064As]');
+      t = t
+          .replaceAll('أ', 'ا')
+          .replaceAll('إ', 'ا')
+          .replaceAll('آ', 'ا')
+          .replaceAll(' ۖ', '')
+          .replaceAll('\u064B', '')
+          .replaceAll('ۤ', '')
+          // .replaceAll(arabicPattern, '')
+          // .replaceAll('  ', ' ')
+          .trim();
       // print('recited text = $recitedText');
       // print(recitedText.length);
       // print(t.length);
@@ -161,6 +173,9 @@ class SpeechToText {
             _showError('Please try again', Colors.red);
             temp = (0.5).toString();
           }
+        } else {
+          temp = (0.0).toString();
+          _showError('Missing word', Colors.red);
         }
         debugPrint("orignal arabic text: $t");
       } else {

@@ -71,6 +71,19 @@ dev_dependencies:
         sdk: flutter
     flutter_lints: ^2.0.0
 
+    flutter_launcher_icons:
+    flutter_native_splash:
+
+flutter_native_splash:
+    color: "#043b3b"
+    image: assets\icons\logo-no-background.png
+    color_dark: "#043b3b"
+    image_dark: assets/icons/logo-no-background.png
+flutter_icons:
+    android: true
+    ios: true
+    image_path: "assets/icons/logo-no-background.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

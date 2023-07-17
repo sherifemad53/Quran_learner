@@ -256,7 +256,13 @@ class _SurahViewScreenState extends State<SurahViewScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         if (!isMemoriztingMode && isViewMoreInfo)
-                          Html(data: text),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 7),
+                            child: Html(
+                              data: text,
+                              shrinkWrap: true,
+                            ),
+                          ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

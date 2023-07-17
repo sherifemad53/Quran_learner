@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../providers/settings_provider.dart';
+import '../../widgets/guide_container.dart';
 
 class SurahViewSettingsScreen extends StatefulWidget {
   const SurahViewSettingsScreen({super.key});
@@ -55,52 +56,69 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
       body: SettingsList(
         sections: [
           CustomSettingsSection(
-            child: Center(
-              child: SizedBox(
-                height: size!.height * 0.15,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.all(15),
-                  itemCount: tabs.length,
-                  scrollDirection: Axis.horizontal,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () {
-                      if (index == 0) {
-                        settingsProvider!.updateSurahViewMode('Recitation');
-                      } else {
-                        settingsProvider!.updateSurahViewMode('Memorization');
-                      }
-                      setState(() {});
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      margin: const EdgeInsets.all(7),
-                      padding: const EdgeInsets.all(7),
-                      width: size!.width * 0.4,
-                      height: size!.height * 0.1,
-                      decoration: BoxDecoration(
-                        color:
-                            current == index ? Colors.white70 : Colors.white54,
-                        borderRadius: current == index
-                            ? BorderRadius.circular(15)
-                            : BorderRadius.circular(10),
-                        border: current == index
-                            ? Border.all(
-                                color: Theme.of(context).primaryColor, width: 2)
-                            : null,
-                      ),
-                      child: Center(
-                        child: FittedBox(
-                          child: Text(tabs[index],
-                              style:
-                                  Theme.of(context).textTheme.headlineMedium),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 22),
+                  child: Text(
+                    "Mode Selection",
+                    style: Theme.of(context).textTheme.headlineMedium,
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Center(
+                  child: SizedBox(
+                    height: size!.height * 0.10,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      // padding: const EdgeInsets.all(),
+                      itemCount: tabs.length,
+                      scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => GestureDetector(
+                        onTap: () {
+                          if (index == 0) {
+                            settingsProvider!.updateSurahViewMode('Recitation');
+                          } else {
+                            settingsProvider!
+                                .updateSurahViewMode('Memorization');
+                          }
+                          setState(() {});
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.all(7),
+                          padding: const EdgeInsets.all(7),
+                          width: size!.width * 0.4,
+                          height: size!.height * 0.1,
+                          decoration: BoxDecoration(
+                            color: current == index
+                                ? Colors.white70
+                                : Colors.white54,
+                            borderRadius: current == index
+                                ? BorderRadius.circular(15)
+                                : BorderRadius.circular(10),
+                            border: current == index
+                                ? Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 2)
+                                : null,
+                          ),
+                          child: Center(
+                            child: FittedBox(
+                              child: Text(tabs[index],
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
           SettingsSection(
@@ -145,6 +163,31 @@ class _SurahViewSettingsScreenState extends State<SurahViewSettingsScreen>
                         _currentSliderValue = value;
                       });
                     },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Text(
+                      "Notes for Recitation mode",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  ),
+                  Card(
+                    child: Column(
+                      children: const [
+                        GuideContainer(
+                          guideNo: 1,
+                          title: "The Algorithm",
+                          guideDescription:
+                              "It tries tto get the most reasonable text alignment between both transcripted text and orignal text",
+                        ),
+                        GuideContainer(
+                          title: "Explaination",
+                          guideNo: 2,
+                          guideDescription:
+                              "The red dash means thet their is a mismatch while the yellow means there is a mis alignment (the charactor not in the place where it suppose to be)",
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
